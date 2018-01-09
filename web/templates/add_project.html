@@ -87,6 +87,10 @@
                 alert("Please add project name.");
                 return false;
             }
+            if ($('input[name="business_unit_id"]').val().length == 0) {
+                alert("Please Choose Business Unit.");
+                return false;
+            }
             $("#add_project_form").submit()
         }
 
