@@ -7,6 +7,7 @@ from web.views import asset
 from web.views import user
 from web.views import server
 from web.views import mission
+from web.views import project
 
 urlpatterns = [
     # url(r'^login.html$', account.LoginView.as_view()),
@@ -51,6 +52,12 @@ urlpatterns = [
     url(r'^mission-detail-json-(?P<mission_id>\d+).html$', mission.MissionDetailListJsonView.as_view()),
 
     url(r'^mission-detail-json-(?P<mission_id>\d+).html$', mission.MissionDetailListJsonView.as_view()),
+
+
+    url(r'^project.html$', project.ProjectListView.as_view()),
+    url(r'^projects.html$', project.ProjectJsonView.as_view()),
+    url(r'^add-project.html$', project.AddProjectView.as_view()),
+    url(r'^edit-project-(?P<project_nid>\d+).html$', project.UpdateProjectView.as_view()),
 
     # url(r'^chart-(?P<chart_type>\w+).html$', home.ChartView.as_view()),
 ]

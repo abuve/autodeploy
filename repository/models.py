@@ -2,13 +2,14 @@ from django.db import models
 
 from cmdb import models as CMDB_MODELS
 
-
 class ProjectInfo(models.Model):
     """
     项目信息表
     """
     name = models.CharField(max_length=64, unique=True)
     #project_path = models.CharField('系统目录', max_length=200, unique=True)
+    business_unit = models.ForeignKey(CMDB_MODELS.BusinessUnit, verbose_name='归属业务线', null=True, blank=True,
+                                      on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name_plural = "项目信息表"
