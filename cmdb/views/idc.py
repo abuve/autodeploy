@@ -1,240 +1,133 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 import json
-from django.db.models import Q
-from repository import models
-from utils.pager import PageInfo
-from utils.response import BaseResponse
-from django.http.request import QueryDict
+from django.views import View
+from django.shortcuts import render
+from django.shortcuts import HttpResponse, HttpResponseRedirect
+from django.http import JsonResponse
 
-from utils.base import BaseServiceList
+from web.service import server
+from web.service import server_project
+from web.service import server_group
+from web.service import server_instance
+from web.service import server_yaml_conf
+from web.service import project
+from cmdb.service import idc
 from repository import models as repository_models
-from cmdb import models as CMDB_MODELS
-
-from conf import settings
 
 
-class Idc(BaseServiceList):
-    def __init__(self):
-        # 查询条件的配置
-        condition_config = [
-            {'name': 'name', 'text': 'Idc', 'condition_type': 'input'},
-            {'name': 'name', 'text': 'Floor', 'condition_type': 'input'},
-            {'name': 'name', 'text': 'Phone', 'condition_type': 'input'},
-            {'name': 'name', 'text': 'Address', 'condition_type': 'input'},
-
-        ]
-        # 表格的配置
-        table_config = [
-            {
-                'q': 'id',  # 用于数据库查询的字段，即Model.Tb.objects.filter(*[])
-                'title': "Project ID",  # 前端表格中显示的标题
-                'display': 0,  # 是否在前端显示，0表示在前端不显示, 1表示在前端隐藏, 2表示在前段显示
-                'text': {'content': "{id}", 'kwargs': {'id': '@id'}},
-                'attr': {'k1':'v1'}  # 自定义属性
-            },
-            {
-                'q': 'name',
-                'title': "Name",
-                'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@name'}},
-                'attr': {}
-            },
-            {
-                'q': 'floor',
-                'title': "Floor",
-                'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@floor'}},
-                'attr': {}
-            },
-            {
-                'q': 'phone',
-                'title': "Phone",
-                'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@phone'}},
-                'attr': {}
-            },
-            {
-                'q': 'idc_address',
-                'title': "Address",
-                'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@idc_address'}},
-                'attr': {}
-            },
-            {
-                'q': None,
-                'title': "Options",
-                'display': 1,
-                'text': {
-                    'content': '<div class="btn-group">' + \
-                                '<a type="button" class="btn btn-default btn-xs" href="/edit-idc-{nid}.html"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>' + \
-                               '<a type="button" class="btn btn-default btn-xs" onclick=delete_idc_data_fn({nid})><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>' + \
-                               '<button type="button" class="btn btn-default dropdown-toggle btn-xs"data-toggle="1dropdown"> <span class="caret"></span> <span class="sr-only">切换下拉菜单</span> </button> <ul class="dropdown-menu" role="menu" style="margin:2px 164px; min-width:130px"> <li><a href="#">More Option</a></li> </ul>' + \
-                                '</div>',
-                    'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id', 'name': '@name'}},
-                'attr': {'width': '300px'}
-            },
-        ]
-        # 额外搜索条件
-        extra_select = {
-            #'server_title': 'select hostname from repository_server where repository_server.asset_id=repository_asset.id and repository_asset.device_type_id=1',
-            #'network_title': 'select management_ip from repository_networkdevice where repository_networkdevice.asset_id=repository_asset.id and repository_asset.device_type_id=2',
-        }
-        super(Idc, self).__init__(condition_config, table_config, extra_select)
+class IdcListView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'cmdb_idc_list.html')
 
 
-    @property
-    def project_list(self):
-        result = map(lambda x: {'id': x[0], 'name': x[1]}, repository_models.ProjectInfo.objects.values_list())
-        return list(result)
+class IdcJsonView(View):
+    def post(self, request):
+        response = idc.Idc.add_data(request)
+        return HttpResponseRedirect('cmdb/idc-list.html')
 
-    @property
-    def device_type_list(self):
-        result = map(lambda x: {'id': x[0], 'name': x[1]}, models.Asset.device_type_choices)
-        return list(result)
+    def get(self, request):
+        obj = idc.Idc()
+        response = obj.fetch_idc(request)
+        return JsonResponse(response.__dict__)
 
-    #@property
-    def instance_type_list(self):
-        result = map(lambda x: {'id': x[0], 'name': x[1]}, repository_models.AppInstances.instance_type_choices)
-        return list(result)
+    def delete(self, request):
+        response = idc.Idc.delete_data(request)
+        return JsonResponse(response.__dict__)
 
-    @property
-    def business_unit_list(self):
-        values = models.BusinessUnit.objects.values('id', 'name')
-        return list(values)
+    def put(self, request):
+        response = idc.Idc.put_idc(request)
+        return JsonResponse(response.__dict__)
 
-    @staticmethod
-    def assets_condition(request):
-        con_str = request.GET.get('condition', None)
-        if not con_str:
-            con_dict = {}
-        else:
-            con_dict = json.loads(con_str)
 
-        con_q = Q()
-        for k, v in con_dict.items():
-            temp = Q()
-            temp.connector = 'OR'
-            for item in v:
-                temp.children.append((k, item))
-            con_q.add(temp, 'AND')
+class ServerDetailView(View):
+    def get(self, request, asset_nid):
+        response = server.Server.server_config(asset_nid)
+        return render(request, 'server_config.html', {'response': response})
 
-        return con_q
 
-    def fetch_idc(self, request):
-        response = BaseResponse()
-        try:
-            ret = {}
-            conditions = self.assets_condition(request)
-            idc_count = CMDB_MODELS.IDC.objects.filter(conditions).count()
-            page_info = PageInfo(request.GET.get('pager', None), idc_count)
-            idc_list = CMDB_MODELS.IDC.objects.filter(conditions).extra(select=self.extra_select).values(
-                *self.values_list).order_by("-id")[page_info.start:page_info.end]
-            ret['table_config'] = self.table_config
-            ret['condition_config'] = self.condition_config
-            ret['data_list'] = list(idc_list)
-            ret['page_info'] = {
-                "page_str": page_info.pager(),
-                "page_start": page_info.start,
-            }
-            ret['global_dict'] = {
-                'project_list': self.project_list
-            }
-            response.data = ret
-            response.message = '获取成功'
-        except Exception as e:
-            response.status = False
-            response.message = str(e)
+class ServerDetaiGroupView(View):
+    def get(self, request, asset_nid):
+        response = server_group.ServerGroup.get_server_groups_json(asset_nid)
+        return HttpResponse(json.dumps(response))
 
-        return response
 
-    @staticmethod
-    def delete_data(request):
-        response = BaseResponse()
-        try:
-            recv_data = QueryDict(request.body, encoding='utf-8')
-            idc_id = recv_data.get("idc_id")
-            CMDB_MODELS.IDC.objects.get(id=idc_id).delete()
-            response.message = '删除成功'
-        except Exception as e:
-            response.status = False
-            response.message = str(e)
-        return response
+class AddIdcView(View):
+    def get(self, request, *args, **kwargs):
+        # response = server_project.ServerProject.get_project_info(request)
+        return render(request, 'add_idc.html')
 
-    @staticmethod
-    def add_data(request):
-        response = BaseResponse()
-        try:
-            response.error = []
-            post_dict = QueryDict(request.body, encoding='utf-8')
 
-            idc_name = post_dict.get('idc_name')
-            idc_floor = post_dict.get('idc_floor')
-            idc_phone = post_dict.get('idc_phone')
-            idc_address = post_dict.get('idc_address')
+class UpdateIdcView(View):
+    def get(self, request, idc_nid):
+        # project_info = server_project.ServerProject.get_project_info(request)
+        response = idc.Idc.idc_config(idc_nid)
+        return render(request, 'edit_idc.html', {'response': response})
 
-            add_to_db = CMDB_MODELS.IDC(
-                name=idc_name,
-                floor=idc_floor,
-                phone=idc_phone,
-                idc_address = idc_address,
 
-            )
-            add_to_db.save()
+class UpdateServerGroupView(View):
+    def get(self, request, *args, **kwargs):
+        response = server_group.ServerGroup.get_group_by_id(request)
+        return HttpResponse(json.dumps(response))
 
-            # create groups include production and cstest.
-            from urllib import parse, request
-            import json
-            import urllib
-            groups_list = ['CSTest', 'Production']
-            header_dict = {"Content-Type": "application/x-www-form-urlencoded"}
-            url = 'http://127.0.0.1:%s/update-server-group.html' % settings.project_port
-            for group in groups_list:
-                textmod = {"add_group_app_id": add_to_db.id, "add_group_name": group, "add_group_yaml_path": 1}
-                textmod = parse.urlencode(textmod).encode(encoding='utf-8')
-                request = urllib.request.Request(url=url, data=textmod, headers=header_dict)
-                response = urllib.request.urlopen(request)
+    def post(self, request):
+        response = server_group.ServerGroup.add_server_group(request)
+        return JsonResponse(response.__dict__)
 
-        except Exception as e:
-            print(Exception, e)
-            response.status = False
-            response.message = str(e)
-        return response
+    def put(self, request):
+        response = server_group.ServerGroup.update_server_group(request)
+        return JsonResponse(response.__dict__)
 
-    @staticmethod
-    def put_idc(request):
-        response = BaseResponse()
-        try:
-            response.error = []
-            put_dict = QueryDict(request.body, encoding='utf-8')
-            idc_id = put_dict.get('idc_id')
-            idc_name = put_dict.get('idc_name')
-            idc_floor = put_dict.get('idc_floor')
-            idc_phone = put_dict.get('idc_phone')
-            idc_address = put_dict.get('idc_address')
+    def delete(self, request):
+        response = server_group.ServerGroup.delete_server_group(request)
+        return JsonResponse(response.__dict__)
 
-            update_data = CMDB_MODELS.IDC.objects.get(id=idc_id)
-            update_data.name = idc_name
-            update_data.floor = idc_floor
-            update_data.phone = idc_phone
-            update_data.idc_address = idc_address
-            update_data.save()
 
-        except Exception as e:
-            print(Exception,e)
-            response.status = False
-            response.message = str(e)
-        return response
+class UpdateServerInstanceView(View):
+    def get(self, request, *args, **kwargs):
+        response = server_instance.ServerInstance.get_instance_by_id(request)
+        return HttpResponse(json.dumps(response))
 
-    @staticmethod
-    def idc_config(idc_id):
+    def post(self, request):
+        response = server_instance.ServerInstance.add_server_instance(request)
+        return JsonResponse(response.__dict__)
 
-        response = BaseResponse()
-        try:
-            response.data = CMDB_MODELS.IDC.objects.filter(id=idc_id).first()
-            # response.asset_data = CMDB_MODELS.Asset.objects.all()
-        except Exception as e:
-            print(Exception, e)
-            response.status = False
-            response.message = str(e)
-        return response
+    def put(self, request):
+        response = server_instance.ServerInstance.update_server_instance(request)
+        return JsonResponse(response.__dict__)
+
+    def delete(self, request):
+        response = server_instance.ServerInstance.delete_server_instance(request)
+        return JsonResponse(response.__dict__)
+
+
+class GetServerInstanceTypeView(View):
+    def get(self, request, *args, **kwargs):
+        response = server.Server.instance_type_list(request)
+        return HttpResponse(json.dumps(response))
+
+
+class ServerDetaiInstanceView(View):
+    def get(self, request, asset_nid):
+        response = server_instance.ServerInstance.get_server_instances_json(asset_nid)
+        return HttpResponse(json.dumps(response))
+
+
+class UpdateYamlConfView(View):
+    def get(self, request, *args, **kwargs):
+        service_handler = server_yaml_conf.ServerYamlConf()
+        response = service_handler.get_yaml_conf(request)
+        return JsonResponse(response.__dict__)
+
+    def post(self, request):
+        response = server_yaml_conf.ServerYamlConf().add_yaml_conf(request)
+        return JsonResponse(response.__dict__)
+
+    def put(self, request):
+        response = server_yaml_conf.ServerYamlConf().update_yaml_conf(request)
+        return JsonResponse(response.__dict__)
+
+
+def get_app_by_project(request):
+    response = server_project.ServerProject.get_app_by_project(request)
+    return JsonResponse(response.__dict__)
