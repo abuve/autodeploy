@@ -19,6 +19,8 @@ from cmdb import models as CMDB_MODELS
 from conf.settings import web_conf_path
 from repository.cores import FileHandler
 
+from conf import settings
+
 
 class WebConfig(BaseServiceList):
     def __init__(self):
@@ -154,7 +156,7 @@ class WebConfig(BaseServiceList):
             push_group_id = post_dict.get('push_group_id')
             push_memo = post_dict.get('push_memo')
             __push_version = 'last_version'
-            __push_target_path = '/tmp/test'
+            __push_target_path = settings.web_config_nginx_path
             get_asset_from_select_group = CMDB_MODELS.Asset.objects.filter(instances__id=push_group_id).values('server__ipaddress')
             asset_list = list(get_asset_from_select_group)
 

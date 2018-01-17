@@ -10,10 +10,10 @@ class SSHConnection(object):
         self.username = username
         self.__key = settings.ssh_key_file
         self.__key_pass = settings.ssh_key_pass
+        self.__nginx_conf_path = settings.web_config_nginx_path
 
     def run(self, host_ip):
         self.connect(host_ip)  # 连接远程服务器
-        self.upload("D:/nginx_test", '/tmp/nginx')  # 将本地的db.py文件上传到远端服务器的/tmp/目录下并改名为1.py
         self.cmd('df')  # 执行df 命令
         self.close()  # 关闭连接
 
