@@ -52,7 +52,7 @@ class AppGroups(models.Model):
     #config_path = models.CharField('应用路径', max_length=200, blank=True, null=True)
     yaml_path = models.CharField('YAML配置文件路径', max_length=200, blank=True, null=True)
     app_id = models.ForeignKey(Applications, related_name='groups')
-    instance = models.ManyToManyField(CMDB_MODELS.DockerInstance, related_name='instances')
+    instance = models.ManyToManyField(CMDB_MODELS.Asset, related_name='instances')
 
     class Meta:
         unique_together = ('name', 'app_id',)
@@ -91,6 +91,38 @@ class DockerYamlConf(models.Model):
 
     def __str__(self):
         return str(self.group_id)
+
+
+class WebConfigLogs(models.Model):
+    app_id = models.ForeignKey(Applications, verbose_name='所属应用', null=True, blank=True,
+                                      on_delete=models.SET_NULL, related_name='webconfiglogs')
+    version = models.CharField(max_length=200, blank=True, null=True)
+    memo = models.CharField(max_length=400, blank=True, null=True)
+    user = models.CharField(max_length=40, blank=True, null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "web配置管理日志表"
+
+    def __str__(self):
+        return self.version
+
+
+class WebConfigInstance(models.Model):
+    """
+    web配置管理ip状态表
+    """
+    mission_id = models.ForeignKey(WebConfigLogs, verbose_name='所属任务', null=True, blank=True,
+                                      on_delete=models.SET_NULL, related_name='webconfigip')
+    ip = models.GenericIPAddressField('IP地址', blank=True, null=True)
+    status = models.SmallIntegerField('任务状态', default=0) # 0 - 未知; 1 - 成功; 2 - 失败
+    msg = models.CharField(max_length=200, blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "web配置管理ip状态表"
+
+    def __str__(self):
+        return self.ip
 
 
 class WebConfig(models.Model):

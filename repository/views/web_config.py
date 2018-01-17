@@ -34,6 +34,11 @@ class WebConfigVersionJsonView(View):
         response = web_config.WebConfig.set_last_version(request, server_id)
         return JsonResponse(response.__dict__)
 
+class WebConfigVersionListView(View):
+    def get(self, request, server_id):
+        response = web_config.WebConfig.get_version_tree(server_id)
+        return JsonResponse(response.__dict__)
+
 
 class WebConfigFileData(View):
     def get(self, request, server_id):
@@ -43,3 +48,23 @@ class WebConfigFileData(View):
     def post(self, request, server_id):
         response = web_config.WebConfig.create_file(request, server_id)
         return JsonResponse(response.__dict__)
+
+    def delete(self, request, server_id):
+        response = web_config.WebConfig.delete_file(request, server_id)
+        return JsonResponse(response.__dict__)
+
+    def put(self, request, server_id):
+        response = web_config.WebConfig.edit_file(request, server_id)
+        return JsonResponse(response.__dict__)
+
+
+class WebConfigFilePush(View):
+    def post(self, request, server_id):
+        response = web_config.WebConfig.push_file(request, server_id)
+        return JsonResponse(response.__dict__)
+
+
+class WebConfigVersionStatus(View):
+    def post(self, request):
+        response = web_config.WebConfig.get_version_status(request)
+        return render(request, 'include/server_config_webconfig_right_status.html', {'response': response})
