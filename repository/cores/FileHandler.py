@@ -1,5 +1,7 @@
 import os
 import shutil
+import zipfile
+from repository.cores import SSHTrans
 from conf.settings import web_conf_path
 
 
@@ -10,6 +12,7 @@ class Manager:
         self.version = version
         self.select_id = select_id
         self.file_root_path = web_conf_path
+        self.response = {'status': True, 'msg': 'success'}
 
         # 初始化id 列表
         if not self.select_id:
@@ -40,6 +43,9 @@ class Manager:
 
     def __get_last_version_path(self):
         return self.file_root_path + '/%s/%s/last_version' % (self.server_id, self.conf_type)
+
+    def __get_current_version_path(self, version_name):
+        return self.file_root_path + '/%s/%s/%s' % (self.server_id, self.conf_type, version_name)
 
     def __compare(self, x, y):
         stat_x = os.stat(self.__get_last_path() + "/" + x)
@@ -76,6 +82,7 @@ class Manager:
         return data_list
 
     def create_items(self, name, item_path, item_type):
+        print(name, item_path, item_type)
         try:
             base_dir = self.__get_last_path()
             item_path = '%s%s' %(base_dir, item_path)
@@ -83,12 +90,71 @@ class Manager:
                 with open('%s%s' % (item_path, name), 'w') as f:
                     f.write('')
             elif item_type == 'dir':
+                print(item_path, name)
                 os.makedirs('%s%s' % (item_path, name))
             #os.makedirs('%s/%s' %(base_dir, name))
             return True
         except Exception as e:
+            return False
+
+    def delete_items(self, item_path=None):
+        response = {'status': True, 'msg': 'success'}
+        try:
+            base_dir = self.__get_last_path()
+            item_path = '%s%s' % (base_dir, item_path)
+            if os.path.isfile(item_path):
+                os.remove(item_path)
+            else:
+                shutil.rmtree(item_path)
+        except Exception as e:
+            response = {'status': False, 'msg': '%s' % e}
+
+        return response
+
+    def edit_items(self, item_path, item_data):
+        response = {'status': True, 'msg': 'success'}
+        try:
+            base_dir = self.__get_last_path()
+            item_path = '%s%s' % (base_dir, item_path)
+            f = open(item_path, 'wb')
+            f.write(item_data.encode(encoding="gbk"))
+            f.close()
+        except Exception as e:
+            response = {'status': False, 'msg': '%s' % e}
+
+        return response
+
+    def __tar_zip_files(self, target_dir):
+        try:
+            self.source_file_path = ('%s/archive/%s-%s' % (web_conf_path, self.conf_type, self.server_id))
+            shutil.make_archive(self.source_file_path, 'zip', target_dir)
+            return True
+        except Exception as e:
             print(Exception, e)
             return False
+
+    def push_version(self, target_path, ip_obj_list):
+        try:
+            version_dir = self.__get_last_path()
+            tar_files = self.__tar_zip_files(version_dir)
+            for ip_obj in ip_obj_list:
+                try:
+                    if tar_files:
+                        source_real_path = '%s.zip' % self.source_file_path
+                        version_handler = SSHTrans.SSHConnection()
+                        version_handler.push_webconf_files(ip_obj.ip, source_real_path, target_path)
+                        ip_obj.status = 1
+                except Exception as e:
+                    print(Exception, e)
+                    ip_obj.status = 2
+                    ip_obj.msg = e
+
+                ip_obj.save()
+
+        except Exception as e:
+            self.response = {'status': False, 'msg': '%s' % e}
+
+        return self.response
 
     def get_file(self):
         file_path = self.__get_last_path()
@@ -109,6 +175,13 @@ class Manager:
         # copy files
         shutil.copytree(source_path, target_path)
         return True
+
+    def copy_file(self, source_dir=None, target_dir=None):
+        shutil.copytree(source_dir, target_dir)
+
+    def set_to_current_version(self, version_name):
+        new_version_path = self.__get_current_version_path(version_name)
+        self.copy_file(self.__get_last_version_path(), new_version_path)
 
 
 if __name__ == "__main__":
