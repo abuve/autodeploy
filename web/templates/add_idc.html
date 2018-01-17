@@ -53,7 +53,7 @@
 
             <div class="form-group">
                 <div class="col-sm-2">
-                    <a type="submit" class="btn btn-primary" onclick="add_project_fn()"><i class="fa fa-check"></i> Create Project</a>
+                    <a type="submit" class="btn btn-primary" onclick="add_project_fn()"><i class="fa fa-check"></i> Create Idc</a>
                 </div>
             </div>
 
@@ -87,6 +87,7 @@
                 return false;
             }
             if ($('input[name="idc_floor"]').val().length == 0 ) {
+                if ($('input[name="idc_floor"]').val())
                 alert("Please add idc floor.");
                 return false;
             }
