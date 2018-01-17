@@ -83,25 +83,6 @@ class Idc(BaseServiceList):
         super(Idc, self).__init__(condition_config, table_config, extra_select)
 
 
-    @property
-    def project_list(self):
-        result = map(lambda x: {'id': x[0], 'name': x[1]}, repository_models.ProjectInfo.objects.values_list())
-        return list(result)
-
-    @property
-    def device_type_list(self):
-        result = map(lambda x: {'id': x[0], 'name': x[1]}, models.Asset.device_type_choices)
-        return list(result)
-
-    #@property
-    def instance_type_list(self):
-        result = map(lambda x: {'id': x[0], 'name': x[1]}, repository_models.AppInstances.instance_type_choices)
-        return list(result)
-
-    @property
-    def business_unit_list(self):
-        values = models.BusinessUnit.objects.values('id', 'name')
-        return list(values)
 
     @staticmethod
     def assets_condition(request):
@@ -136,9 +117,6 @@ class Idc(BaseServiceList):
             ret['page_info'] = {
                 "page_str": page_info.pager(),
                 "page_start": page_info.start,
-            }
-            ret['global_dict'] = {
-                'project_list': self.project_list
             }
             response.data = ret
             response.message = '获取成功'
@@ -181,19 +159,6 @@ class Idc(BaseServiceList):
 
             )
             add_to_db.save()
-
-            # create groups include production and cstest.
-            from urllib import parse, request
-            import json
-            import urllib
-            groups_list = ['CSTest', 'Production']
-            header_dict = {"Content-Type": "application/x-www-form-urlencoded"}
-            url = 'http://127.0.0.1:%s/update-server-group.html' % settings.project_port
-            for group in groups_list:
-                textmod = {"add_group_app_id": add_to_db.id, "add_group_name": group, "add_group_yaml_path": 1}
-                textmod = parse.urlencode(textmod).encode(encoding='utf-8')
-                request = urllib.request.Request(url=url, data=textmod, headers=header_dict)
-                response = urllib.request.urlopen(request)
 
         except Exception as e:
             print(Exception, e)
