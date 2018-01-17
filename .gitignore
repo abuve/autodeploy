@@ -1,6 +1,9 @@
 # python
 *.py[cod]
 
+# Pycharm
+.idea/
+
 # Project
 settings.py
 migrations
