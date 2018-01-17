@@ -1,8 +1,9 @@
 # python
 *.py[cod]
 
-# Pycharm
+# PyCharm
 .idea/
+__pycache__/
 
 # Project
 settings.py
