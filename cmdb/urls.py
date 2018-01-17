@@ -4,6 +4,7 @@ from cmdb.views import server
 from cmdb.views import approval
 from cmdb.views import docker
 from cmdb.views import business
+from cmdb.views import idc
 
 urlpatterns = [
     url(r'^$', server.ServerListView.as_view()),
@@ -27,6 +28,11 @@ urlpatterns = [
     # cmdb report with no asset id, it's need admin to approved.
     #url(r'^report/asset_report_use_asset_id/$', approval.asset_report_use_asset_id),
     #url(r'^report/asset_report_with_no_id/$', approval.asset_with_no_asset_id),
+
+    url(r'^idc-list.html$', idc.IdcListView.as_view()),
+    url(r'^idcs.html$', idc.IdcJsonView.as_view()),
+    url(r'^add-idc.html$', idc.AddIdcView.as_view()),
+    url(r'^edit-idc-(?P<idc_nid>\d+).html$', idc.UpdateIdcView.as_view()),
 
     url(r'^get_instance_by_asset_id/$', approval.asset_with_no_asset_id),
 
