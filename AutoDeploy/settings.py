@@ -79,11 +79,11 @@ WSGI_APPLICATION = 'AutoDeploy.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'AutoDeploy',
-        'USER': 'root',
-        'PASSWORD': '999142536',
-        'HOST': '127.0.0.1',
-        'PORT': 3306,
+        'NAME': 'autodeploy',
+        'USER': 'abbott',
+        'PASSWORD': '123456',
+        'HOST': '192.168.10.231',
+        'PORT': 3366,
     }
 }
 
