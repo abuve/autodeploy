@@ -180,18 +180,18 @@ class Server(BaseServiceList):
             )
             add_to_db.save()
 
-            # create groups include production and cstest.
-            from urllib import parse, request
-            import json
-            import urllib
-            groups_list = ['CSTest', 'Production']
-            header_dict = {"Content-Type": "application/x-www-form-urlencoded"}
-            url = 'http://127.0.0.1:%s/update-server-group.html' % settings.project_port
-            for group in groups_list:
-                textmod = {"add_group_app_id": add_to_db.id, "add_group_name": group, "add_group_yaml_path": 1}
-                textmod = parse.urlencode(textmod).encode(encoding='utf-8')
-                request = urllib.request.Request(url=url, data=textmod, headers=header_dict)
-                response = urllib.request.urlopen(request)
+            # # create groups include production and cstest.
+            # from urllib import parse, request
+            # import json
+            # import urllib
+            # groups_list = ['CSTest', 'Production']
+            # header_dict = {"Content-Type": "application/x-www-form-urlencoded"}
+            # url = 'http://127.0.0.1:%s/update-server-group.html' % settings.project_port
+            # for group in groups_list:
+            #     textmod = {"add_group_app_id": add_to_db.id, "add_group_name": group, "add_group_yaml_path": 1}
+            #     textmod = parse.urlencode(textmod).encode(encoding='utf-8')
+            #     request = urllib.request.Request(url=url, data=textmod, headers=header_dict)
+            #     response = urllib.request.urlopen(request)
 
         except Exception as e:
             print(Exception, e)
