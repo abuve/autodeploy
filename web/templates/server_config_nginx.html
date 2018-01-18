@@ -48,7 +48,7 @@
 
                 <div class="btn-group">
                     <button id="enter_edit_btn" class="btn btn-default no-radius" onclick="enter_edit_fn()" disabled="true"><i class="fa fa-plus-circle"></i> 进入编辑</button>
-                    <input type="hidden" name="select_server_id">
+                    <input type="hidden" name="select_server_id" value="{{ response.data.id }}">
                     <input type="hidden" name="select_version_name">
                 </div>
 
@@ -259,7 +259,7 @@
             hljs.initHighlightingOnLoad();
 
             // 加载version状态
-            load_version_status()
+            load_version_status({{ response.version_id }})
 
         });
 

@@ -449,6 +449,7 @@ function do_push() {
                 load_tree_data(server_id, data.data)
                 $("#push_loading").hide()
                 document.getElementById("push_version_form").reset()
+                load_version_status(data.data.version_id)
             } else {
 
             }

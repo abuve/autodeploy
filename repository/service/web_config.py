@@ -31,6 +31,10 @@ class WebConfig(BaseServiceList):
         response = BaseResponse()
         try:
             response.data = REST_MODELS.Applications.objects.filter(id=server_id).first()
+            version_data = REST_MODELS.WebConfigLogs.objects.filter(app_id=server_id).order_by("-id")
+            if version_data:
+                response.version_id = version_data[0].id
+
         except Exception as e:
             print(Exception, e)
             response.status = False
@@ -185,7 +189,8 @@ class WebConfig(BaseServiceList):
             if exec_status['status']:
                 # 发布完成后，将last_version拷贝至新的版本目录中
                 file_handler.set_to_current_version(current_version)
-                response.data = current_version
+                # 将version id 返回至前台，用于刷新右侧版本状态列表
+                response.data = {'version_id': mission_obj.id}
 
         except Exception as e:
             print(Exception, e)
