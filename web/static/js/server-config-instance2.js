@@ -147,12 +147,13 @@ function edit_instance_data_fn(instance_id) {
 
 function update_server_instance_fn(update_type, instance_id) {
 
+    var server_id = $('input[name="server_id"]').val()
     var add_instance_group_id = $('select[name="add_instance_group_id"]').val()
     var add_instance_id = $('select[name="add_instance_ip"]').val()
     //var add_instance_id = $('select[name="instance_select"]').val()
 
     $.ajax({
-        url: '/update-server-instance.html',
+        url: '/server/config/instance/json-' + server_id + '.html',
         type: update_type,
         dataType: 'json',
         traditional:true,

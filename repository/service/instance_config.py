@@ -70,10 +70,13 @@ class ServerInstance(BaseServiceList):
         try:
             response.error = {}
             post_dict = QueryDict(request.body, encoding='utf-8')
+            print(post_dict)
 
-            delete_instance_id = post_dict.get('instance_id')
-            get_data_from_db = repository_models.AppInstances.objects.get(id=delete_instance_id)
-            get_data_from_db.delete()
+            add_instance_group_id = post_dict.get('add_instance_group_id')
+            add_instance_id = post_dict.get('add_instance_id')
+
+            add_to_db = repository_models.AppGroups.objects.get(id=add_instance_group_id)
+            add_to_db.instance.remove(CMDB_MODELS.Asset.objects.get(id=add_instance_id))
 
         except Exception as e:
             print(Exception, e)
