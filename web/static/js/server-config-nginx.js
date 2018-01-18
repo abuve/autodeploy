@@ -446,7 +446,7 @@ function do_push() {
             if (data.status) {
                 $("#version_push_modal").modal('hide')
                 set_version_info(server_id)
-                load_tree_data(server_id, data.data)
+                load_tree_data(server_id, data.data.version_name)
                 $("#push_loading").hide()
                 document.getElementById("push_version_form").reset()
                 load_version_status(data.data.version_id)

@@ -190,7 +190,7 @@ class WebConfig(BaseServiceList):
                 # 发布完成后，将last_version拷贝至新的版本目录中
                 file_handler.set_to_current_version(current_version)
                 # 将version id 返回至前台，用于刷新右侧版本状态列表
-                response.data = {'version_id': mission_obj.id}
+                response.data = {'version_id': mission_obj.id, 'version_name': current_version}
 
         except Exception as e:
             print(Exception, e)
@@ -206,7 +206,7 @@ class WebConfig(BaseServiceList):
             version_id = post_dict.get('version_id')
             print(server_id)
             current_version_status = repository_models.WebConfigLogs.objects.get(id=version_id)
-            all_version_from_server = repository_models.WebConfigLogs.objects.filter(app_id_id=server_id)
+            all_version_from_server = repository_models.WebConfigLogs.objects.filter(app_id_id=server_id)[:10]
             response.current_version_status = current_version_status
             response.all_version_from_server = all_version_from_server
         except Exception as e:
@@ -218,7 +218,7 @@ class WebConfig(BaseServiceList):
     def get_version_tree(server_id):
         response = BaseResponse()
         try:
-            server_obj = repository_models.WebConfigLogs.objects.filter(app_id=server_id).values('id', 'version').order_by("-id")
+            server_obj = repository_models.WebConfigLogs.objects.filter(app_id=server_id).values('id', 'version').order_by("-id")[:10]
             response.data = list(server_obj)
         except Exception as e:
             print(Exception, e)
