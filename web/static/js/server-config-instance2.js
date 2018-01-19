@@ -90,10 +90,11 @@ var ButtonInit = function () {
 };
 
 function instance_operateFormatter(value, row, index) {
+        console.log(row.instances__id)
         return [
             '<div class="btn-group">',
             '<a type="button" class="btn btn-default btn-xs" onclick="edit_instance_data_fn(' + row.id + ')"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>',
-            '<a type="button" class="btn btn-default btn-xs" onclick="delete_instance_data_fn(' + row.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>',
+            '<a type="button" class="btn btn-default btn-xs" onclick="delete_instance_data_fn(' + row.instances__id + ',' + row.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>',
             '<a type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Option</a> <button type="button" class="btn btn-default dropdown-toggle btn-xs"data-toggle="1dropdown"> <span class="caret"></span> <span class="sr-only">切换下拉菜单</span> </button> <ul class="dropdown-menu" role="menu" style="margin:2px 164px; min-width:130px"> <li><a href="#">More Option</a></li> </ul>',
             '</div>'
         ].join('');
@@ -119,10 +120,10 @@ function get_instance_type() {
     return recv_data
 }
 
-function delete_instance_data_fn(instance_id) {
+function delete_instance_data_fn(group_id, instance_id) {
 
     $("#instance_html_area").html("Confirm remove Instance ID " + instance_id + " ? All the data will be delete.")
-    $("#delete_server_instance_fn").attr("onclick", "update_server_instance_fn('delete', " + instance_id + ")")
+    $("#delete_server_instance_fn").attr("onclick", "delete_server_instance_fn( " + group_id + "," + instance_id + ")")
     $("#delete_instance_modal").modal('show')
 
 }
@@ -145,7 +146,7 @@ function edit_instance_data_fn(instance_id) {
     });
 }
 
-function update_server_instance_fn(update_type, instance_id) {
+function update_server_instance_fn(update_type, delete_instance_id) {
 
     var server_id = $('input[name="server_id"]').val()
     var add_instance_group_id = $('select[name="add_instance_group_id"]').val()
@@ -158,12 +159,32 @@ function update_server_instance_fn(update_type, instance_id) {
         dataType: 'json',
         traditional:true,
         data: {'add_instance_group_id': add_instance_group_id,
-                'add_instance_id': add_instance_id},
+                'add_instance_id': add_instance_id,
+                'server_id': server_id,
+                'delete_instance_id': delete_instance_id},
         success: function (data, response, status) {
             $('#instance_table').bootstrapTable('refresh');
             $("#add_instance_modal").modal('hide')
             $("#delete_instance_modal").modal('hide')
             $("#add_server_instance_form").trigger("reset");
+        }
+    });
+}
+
+function delete_server_instance_fn(group_id, instance_id) {
+
+    var server_id = $('input[name="server_id"]').val()
+
+    $.ajax({
+        url: '/server/config/instance/json-' + server_id + '.html',
+        type: 'delete',
+        dataType: 'json',
+        traditional:true,
+        data: {'group_id': group_id,
+                'instance_id': instance_id},
+        success: function (data, response, status) {
+            $('#instance_table').bootstrapTable('refresh');
+            $("#delete_instance_modal").modal('hide')
         }
     });
 }

@@ -426,7 +426,20 @@ function do_edit() {
 }
 
 function push_fn() {
+    push_button('off')
     $("#version_push_modal").modal('show')
+}
+
+function push_button(switch_tag) {
+    if (switch_tag == "on") {
+        $("#push_loading").show();
+        $("#push_btn_cancel").attr('disabled', 'disabled');
+        $("#push_btn_submit").attr('disabled', 'disabled');
+    } else if (switch_tag == "off") {
+        $("#push_loading").hide();
+        $("#push_btn_cancel").removeAttr('disabled', 'disabled');
+        $("#push_btn_submit").removeAttr('disabled', 'disabled');
+    }
 }
 
 function do_push() {
@@ -434,7 +447,7 @@ function do_push() {
     var push_group_id = $("select[name='push_group_id']").val()
     var push_memo = $("textarea[name='push_memo']").val()
 
-    $("#push_loading").show()
+    push_button('on')
 
     $.ajax({
         url: '/server/webconf/nginx/file-push-' + server_id + '.html',
@@ -447,7 +460,7 @@ function do_push() {
                 $("#version_push_modal").modal('hide')
                 set_version_info(server_id)
                 load_tree_data(server_id, data.data.version_name)
-                $("#push_loading").hide()
+                push_button('off')
                 document.getElementById("push_version_form").reset()
                 load_version_status(data.data.version_id)
             } else {

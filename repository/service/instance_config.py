@@ -38,7 +38,8 @@ class ServerInstance(BaseServiceList):
                                                                                               'device_type_id',
                                                                                               'instances__name',
                                                                                               'instances__app_id__name',
-                                                                                              'instances__app_id__project_id__name').order_by("-id")
+                                                                                              'instances__app_id__project_id__name',
+                                                                                              'instances__id').order_by("-id")
             response.data = list(instance_asset_list)
         except Exception as e:
             print(Exception, e)
@@ -72,11 +73,11 @@ class ServerInstance(BaseServiceList):
             post_dict = QueryDict(request.body, encoding='utf-8')
             print(post_dict)
 
-            add_instance_group_id = post_dict.get('add_instance_group_id')
-            add_instance_id = post_dict.get('add_instance_id')
+            group_id = post_dict.get('group_id')
+            instance_id = post_dict.get('instance_id')
 
-            add_to_db = repository_models.AppGroups.objects.get(id=add_instance_group_id)
-            add_to_db.instance.remove(CMDB_MODELS.Asset.objects.get(id=add_instance_id))
+            add_to_db = repository_models.AppGroups.objects.get(id=group_id)
+            add_to_db.instance.remove(CMDB_MODELS.Asset.objects.get(id=instance_id))
 
         except Exception as e:
             print(Exception, e)
