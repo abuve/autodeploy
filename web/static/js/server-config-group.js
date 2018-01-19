@@ -8,7 +8,7 @@ var GroupTableInit = function () {
     //初始化Table
     oTableInit.Init = function (app_id) {
         $('#group_table').bootstrapTable({
-            url: '/server-groups-' + app_id + '.html',         //请求后台的URL（*）
+            url: '/server/config/group/json-' + app_id + '.html',         //请求后台的URL（*）
             method: 'get',                      //请求方式（*）
             toolbar: '#group_toolbar',                //工具按钮用哪个容器
             striped: true,                      //是否显示行间隔色
@@ -110,7 +110,7 @@ function edit_group_data_fn(group_id) {
     $("#update_server_group_fn").attr("onclick", "update_server_group_fn('put', " + group_id + ")")
 
     $.ajax({
-        url: '/update-server-group.html',
+        url: '/server/config/group/update-server-group.html',
         type: 'get',
         dataType: 'json',
         traditional:true,
@@ -131,7 +131,7 @@ function update_server_group_fn(update_type, group_id) {
     var add_group_yaml_path = $('input[name="add_group_yaml_path"]').val()
 
     $.ajax({
-        url: '/update-server-group.html',
+        url: '/server/config/group/update-server-group.html',
         type: update_type,
         dataType: 'json',
         traditional:true,

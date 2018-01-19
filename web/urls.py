@@ -36,8 +36,8 @@ urlpatterns = [
 
     url(r'^get_app_by_project/$', server.get_app_by_project),
 
-    url(r'^update-server-group.html$', server.UpdateServerGroupView.as_view()),
-    url(r'^server-groups-(?P<asset_nid>\d+).html$', server.ServerDetaiGroupView.as_view()),
+    # url(r'^update-server-group.html$', server.UpdateServerGroupView.as_view()),
+    # url(r'^server-groups-(?P<asset_nid>\d+).html$', server.ServerDetaiGroupView.as_view()),
 
     url(r'^server-instances-(?P<asset_nid>\d+).html$', server.ServerDetaiInstanceView.as_view()),
     url(r'^update-server-instance.html$', server.UpdateServerInstanceView.as_view()),

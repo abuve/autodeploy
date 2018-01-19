@@ -1,12 +1,41 @@
-<div style="">
+{% extends 'layout/_layout.html' %}
 
-    <div id="group_toolbar" class="btn-group">
-        <a class="btn btn-default no-radius" data-toggle="modal" data-target="#add_group_modal" onclick="create_group_fn()"><i class="fa fa-plus-circle"></i> Create Group</a>
+{% load count_instance %}
+
+{% block css %}
+
+    <link href="/static/plugins/bootstrap/css/bootstrap-table.css" rel="stylesheet" />
+
+{% endblock %}
+
+{% block conent %}
+
+    <ol class="breadcrumb" style="margin-bottom: 0;">
+        <div class='btn-group btn-group-xs'>
+            <a type="button" class="btn btn-default btn-arrow-right btn-arrow-left:before" style="color:#1c5a9c; padding-left:10px"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Dashboard</a>
+            <a type="button" class="btn btn-default btn-arrow-right" style="color:#1c5a9c;" href="/server.html"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Application</a>
+        </div>
+    </ol>
+
+    <div style="padding: 10px 8px;">
+
+            <!-- nav start -->
+            {% include 'include/server_config_header.html' %}
+            <!-- nav end -->
+
+        <div class="row" style="padding-top: 10px">
+            <div class="col-md-12">
+
+                <div id="group_toolbar" class="btn-group">
+                    <a class="btn btn-default no-radius" data-toggle="modal" data-target="#add_group_modal" onclick="create_group_fn()"><i class="fa fa-plus-circle"></i> Create Group</a>
+                </div>
+
+                <table id="group_table"></table>
+            </div>
+
+        </div>
+
     </div>
-
-    <table id="group_table"></table>
-
-</div>
 
 
 <!-- 新增分组 -->
@@ -108,3 +137,29 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
+
+
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="/static/plugins/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/static/js/cores.js"></script>
+
+    <script src="/static/plugins/bootstrap/js/bootstrap-table.js"></script>
+
+    <script type="text/javascript" src="/static/js/server-config-group.js"></script>
+
+    <script>
+        $(function () {
+            $.initMenu('#menu_asset');
+
+            var groupTable = new GroupTableInit();
+            groupTable.Init({{ response.data.id }});
+
+        });
+
+    </script>
+
+{% endblock %}
