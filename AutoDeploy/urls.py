@@ -17,11 +17,11 @@ from django.conf.urls import url
 from django.conf.urls import include
 from django.contrib import admin
 
-#from PySAMLSP import views as auth_views
+from PySAMLSP import views as auth_views
 
 urlpatterns = [
-    #url(r'^acs/', auth_views.acs, name='acs'),
-    #url(r'^auth/', auth_views.auth, name='auth'),
+    url(r'^acs/', auth_views.acs, name='acs'),
+    url(r'^auth/', auth_views.auth, name='auth'),
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include('api.urls')),
     url(r'^cmdb/', include('cmdb.urls')),
