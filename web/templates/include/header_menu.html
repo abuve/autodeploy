@@ -12,13 +12,13 @@
 
         <div class="user-info right">
             <a href="#" class="avatar">
-                <img class="img-circle" src="/static/imgs/avatar/default.png">
+                <img class="img-circle" src="/static/imgs/avatar/default.png"> {{ request.user }}
             </a>
 
-            <!--<div class="more-info">
-                <a href="#" class="more-item">个人信息</a>
-                <a href="/logout.html" class="more-item">注销</a>
-            </div>-->
+            <div class="more-info">
+                <!--<a href="#" class="more-item">个人信息</a>-->
+                <a href="/logout.html" class="more-item">Logout</a>
+            </div>
         </div>
 
         <!--<a class="user-menu right">

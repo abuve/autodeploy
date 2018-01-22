@@ -12,6 +12,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import logout as django_logout
 # from permission_manager.cores import session_handler
 
+from conf import settings as conf_settings
+
 
 try:
     urlencoder = urllib.urlencode
@@ -37,7 +39,8 @@ def login_sp(request):
 
 def logout(request):
     django_logout(request)
-    return redirect('https://sso.monaco1.me/logout')
+    #return redirect('https://sso.monaco1.me/logout')
+    return redirect(conf_settings.logout_url)
 
 
 @csrf_exempt
