@@ -21,10 +21,20 @@ class InstanceConfigJsonView(View):
         response = instance_config.ServerInstance.get_server_instances_json(server_id)
         return HttpResponse(json.dumps(response.data))
 
-    def post(self, request, server_id):
-        response = instance_config.ServerInstance.add_server_instance(request)
-        return HttpResponse(json.dumps(response.data))
 
-    def delete(self, request, server_id):
+class UpdateServerInstanceView(View):
+    def get(self, request, *args, **kwargs):
+        response = instance_config.ServerInstance.get_instance_by_id(request)
+        return HttpResponse(json.dumps(response))
+
+    def post(self, request):
+        response = instance_config.ServerInstance.add_server_instance(request)
+        return JsonResponse(response.__dict__)
+
+    def put(self, request):
+        response = instance_config.ServerInstance.update_server_instance(request)
+        return JsonResponse(response.__dict__)
+
+    def delete(self, request):
         response = instance_config.ServerInstance.delete_server_instance(request)
-        return HttpResponse(json.dumps(response.data))
+        return JsonResponse(response.__dict__)

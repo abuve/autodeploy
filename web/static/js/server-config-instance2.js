@@ -15,6 +15,7 @@ var InstanceTableInit = function () {
             cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
             pagination: true,                   //是否显示分页（*）
             sortable: false,                     //是否启用排序
+            sortName: 'Group',
             sortOrder: "asc",                   //排序方式
             queryParams: oTableInit.queryParams,//传递参数（*）
             sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
@@ -102,7 +103,9 @@ function instance_operateFormatter(value, row, index) {
 
 function create_instance_fn() {
     $("#add_server_instance_form").trigger("reset");
-    $("#update_server_instance_fn").attr('onclick', 'update_server_instance_fn("post")')
+    // 添加分组实例时，选择分组名
+    $('select[name="add_instance_group_id"]').removeAttr("disabled", "true")
+    $("#update_server_instance_fn").attr('onclick', 'do_create_instance_fn("post")')
 }
 
 function get_instance_type() {
@@ -132,29 +135,32 @@ function edit_instance_data_fn(instance_id) {
     $("#update_server_instance_fn").attr("onclick", "update_server_instance_fn('put', " + instance_id + ")")
 
     $.ajax({
-        url: '/update-server-instance.html',
+        url: '/server/config/instance/update-server-instance.html',
         type: 'get',
         dataType: 'json',
         traditional:true,
         data: {'instance_id': instance_id},
         success: function (data, response, status) {
             $("#add_instance_modal").modal('show')
-            $('select[name="add_instance_group_id"]').val(data[0].group_id__id)
-            $('input[name="add_instance_ip"]').val(data[0].ip)
-            $('input[name="add_instance_port"]').val(data[0].port)
+            $('select[name="add_instance_group_id"]').val(data[0].instances__id);
+            $('select[name="add_instance_ip"]').val(data[0].id);
+            $('input[name="old_instance_id"]').val(data[0].id);
+
+            // 修改分组实例时，禁止修改分组名
+            $('select[name="add_instance_group_id"]').attr("disabled", "true")
         }
     });
 }
 
-function update_server_instance_fn(update_type, delete_instance_id) {
+function do_create_instance_fn(update_type, delete_instance_id) {
 
-    var server_id = $('input[name="server_id"]').val()
-    var add_instance_group_id = $('select[name="add_instance_group_id"]').val()
-    var add_instance_id = $('select[name="add_instance_ip"]').val()
+    var server_id = $('input[name="server_id"]').val();
+    var add_instance_group_id = $('select[name="add_instance_group_id"]').val();
+    var add_instance_id = $('select[name="add_instance_ip"]').val();
     //var add_instance_id = $('select[name="instance_select"]').val()
 
     $.ajax({
-        url: '/server/config/instance/json-' + server_id + '.html',
+        url: '/server/config/instance/update-server-instance.html',
         type: update_type,
         dataType: 'json',
         traditional:true,
@@ -164,8 +170,31 @@ function update_server_instance_fn(update_type, delete_instance_id) {
                 'delete_instance_id': delete_instance_id},
         success: function (data, response, status) {
             $('#instance_table').bootstrapTable('refresh');
-            $("#add_instance_modal").modal('hide')
-            $("#delete_instance_modal").modal('hide')
+            $("#add_instance_modal").modal('hide');
+            $("#delete_instance_modal").modal('hide');
+            $("#add_server_instance_form").trigger("reset");
+        }
+    });
+}
+
+function update_server_instance_fn(update_type) {
+
+    var instance_group_id = $('select[name="add_instance_group_id"]').val();
+    var new_instance_id = $('select[name="add_instance_ip"]').val();
+    var old_instance_id = $('input[name="old_instance_id"]').val();
+
+    $.ajax({
+        url: '/server/config/instance/update-server-instance.html',
+        type: update_type,
+        dataType: 'json',
+        traditional:true,
+        data: {'instance_group_id': instance_group_id,
+                'new_instance_id': new_instance_id,
+                'old_instance_id': old_instance_id},
+        success: function (data, response, status) {
+            $('#instance_table').bootstrapTable('refresh');
+            $("#add_instance_modal").modal('hide');
+            $("#delete_instance_modal").modal('hide');
             $("#add_server_instance_form").trigger("reset");
         }
     });
@@ -176,7 +205,7 @@ function delete_server_instance_fn(group_id, instance_id) {
     var server_id = $('input[name="server_id"]').val()
 
     $.ajax({
-        url: '/server/config/instance/json-' + server_id + '.html',
+        url: '/server/config/instance/update-server-instance.html',
         type: 'delete',
         dataType: 'json',
         traditional:true,

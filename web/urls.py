@@ -39,11 +39,11 @@ urlpatterns = [
     # url(r'^update-server-group.html$', server.UpdateServerGroupView.as_view()),
     # url(r'^server-groups-(?P<asset_nid>\d+).html$', server.ServerDetaiGroupView.as_view()),
 
-    url(r'^server-instances-(?P<asset_nid>\d+).html$', server.ServerDetaiInstanceView.as_view()),
-    url(r'^update-server-instance.html$', server.UpdateServerInstanceView.as_view()),
-    url(r'^get-server-instance_type.html$', server.GetServerInstanceTypeView.as_view()),
+    #url(r'^server-instances-(?P<asset_nid>\d+).html$', server.ServerDetaiInstanceView.as_view()),
+    #url(r'^update-server-instance.html$', server.UpdateServerInstanceView.as_view()),
+    #url(r'^get-server-instance_type.html$', server.GetServerInstanceTypeView.as_view()),
 
-    url(r'^update-yaml-nginx.html$', server.UpdateYamlConfView.as_view()),
+    #url(r'^update-yaml-nginx.html$', server.UpdateYamlConfView.as_view()),
 
     url(r'^mission.html$', mission.MissionListView.as_view()),
     url(r'^missions.html$', mission.MissionJsonView.as_view()),

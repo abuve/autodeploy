@@ -91,16 +91,13 @@ class ServerInstance(BaseServiceList):
             response.error = {}
             post_dict = QueryDict(request.body, encoding='utf-8')
 
-            instance_id = post_dict.get('instance_id')
-            add_instance_group_id = post_dict.get('add_instance_group_id')
-            add_instance_ip = post_dict.get('add_instance_ip')
-            add_instance_port = post_dict.get('add_instance_port')
+            instance_group_id = post_dict.get('instance_group_id')
+            new_instance_id = post_dict.get('new_instance_id')
+            old_instance_id = post_dict.get('old_instance_id')
 
-            get_instance_from_db = repository_models.AppInstances.objects.get(id=instance_id)
-            get_instance_from_db.group_id = repository_models.AppGroups.objects.get(id=add_instance_group_id)
-            get_instance_from_db.ip = add_instance_ip
-            get_instance_from_db.port = add_instance_port
-            get_instance_from_db.save()
+            get_group_from_db = repository_models.AppGroups.objects.get(id=instance_group_id)
+            get_group_from_db.instance.remove(CMDB_MODELS.Asset.objects.get(id=old_instance_id))
+            get_group_from_db.instance.add(CMDB_MODELS.Asset.objects.get(id=new_instance_id))
 
         except Exception as e:
             print(Exception, e)
@@ -111,10 +108,6 @@ class ServerInstance(BaseServiceList):
     def get_instance_by_id(request):
         response = BaseResponse()
         instance_id = request.GET.get('instance_id')
-        get_edit_instance_data = repository_models.AppInstances.objects.filter(id=instance_id).values("id", "ip",
-                                                                                                      "port",
-                                                                                                      "group_id__name",
-                                                                                                      "group_id__id")
+        get_edit_instance_data = CMDB_MODELS.Asset.objects.filter(id=instance_id).values("id", "instances__id")
         response.data = list(get_edit_instance_data)
-        print(response.data)
         return response.data

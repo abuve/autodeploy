@@ -6,8 +6,10 @@ from cmdb.views import docker
 from cmdb.views import business
 from cmdb.views import idc
 
+from django.contrib.auth.decorators import login_required
+
 urlpatterns = [
-    url(r'^$', server.ServerListView.as_view()),
+    url(r'^$', login_required(server.ServerListView.as_view())),
     url(r'^server-list.html$', server.ServerListView.as_view()),
     url(r'^server-json.html$', server.ServerJsonView.as_view()),
 

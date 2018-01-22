@@ -20,5 +20,6 @@ urlpatterns = [
 
     url(r'^config/instance/(?P<server_id>\d+).html$', instance_config.InstanceConfigView.as_view()),
     url(r'^config/instance/json-(?P<server_id>\d+).html$', instance_config.InstanceConfigJsonView.as_view()),
+    url(r'^config/instance/update-server-instance.html$', instance_config.UpdateServerInstanceView.as_view()),
 
 ]
