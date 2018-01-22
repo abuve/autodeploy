@@ -19,7 +19,7 @@ class Server(BaseServiceList):
         # 查询条件的配置
         condition_config = [
             {'name': 'name', 'text': 'App Name', 'condition_type': 'input'},
-            {'name': 'name', 'text': 'Project', 'condition_type': 'select', 'global_name': 'project_list'},
+            {'name': 'project_id__id', 'text': 'Project', 'condition_type': 'select', 'global_name': 'project_list'},
         ]
         # 表格的配置
         table_config = [
