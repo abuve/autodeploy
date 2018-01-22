@@ -137,6 +137,9 @@
             var instanceTable = new InstanceTableInit();
             instanceTable.Init({{ response.data.id }});
 
+            // 激活头部菜单
+            $("#instances").addClass('active')
+
         });
 
     </script>

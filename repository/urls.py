@@ -14,7 +14,7 @@ urlpatterns = [
 
     url(r'^webconf/nginx/get_version_status.html$', web_config.WebConfigVersionStatus.as_view()),
 
-    url(r'^config/group/(?P<server_id>\d+).html$', group_config.GroupConfigView.as_view()),
+    url(r'^config/group/(?P<server_id>\d+).html$', group_config.GroupConfigView.as_view(), name='test123'),
     url(r'^config/group/json-(?P<server_id>\d+).html$', group_config.GroupConfigJsonView.as_view()),
     url(r'^config/group/update-server-group.html$', group_config.UpdateServerGroupView.as_view()),
 

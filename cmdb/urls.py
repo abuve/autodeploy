@@ -40,8 +40,4 @@ urlpatterns = [
 
     url(r'^test/$', server.test),
 
-    url(r'^rsync_old_data/$', server.rsync_old_data),
-
-    url(r'^upload_cloud_server/$', server.upload_cloud_server),
-
 ]
