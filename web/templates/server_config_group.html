@@ -30,6 +30,7 @@
 
                 <div id="group_toolbar" class="btn-group">
                     <a class="btn btn-default no-radius" data-toggle="modal" data-target="#add_group_modal" onclick="create_group_fn()"><i class="fa fa-plus-circle"></i> Create Group</a>
+                    <a class="btn btn-default no-radius" data-toggle="modal" data-target="#add_public_group_modal" onclick="bond_public_group_fn()"><i class="fa fa-plus-circle"></i> Public Group</a>
                 </div>
 
                 <table id="group_table"></table>
@@ -60,7 +61,7 @@
                                     <input type="hidden" class="form-control" name="add_group_app_id" value="{{ response.data.id }}">
                                 </td>
                             </tr>
-                            <tr>
+                            <!--<tr>
                                 <td style="line-height:34px;" align="right">Docker yaml conf : *</td>
                                 <td>
                                     <input type="text" class="form-control" name="add_group_yaml_path" placeholder="Please enter application path...">
@@ -71,6 +72,20 @@
                                 <td>
                                     <input type="text" class="form-control" name="add_group_jenkins_key" placeholder="">
                                 </td>
+                            </tr>-->
+                            <tr>
+                                <td style="line-height:34px;" align="right">Group Type : *</td>
+                                <td style="vertical-align: inherit">
+
+                                    <label class="radio-inline" style="padding-left: 24px">
+                                        <input type="radio" name="add_group_type" value="0" id="add_group_type_0" checked=""> Private
+                                    </label>
+
+                                    <label class="radio-inline">
+                                        <input type="radio" name="add_group_type" value="1" id="add_group_type_1"> Public
+                                    </label>
+
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -80,6 +95,40 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-primary" id="update_server_group_fn" onclick="update_server_group_fn('post')">Save</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<!-- 新增公共分组 -->
+<div class="modal fade" id="add_public_group_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="margin-top: 150px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Bond Public Application Group</h4>
+            </div>
+            <div class="modal-body">
+
+                <form role="form" id="add_server_group_form" action="/update-server-group.html" method="post">
+                    <table class="table table-bordered table-striped">
+                        <tbody>
+                            <tr>
+                                <td style="line-height:34px;" align="right">Group Name : *</td>
+                                <td>
+                                    <select class="form-control" name="bond_public_group" id="bond_public_group"></select>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="do_bond_public_group()">Bond</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->

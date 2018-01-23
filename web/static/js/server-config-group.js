@@ -50,8 +50,9 @@ var GroupTableInit = function () {
                     title: 'Project'
                 },
                 {
-                    field: 'yaml_path',
-                    title: 'Docker YAML Path'
+                    field: 'group_type',
+                    title: 'Group Type',
+                    formatter: group_type_formatter
                 },
                 {
                     field: 'name',
@@ -63,8 +64,6 @@ var GroupTableInit = function () {
             ]
         });
     };
-
-
 
     //得到查询的参数
     oTableInit.queryParams = function (params) {
@@ -80,16 +79,27 @@ var GroupTableInit = function () {
 };
 
 function group_operateFormatter(value, row, index) {
-        return [
-            '<div class="btn-group">',
-            '<a type="button" class="btn btn-default btn-xs" onclick="edit_group_data_fn(' + row.id + ')"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>',
-            '<a type="button" class="btn btn-default btn-xs" onclick=delete_group_data_fn(' + row.id + ',' + JSON.stringify(row.name) + ')><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>',
-            '<a type="button" class="btn btn-default btn-xs" onclick="get_yaml_conf_fn(' + row.id + ')"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> Docker YAML</a>',
-            // '<a type="button" class="btn btn-default btn-xs" onclick="group_edit_fn(' + row.id + ')"><span class="glyphicon glyphicon-send" aria-hidden="true"></span> Instances</a>',
-            '<a type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-tags" aria-hidden="true"></span> Instance</a> <button type="button" class="btn btn-default dropdown-toggle btn-xs"data-toggle="dropdown"> <span class="caret"></span> <span class="sr-only">切换下拉菜单</span> </button> <ul class="dropdown-menu" role="menu" style="margin:2px 164px; min-width:130px"> <li><a href="#">More Option</a></li> </ul>',
-            '</div>'
-        ].join('');
+    return [
+        '<div class="btn-group">',
+        '<a type="button" class="btn btn-default btn-xs" onclick="edit_group_data_fn(' + row.id + ')"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>',
+        '<a type="button" class="btn btn-default btn-xs" onclick=delete_group_data_fn(' + row.id + ',' + JSON.stringify(row.name) + ')><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>',
+        '<a type="button" class="btn btn-default btn-xs" onclick="get_yaml_conf_fn(' + row.id + ')"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> Docker YAML</a>',
+        // '<a type="button" class="btn btn-default btn-xs" onclick="group_edit_fn(' + row.id + ')"><span class="glyphicon glyphicon-send" aria-hidden="true"></span> Instances</a>',
+        '<a type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-tags" aria-hidden="true"></span> Instance</a> <button type="button" class="btn btn-default dropdown-toggle btn-xs"data-toggle="dropdown"> <span class="caret"></span> <span class="sr-only">切换下拉菜单</span> </button> <ul class="dropdown-menu" role="menu" style="margin:2px 164px; min-width:130px"> <li><a href="#">More Option</a></li> </ul>',
+        '</div>'
+    ].join('');
+}
+
+function group_type_formatter(value, row, index) {
+    if (row.group_type == 0) {
+        var btn_html = '<a type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-tag" aria-hidden="true"></span> Private</a>'
+    } else if (row.group_type == 1) {
+        var btn_html = '<a type="button" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span> Public</a>'
     }
+    return [
+        '<div class="btn-group">' + btn_html + '</div>'
+    ].join('');
+}
 
 
 function create_group_fn() {
@@ -119,6 +129,7 @@ function edit_group_data_fn(group_id) {
             $("#add_group_modal").modal('show')
             $('input[name="add_group_name"]').val(data[0].name)
             $('input[name="add_group_yaml_path"]').val(data[0].yaml_path)
+            $("#add_group_type_" + data[0].group_type).prop("checked", true);
         }
     });
 
@@ -129,13 +140,14 @@ function update_server_group_fn(update_type, group_id) {
     var add_group_name = $('input[name="add_group_name"]').val()
     var add_group_app_id = $('input[name="add_group_app_id"]').val()
     var add_group_yaml_path = $('input[name="add_group_yaml_path"]').val()
+    var add_group_type = $('input[name="add_group_type"]:checked').val()
 
     $.ajax({
         url: '/server/config/group/update-server-group.html',
         type: update_type,
         dataType: 'json',
         traditional:true,
-        data: {'add_group_name': add_group_name, 'add_group_app_id': add_group_app_id, 'add_group_yaml_path': add_group_yaml_path, 'group_id': group_id},
+        data: {'add_group_name': add_group_name, 'add_group_app_id': add_group_app_id, 'add_group_yaml_path': add_group_yaml_path, 'group_id': group_id, 'add_group_type': add_group_type},
         success: function (data, response, status) {
             $('#group_table').bootstrapTable('refresh');
             $("#add_group_modal").modal('hide')
@@ -217,4 +229,44 @@ function yaml_update_fn(update_type, group_id) {
 
         }
     });
+}
+
+function bond_public_group_fn() {
+
+    var add_group_app_id = $('input[name="add_group_app_id"]').val()
+
+    $.ajax({
+        url: '/server/config/group/update-public-group.html',
+        type: 'get',
+        dataType: 'json',
+        traditional:true,
+        success: function (data, response, status) {
+            $("#bond_public_group").html("")
+            $.each(data, function( index, value ) {
+                if (value.group_type == 1) {
+                    $("#bond_public_group").append("<option value=" + data[index].id + ">" + data[index].name + "</option>")
+                }
+            });
+        }
+    });
+
+}
+
+function do_bond_public_group() {
+
+    var add_group_app_id = $('input[name="add_group_app_id"]').val()
+    var public_group_id = $("select[name='bond_public_group']").val()
+
+    $.ajax({
+        url: '/server/config/group/update-public-group.html',
+        type: 'post',
+        dataType: 'json',
+        traditional:true,
+        data: {'add_group_app_id': add_group_app_id, 'public_group_id': public_group_id},
+        success: function (data, response, status) {
+            $('#group_table').bootstrapTable('refresh');
+            $("#add_public_group_modal").modal('hide')
+        }
+    });
+
 }

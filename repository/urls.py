@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^config/group/(?P<server_id>\d+).html$', login_required(group_config.GroupConfigView.as_view()), name='server-config-group'),
     url(r'^config/group/json-(?P<server_id>\d+).html$', login_required(group_config.GroupConfigJsonView.as_view())),
     url(r'^config/group/update-server-group.html$', login_required(group_config.UpdateServerGroupView.as_view())),
+    url(r'^config/group/update-public-group.html$', login_required(group_config.UpdatePublicGroupView.as_view())),
 
     url(r'^config/instance/(?P<server_id>\d+).html$', login_required(instance_config.InstanceConfigView.as_view()), name='server-config-instance'),
     url(r'^config/instance/json-(?P<server_id>\d+).html$', login_required(instance_config.InstanceConfigJsonView.as_view())),

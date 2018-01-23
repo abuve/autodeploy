@@ -53,6 +53,11 @@ class AppGroups(models.Model):
     yaml_path = models.CharField('YAML配置文件路径', max_length=200, blank=True, null=True)
     app_id = models.ManyToManyField(Applications, related_name='groups')
     instance = models.ManyToManyField(CMDB_MODELS.Asset, related_name='instances')
+    group_type_choices = (
+        (0, 'private'),  # 私有分组
+        (1, 'public'),   # 公共分组
+    )
+    group_type = models.SmallIntegerField(choices=group_type_choices, default=0)
 
     class Meta:
         verbose_name_plural = "应用分组表"

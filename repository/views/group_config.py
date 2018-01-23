@@ -17,7 +17,7 @@ class GroupConfigView(View):
 
 class GroupConfigJsonView(View):
     def get(self, request, server_id):
-        response = group_config.ServerGroup.get_server_groups_json(server_id)
+        response = group_config.ServerGroup.get_server_groups_json(request, server_id)
         return HttpResponse(json.dumps(response.data))
 
 
@@ -36,4 +36,14 @@ class UpdateServerGroupView(View):
 
     def delete(self, request):
         response = group_config.ServerGroup.delete_server_group(request)
+        return JsonResponse(response.__dict__)
+
+
+class UpdatePublicGroupView(View):
+    def get(self, request, *args, **kwargs):
+        response = group_config.ServerGroup.get_public_group(request)
+        return HttpResponse(json.dumps(response.data))
+
+    def post(self, request):
+        response = group_config.ServerGroup.bond_public_group(request)
         return JsonResponse(response.__dict__)

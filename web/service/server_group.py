@@ -19,7 +19,7 @@ class ServerGroup(BaseServiceList):
 
         try:
             from django.db.models import Count
-            get_group_from_db = models.AppGroups.objects.filter(app_id__id=server_id).values('id', 'name', 'app_id__name', 'app_id__project_id__name', 'yaml_path').order_by("-id")
+            get_group_from_db = models.AppGroups.objects.filter(app_id__id=server_id).values('id', 'name', 'app_id__name', 'app_id__project_id__name', 'group_type').order_by("-id")
             response.data = list(get_group_from_db)
         except Exception as e:
             print(Exception, e)
