@@ -53,9 +53,11 @@ class ServerGroup(BaseServiceList):
             add_to_db = repository_models.AppGroups(
                 name = add_group_name,
                 yaml_path = add_group_yaml_path,
-                app_id = repository_models.Applications.objects.get(id=add_group_app_id)
+                #app_id = repository_models.Applications.objects.get(id=add_group_app_id)
             )
+
             add_to_db.save()
+            add_to_db.app_id.add(repository_models.Applications.objects.get(id=add_group_app_id))
 
         except Exception as e:
             print(Exception, e)
