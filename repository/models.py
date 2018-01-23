@@ -51,14 +51,10 @@ class AppGroups(models.Model):
     name = models.CharField('分组名称', max_length=64)
     #config_path = models.CharField('应用路径', max_length=200, blank=True, null=True)
     yaml_path = models.CharField('YAML配置文件路径', max_length=200, blank=True, null=True)
-    #app_id = models.ForeignKey(Applications, related_name='groups')
-    #app_id = models.CharField(max_length=200, blank=True, null=True)
     app_id = models.ManyToManyField(Applications, related_name='groups')
-    #applications = models.ManyToManyField(Applications, related_name='groups')
     instance = models.ManyToManyField(CMDB_MODELS.Asset, related_name='instances')
 
     class Meta:
-        # unique_together = ('name', 'app_id',)
         verbose_name_plural = "应用分组表"
 
     def __str__(self):
@@ -212,3 +208,4 @@ class Mission(models.Model):
 
     def __str__(self):
         return self.name
+
