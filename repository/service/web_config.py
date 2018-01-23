@@ -169,6 +169,7 @@ class WebConfig(BaseServiceList):
             mission_obj = repository_models.WebConfigLogs(
                 app_id=app_obj,
                 version=current_version,
+                user=request.user,
                 memo=push_memo
             )
             mission_obj.save()
@@ -206,7 +207,7 @@ class WebConfig(BaseServiceList):
             version_id = post_dict.get('version_id')
             print(server_id)
             current_version_status = repository_models.WebConfigLogs.objects.get(id=version_id)
-            all_version_from_server = repository_models.WebConfigLogs.objects.filter(app_id_id=server_id)[:10]
+            all_version_from_server = repository_models.WebConfigLogs.objects.filter(app_id_id=server_id).order_by('-id')[:10]
             response.current_version_status = current_version_status
             response.all_version_from_server = all_version_from_server
         except Exception as e:

@@ -12,7 +12,6 @@ from cmdb import models as CMDB_MODELS
 
 class ServerListView(View):
     def get(self, request, *args, **kwargs):
-        print(request.user)
         return render(request, 'cmdb_server_list.html')
 
 
