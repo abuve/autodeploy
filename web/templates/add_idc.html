@@ -32,13 +32,13 @@
                 <tr>
                     <td style="line-height:34px;" align="right">Floor : *</td>
                     <td>
-                        <input type="text" class="form-control" name="idc_floor" placeholder="Enter idc floor...">
+                        <input type="text" class="form-control" name="idc_floor" placeholder="Enter idc floor..." onkeyup="value=value.replace(/[^\d]/g,'')">
                     </td>
                 </tr>
                 <tr>
                     <td style="line-height:34px;" align="right">Phone : *</td>
                     <td>
-                        <input type="text" class="form-control" name="idc_phone" placeholder="Enter idc phone...">
+                        <input type="text" class="form-control" name="idc_phone" placeholder="Enter idc phone..." onkeyup="value=value.replace(/[^\d]/g,'')">
                     </td>
                 </tr>
                 <tr>
@@ -82,15 +82,19 @@
         });
 
         function add_project_fn() {
+            var idc_floor_val = $('input[name="idc_floor"]').val();
+            var number_note = "Please fill number";
+            var reg = /^[1-9]\d*$|^0$/;
+
             if ($('input[name="idc_name"]').val().length == 0 ) {
                 alert("Please add idc name.");
                 return false;
             }
-            if ($('input[name="idc_floor"]').val().length == 0 ) {
-                if ($('input[name="idc_floor"]').val())
+            if (idc_floor_val.length == 0 ) {
                 alert("Please add idc floor.");
                 return false;
             }
+
             if ($('input[name="idc_phone"]').val().length == 0 ) {
                 alert("Please add idc phone.");
                 return false;
