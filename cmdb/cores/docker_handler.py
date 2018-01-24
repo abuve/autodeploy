@@ -8,7 +8,7 @@ import platform
 from conf import settings
 
 if platform.system() == 'Linux':
-    sys.path.append(settings.project_path)
+    sys.path.append('/app/project/AutoDeploy')
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "AutoDeploy.settings")
 django.setup()
@@ -37,11 +37,11 @@ class DockerHandler(object):
         return docker_set.containers.list()
 
     def set_container(self):
-        list_from_db = list(self.host_obj.docker.values_list('obj_id'))
+        list_from_db = list(self.host_obj.docker.values_list('name'))
 
         list_from_new = []
         for obj in self.contains_new_list:
-            list_from_new.append((obj['obj_id'], ))
+            list_from_new.append((obj['name'], ))
 
         old_set = set(list_from_db)
         new_set = set(list_from_new)
