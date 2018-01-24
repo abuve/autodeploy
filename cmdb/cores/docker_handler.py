@@ -5,7 +5,7 @@ import os, sys
 import docker
 import django
 import platform
-from conf import settings
+#from conf import settings
 
 if platform.system() == 'Linux':
     sys.path.append('/app/project/AutoDeploy')
