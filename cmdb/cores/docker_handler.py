@@ -1,9 +1,15 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-import os
+import os, sys
 import docker
 import django
+import platform
+from conf import settings
+
+if platform.system() == 'Linux':
+    sys.path.append(settings.project_path)
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "AutoDeploy.settings")
 django.setup()
 
