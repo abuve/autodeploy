@@ -16,7 +16,8 @@ class DockerHandler(object):
 
     def __docker_api_conn(self, host_ip):
         try:
-            client = docker.DockerClient(base_url='tcp://%s:%s' % (host_ip, self.host_port))
+            print(host_ip)
+            client = docker.DockerClient(base_url='tcp://%s:%s' % (host_ip, self.host_port), version='1.24')
             return client
         except:
             return False
