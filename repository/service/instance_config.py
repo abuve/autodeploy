@@ -19,7 +19,7 @@ class ServerInstance(BaseServiceList):
         response = BaseResponse()
         try:
             response.data = models.Applications.objects.filter(id=server_id).first()
-            # 获取project的business，再通过business查找cmdb中对应的资产信息
+            # 获取project的business，再通过business查找cmdb中对应的资产信息，此处用于绑定实例时，过滤业务线中的资产数据
             response.asset_data = CMDB_MODELS.Asset.objects.filter(
                 business_unit__projectinfo__applications__id=server_id)
 
