@@ -5,10 +5,8 @@
                 <li role="presentation" style="border-right: 1px solid #e7e7e7" id="basic_info"><a class="no-radius" href="#basic" aria-controls="basic" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-th-large"></span> Basic Info</a></li>
                 <li role="presentation" style="border-right: 1px solid #e7e7e7" id="groups"><a class="no-radius" href="/server/config/group/{{ response.data.id }}.html">Groups <span class="badge"></span></a></li>
                 <li role="presentation" style="border-right: 1px solid #e7e7e7" id="instances"><a class="no-radius" href="/server/config/instance/{{ response.data.id }}.html">Instances <span class="badge"></span></a></li>
-{#                <li role="presentation" id="instance_management_switch" style="border-right: 1px solid #e7e7e7"><a class="no-radius" href="#instance_management" aria-controls="instance_management" role="tab" data-toggle="tab">Docker <span class="badge"></span></a></li>#}
-{#                <li role="presentation" id="instance_management_switch" style="border-right: 1px solid #e7e7e7"><a class="no-radius" href="#instance_management" aria-controls="instance_management" role="tab" data-toggle="tab">HA Config<span class="badge"></span></a></li>#}
+                <li role="presentation" style="border-right: 1px solid #e7e7e7" id="docker"><a class="no-radius" href="/server/config/docker/{{ response.data.id }}.html">Docker <span class="badge"></span></a></li>
                 <li style="border-right: 1px solid #e7e7e7" id="nginx"><a class="no-radius" href="/server/webconf/nginx/config-{{ response.data.id }}.html">Nginx <span class="badge"></span></a></li>
-{#                <li role="presentation" id="instance_management_switch" style="border-right: 1px solid #e7e7e7"><a class="no-radius" href="#instance_management" aria-controls="instance_management" role="tab" data-toggle="tab">Forward <span class="badge"></span></a></li>#}
             </ul>
         </div>
     </div>
