@@ -101,7 +101,7 @@ class DockerHandler(object):
             try:
                 port_list = []
                 port_map_list = []
-                for container_port, host_port_list in attrs_json['NetworkSettings']['Ports'].items():
+                for container_port, host_port_list in attrs_json['HostConfig']['PortBindings'].items():
                     if host_port_list != None:
                         host_port = host_port_list[0]['HostPort']
                         port_list.append(host_port)
