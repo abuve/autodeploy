@@ -51,6 +51,10 @@ var DockerTableInit = function () {
                     title: 'Host IP',
                 },
                 {
+                    field: 'port',
+                    title: 'Host Port',
+                },
+                {
                     field: 'dockers__name',
                     title: 'Group Name',
                 },

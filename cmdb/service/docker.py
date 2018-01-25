@@ -51,6 +51,13 @@ class Docker(BaseServiceList):
                 'attr': {}
             },
             {
+                'q': 'port',
+                'title': "Host Port",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@port'}},
+                'attr': {}
+            },
+            {
                 'q': 'cpu',
                 'title': "CPU",
                 'display': 1,

@@ -35,6 +35,7 @@ class ServerDocker(BaseServiceList):
         try:
             instance_asset_list = CMDB_MODELS.DockerInstance.objects.filter(dockers__app_id=server_id).values('id', 'obj_id',
                                                                                               'name',
+                                                                                              'port',
                                                                                               'dockers__id',
                                                                                               'dockers__name',
                                                                                               'dockers__app_id__name',
