@@ -2,6 +2,7 @@ from django.conf.urls import url
 from repository.views import web_config
 from repository.views import group_config
 from repository.views import instance_config
+from repository.views import docker_config
 
 from django.contrib.auth.decorators import login_required
 
@@ -24,5 +25,9 @@ urlpatterns = [
     url(r'^config/instance/(?P<server_id>\d+).html$', login_required(instance_config.InstanceConfigView.as_view()), name='server-config-instance'),
     url(r'^config/instance/json-(?P<server_id>\d+).html$', login_required(instance_config.InstanceConfigJsonView.as_view())),
     url(r'^config/instance/update-server-instance.html$', login_required(instance_config.UpdateServerInstanceView.as_view())),
+
+    url(r'^config/docker/(?P<server_id>\d+).html$', login_required(docker_config.DockerConfigView.as_view()), name='server-config-docker'),
+    url(r'^config/docker/json-(?P<server_id>\d+).html$', login_required(docker_config.DockerConfigJsonView.as_view())),
+    url(r'^config/docker/update-server-docker.html$', login_required(docker_config.UpdateServerDockerView.as_view())),
 
 ]

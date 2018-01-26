@@ -2,18 +2,20 @@
  * Created by aaron on 2017/9/11.
  */
 
-var InstanceTableInit = function () {
+var DockerTableInit = function () {
     var oTableInit = new Object();
     //初始化Table
     oTableInit.Init = function (app_id) {
-        $('#instance_table').bootstrapTable({
-            url: '/server-instances-' + app_id + '.html',         //请求后台的URL（*）
+        $('#docker_table').bootstrapTable({
+            //url: '/server-instances-' + app_id + '.html',         //请求后台的URL（*）
+            url: '/server/config/docker/json-' + app_id + '.html',         //请求后台的URL（*）
             method: 'get',                      //请求方式（*）
-            toolbar: '#instance_toolbar',                //工具按钮用哪个容器
+            toolbar: '#docker_toolbar',                //工具按钮用哪个容器
             striped: true,                      //是否显示行间隔色
             cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
             pagination: true,                   //是否显示分页（*）
             sortable: false,                     //是否启用排序
+            sortName: 'Group',
             sortOrder: "asc",                   //排序方式
             queryParams: oTableInit.queryParams,//传递参数（*）
             sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
@@ -34,40 +36,46 @@ var InstanceTableInit = function () {
             columns: [
                 {
                     field: 'id',
-                    title: 'Instance ID'
+                    title: 'ID'
                 },
                 {
-                    field: 'ip',
-                    title: 'IP Address'
+                    field: 'obj_id',
+                    title: 'Container ID'
+                },
+                {
+                    field: 'name',
+                    title: 'Container Name',
+                },
+                {
+                    field: 'asset__server__ipaddress',
+                    title: 'Host IP',
                 },
                 {
                     field: 'port',
-                    title: 'Instance Port'
+                    title: 'Host Port',
                 },
                 {
-                    field: 'instance_type',
-                    title: 'Instance Type',
+                    field: 'dockers__name',
+                    title: 'Group Name',
                 },
                 {
-                    field: 'group_id__name',
-                    title: 'Group',
+                    field: 'dockers__app_id__name',
+                    title: 'Application',
                 },
                 {
-                    field: 'group_id__app_id__name',
-                    title: '	Application',
+                    field: 'dockers__app_id__project_id__name',
+                    title: 'Project',
                 },
                 {
                     field: 'name',
                     title: 'Options',
                     width: 240,
                     align: 'center',
-                    formatter: instance_operateFormatter
+                    formatter: docker_operateFormatter
                 },
             ]
         });
     };
-
-
 
     //得到查询的参数
     oTableInit.queryParams = function (params) {
@@ -94,27 +102,21 @@ var ButtonInit = function () {
     return oInit;
 };
 
-function instance_operateFormatter(value, row, index) {
+function docker_operateFormatter(value, row, index) {
         return [
             '<div class="btn-group">',
-            '<a type="button" class="btn btn-default btn-xs" onclick="edit_instance_data_fn(' + row.id + ')"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>',
-            '<a type="button" class="btn btn-default btn-xs" onclick="delete_instance_data_fn(' + row.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>',
+            '<a type="button" class="btn btn-default btn-xs" onclick="edit_docker_data_fn(' + row.id + ')"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>',
+            '<a type="button" class="btn btn-default btn-xs" onclick="delete_docker_data_fn(' + row.dockers__id + ',' + row.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>',
             '<a type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Option</a> <button type="button" class="btn btn-default dropdown-toggle btn-xs"data-toggle="1dropdown"> <span class="caret"></span> <span class="sr-only">切换下拉菜单</span> </button> <ul class="dropdown-menu" role="menu" style="margin:2px 164px; min-width:130px"> <li><a href="#">More Option</a></li> </ul>',
             '</div>'
         ].join('');
     }
 
-function create_instance_fn() {
-    $("#add_server_instance_form").trigger("reset");
-    // get instance type
-    // var instance_type_objs = get_instance_type()
-    // var instance_type_selecter = $('select[name="add_instance_type"]')
-    // instance_type_selecter.empty();
-    // for(var i=0; i<instance_type_objs.length; i++) {
-    //     var option = $("<option>").text(instance_type_objs[i].name).val(instance_type_objs[i].value)
-    //     instance_type_selecter.append(option);
-    // }
-    $("#update_server_instance_fn").attr('onclick', 'update_server_instance_fn("post")')
+function bond_docker_fn() {
+    $("#add_server_docker_form").trigger("reset");
+    // 添加分组实例时，选择分组名
+    $('select[name="add_docker_group_id"]').removeAttr("disabled", "true")
+    $("#update_server_docker_fn").attr('onclick', 'do_bond_docker_fn()')
 }
 
 function get_instance_type() {
@@ -132,52 +134,97 @@ function get_instance_type() {
     return recv_data
 }
 
-function delete_instance_data_fn(instance_id) {
+function delete_docker_data_fn(group_id, instance_id) {
 
-    $("#instance_html_area").html("Confirm remove Instance ID " + instance_id + " ? All the data will be delete.")
-    $("#delete_server_instance_fn").attr("onclick", "update_server_instance_fn('delete', " + instance_id + ")")
-    $("#delete_instance_modal").modal('show')
+    $("#delete_docker_html_area").html("Confirm remove Docker ID " + instance_id + " ? All the data will be delete.")
+    $("#delete_server_docker_fn").attr("onclick", "delete_server_docker_fn( " + group_id + "," + instance_id + ")")
+    $("#delete_docker_modal").modal('show')
 
 }
 
-function edit_instance_data_fn(instance_id) {
-    $("#update_server_instance_fn").attr("onclick", "update_server_instance_fn('put', " + instance_id + ")")
+function edit_docker_data_fn(docker_id) {
+    $("#update_server_docker_fn").attr("onclick", "update_server_docker_fn('put', " + docker_id + ")")
 
     $.ajax({
-        url: '/update-server-instance.html',
+        url: '/server/config/docker/update-server-docker.html',
         type: 'get',
         dataType: 'json',
         traditional:true,
-        data: {'instance_id': instance_id},
+        data: {'docker_id': docker_id},
         success: function (data, response, status) {
-            $("#add_instance_modal").modal('show')
-            $('select[name="add_instance_group_id"]').val(data[0].group_id__id)
-            $('input[name="add_instance_ip"]').val(data[0].ip)
-            $('input[name="add_instance_port"]').val(data[0].port)
+            $("#add_docker_modal").modal('show')
+            $('select[name="add_docker_group_id"]').val(data[0].dockers__id);
+            $('select[name="add_instance_ip"]').val(data[0].asset__id);
+            $('input[name="old_docker_id"]').val(data[0].id);
+
+            // var e = jQuery.Event("select");
+            //
+            // load_instance_fn(e)
+
+            // 修改分组实例时，禁止修改分组名
+            $('select[name="add_docker_group_id"]').attr("disabled", "true")
         }
     });
 }
 
-function update_server_instance_fn(update_type, instance_id) {
+function do_bond_docker_fn() {
 
-    var add_instance_group_id = $('select[name="add_instance_group_id"]').val()
-    var add_instance_ip = $('input[name="add_instance_ip"]').val()
-    var add_instance_id = $('select[name="instance_select"]').val()
-
-    alert(add_instance_id)
+    var server_id = $('input[name="server_id"]').val();
+    var add_docker_group_id = $('select[name="add_docker_group_id"]').val();
+    var add_docker_id = $('select[name="docker_select"]').val();
 
     $.ajax({
-        url: '/update-server-instance.html',
+        url: '/server/config/docker/update-server-docker.html',
+        type: 'post',
+        dataType: 'json',
+        traditional:true,
+        data: {'add_docker_group_id': add_docker_group_id,
+                'add_docker_id': add_docker_id},
+        success: function (data, response, status) {
+            $('#docker_table').bootstrapTable('refresh');
+            $("#add_docker_modal").modal('hide');
+            $("#add_server_docker_form").trigger("reset");
+        }
+    });
+}
+
+function update_server_docker_fn(update_type) {
+
+    var docker_group_id = $('select[name="add_docker_group_id"]').val();
+    var new_docker_id = $('select[name="docker_select"]').val();
+    var old_docker_id = $('input[name="old_docker_id"]').val();
+
+    $.ajax({
+        url: '/server/config/docker/update-server-docker.html',
         type: update_type,
         dataType: 'json',
         traditional:true,
-        data: {'add_instance_group_id': add_instance_group_id,
-                'instance_id': add_instance_id},
+        data: {'docker_group_id': docker_group_id,
+                'new_docker_id': new_docker_id,
+                'old_docker_id': old_docker_id},
         success: function (data, response, status) {
-            $('#instance_table').bootstrapTable('refresh');
-            $("#add_instance_modal").modal('hide')
-            $("#delete_instance_modal").modal('hide')
-            $("#add_server_instance_form").trigger("reset");
+            $('#docker_table').bootstrapTable('refresh');
+            $("#add_docker_modal").modal('hide');
+            $("#delete_docker_modal").modal('hide');
+            $("#add_server_docker_form").trigger("reset");
+        }
+    });
+}
+
+function delete_server_docker_fn(group_id, docker_id) {
+
+    var server_id = $('input[name="server_id"]').val()
+
+    $.ajax({
+        url: '/server/config/docker/update-server-docker.html',
+        type: 'delete',
+        dataType: 'json',
+        traditional:true,
+        data: {'group_id': group_id,
+                'docker_id': docker_id},
+        success: function (data, response, status) {
+            $('#docker_table').bootstrapTable('refresh');
+            $("#delete_docker_modal").modal('hide')
         }
     });
 }
@@ -197,9 +244,9 @@ function load_instance_fn(value) {
             success: function (data, response, status) {
                 console.log(data)
                 if (data.status) {
-                    $("#instance").html("")
+                    $("#docker_instance").html("")
                     for(var i in data.data.data_list){
-                        $("#instance").append("<option value=" + data.data.data_list[i].id + ">" + data.data.data_list[i].name + "</option>")
+                        $("#docker_instance").append("<option value=" + data.data.data_list[i].id + ">" + data.data.data_list[i].name + "</option>")
                     }
                 }
             }

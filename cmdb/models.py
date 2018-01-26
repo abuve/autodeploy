@@ -261,6 +261,8 @@ class DockerInstance(models.Model):
     cpu_usage = models.FloatField(blank=True, null=True)
     mem_usage = models.FloatField(blank=True, null=True)
     disk_usage = models.FloatField(blank=True, null=True)
+    port = models.CharField(max_length=100, blank=True, null=True)
+    port_map = models.CharField(max_length=200, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Docker实例'

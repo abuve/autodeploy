@@ -5,10 +5,10 @@ import os, sys
 import docker
 import django
 import platform
-from conf import settings
+#from conf import settings
 
 if platform.system() == 'Linux':
-    sys.path.append(settings.project_path)
+    sys.path.append('/app/project/AutoDeploy')
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "AutoDeploy.settings")
 django.setup()
@@ -37,11 +37,11 @@ class DockerHandler(object):
         return docker_set.containers.list()
 
     def set_container(self):
-        list_from_db = list(self.host_obj.docker.values_list('obj_id'))
+        list_from_db = list(self.host_obj.docker.values_list('name'))
 
         list_from_new = []
         for obj in self.contains_new_list:
-            list_from_new.append((obj['obj_id'], ))
+            list_from_new.append((obj['name'], ))
 
         old_set = set(list_from_db)
         new_set = set(list_from_new)
@@ -64,10 +64,11 @@ class DockerHandler(object):
     def __container_delete(self, container_list):
         if container_list:
             print('---going to delete %s' % container_list)
-            CMDB_MODELS.DockerInstance.objects.filter(obj_id__in=container_list).delete()
+            data = CMDB_MODELS.DockerInstance.objects.filter(asset_id=self.host_obj.id, name__in=container_list)
+            CMDB_MODELS.DockerInstance.objects.filter(asset_id=self.host_obj.id, name__in=container_list).delete()
 
     def __container_create_or_delete(self, contains_set):
-        need_create = filter(lambda x: (x['obj_id'], ) in contains_set['container_need_create'], self.contains_new_list)
+        need_create = filter(lambda x: (x['name'], ) in contains_set['container_need_create'], self.contains_new_list)
         need_delete = map(lambda x: x[0], contains_set['container_need_delete'])
 
         self.__container_create(list(need_create))
@@ -96,6 +97,24 @@ class DockerHandler(object):
                 obj_idc['disk'] = int(int(attrs_json['GraphDriver']['Data']['DeviceSize'])  / 1000 / 1000 /1000)   # format to GB
             except:
                 obj_idc['disk'] = None
+
+            try:
+                port_list = []
+                port_map_list = []
+                for container_port, host_port_list in attrs_json['HostConfig']['PortBindings'].items():
+                    if host_port_list != None:
+                        host_port = host_port_list[0]['HostPort']
+                        port_list.append(host_port)
+                    else:
+                        host_port = None
+
+                    port_map_list.append('%s ---> %s' % (container_port, host_port))
+
+                obj_idc['port'] = ', '.join(port_list)
+                obj_idc['port_map'] = ', '.join(port_map_list)
+            except:
+                obj_idc['port'] = None
+                obj_idc['port_map'] = None
 
             # use for cpu memory usage.
             # stats_json = contains_obj.stats(stream=False)
