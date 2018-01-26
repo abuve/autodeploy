@@ -215,3 +215,18 @@ class Mission(models.Model):
     def __str__(self):
         return self.name
 
+
+class WebConfigLogsCenter(models.Model):
+    """
+    应用日志中心表
+    """
+    group_id = models.ForeignKey(AppGroups, verbose_name='所属分组', null=True, blank=True,
+                                      on_delete=models.SET_NULL, related_name='webconfiglogscenter')
+    url = models.URLField('日志地址', blank=True, null=True)
+    memo = models.CharField(max_length=200, blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "应用日志中心表"
+
+    def __str__(self):
+        return self.url

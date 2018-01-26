@@ -3,6 +3,7 @@ from repository.views import web_config
 from repository.views import group_config
 from repository.views import instance_config
 from repository.views import docker_config
+from repository.views import logs_config
 
 from django.contrib.auth.decorators import login_required
 
@@ -29,5 +30,9 @@ urlpatterns = [
     url(r'^config/docker/(?P<server_id>\d+).html$', login_required(docker_config.DockerConfigView.as_view()), name='server-config-docker'),
     url(r'^config/docker/json-(?P<server_id>\d+).html$', login_required(docker_config.DockerConfigJsonView.as_view())),
     url(r'^config/docker/update-server-docker.html$', login_required(docker_config.UpdateServerDockerView.as_view())),
+
+    url(r'^config/logs/(?P<server_id>\d+).html$', login_required(logs_config.LogsConfigView.as_view()), name='server-config-logs'),
+    url(r'^config/logs/json-(?P<server_id>\d+).html$', login_required(logs_config.LogsConfigJsonView.as_view())),
+    url(r'^config/logs/update-server-logs.html$', login_required(logs_config.UpdateServerLogsView.as_view())),
 
 ]
