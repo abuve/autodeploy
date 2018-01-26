@@ -1,5 +1,6 @@
 from django.contrib import admin
 from cmdb import models
+from django.contrib.auth.models import User
 
 '''
 配置Django后台admin数据编辑显示
@@ -23,7 +24,7 @@ class DiskInline(admin.TabularInline):
 #     list_display = ('id', 'hostname', 'manufacturer')
 #     inlines = [MemoryInline, DiskInline]
 
-
+admin.site.register(User)
 admin.site.register(models.Asset)
 admin.site.register(models.Server)
 admin.site.register(models.UserProfile)

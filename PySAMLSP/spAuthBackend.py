@@ -1,5 +1,6 @@
 # import the User object
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from cmdb.models import UserProfile as User
 import random
 import string
 
@@ -25,6 +26,7 @@ class spAuthBackend(object):
             print("USER NOT EXISTS")
             user = User.objects.create_user(username=username).set_unusable_password()
             user = User.objects.get(username=username)
+            print ('test')
         except Exception as e:
             print(Exception, e)
 
