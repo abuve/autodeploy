@@ -1,22 +1,18 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-
-class UserProfile(models.Model):
+class UserProfile(AbstractUser):
     """
     用户信息
     """
-    username = models.CharField(u'用户名', max_length=64, unique=True)
-    password = models.CharField(u'密码', max_length=100)
-    name = models.CharField(u'姓名', max_length=32)
-    email = models.EmailField(u'邮箱')
     phone = models.CharField(u'座机', max_length=32)
     mobile = models.CharField(u'手机', max_length=32)
 
     class Meta:
-        verbose_name_plural = "用户表"
+        verbose_name_plural = "用户信息"
 
     def __str__(self):
-        return self.name
+        return self.username
 
 
 class UserGroup(models.Model):
