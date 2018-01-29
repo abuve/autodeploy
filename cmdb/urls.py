@@ -9,7 +9,6 @@ from cmdb.views import idc
 from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
-    url(r'^$', login_required(server.ServerListView.as_view())),
     url(r'^server-list.html$', login_required(server.ServerListView.as_view())),
     url(r'^server-json.html$', login_required(server.ServerJsonView.as_view())),
 
