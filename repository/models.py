@@ -230,3 +230,22 @@ class WebConfigLogsCenter(models.Model):
 
     def __str__(self):
         return self.url
+
+
+class UrlConfigHandler(models.Model):
+    """
+    URL关系映射表
+    """
+    group_id = models.ForeignKey(AppGroups, verbose_name='所属分组', null=True, blank=True,
+                                      on_delete=models.SET_NULL, related_name='urlconfighandler')
+    url = models.CharField('URL地址', max_length=400)
+    cloud = models.ManyToManyField(CMDB_MODELS.Asset, related_name='urlconfighandler_cloud')
+    forward = models.ManyToManyField(CMDB_MODELS.Asset, related_name='urlconfighandler_forward')
+    docker = models.ManyToManyField(CMDB_MODELS.DockerInstance, related_name='urlconfighandler_docker')
+    memo = models.CharField(max_length=200, blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "URL关系映射表"
+
+    def __str__(self):
+        return self.url

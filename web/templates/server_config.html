@@ -60,14 +60,14 @@
         </div>
     </ol>
 
-    <div style="padding: 10px 8px;">
+    <div class="row" style="padding: 10px 8px;">
+            <div class="col-md-12">
+                {% include 'include/server_config_header.html' %}
+            </div>
+    </div>
 
-            <!-- nav start -->
-            {% include 'include/server_config_header.html' %}
-            <!-- nav end -->
-
-        <div class="row" style="padding-top: 20px">
-            <div class="col-md-6">
+    <div class="row" style="padding: 10px 8px;">
+            <div class="col-md-5">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">Basic Info</h3>
@@ -121,12 +121,7 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
 
-        </div>
-
-        <div class="row">
-            <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">Logs Url</h3>
@@ -164,15 +159,62 @@
                 </div>
             </div>
 
-        </div>
-
-
-
+            <div class="col-md-7">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Url Maps</h3>
+                    </div>
+                    <table class="table table-bordered table-striped">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    Group Tag
+                                </th>
+                                <th>
+                                    Http URL
+                                </th>
+                                <th>
+                                    Cloud Server
+                                </th>
+                                <th>
+                                    Forward Server(Ha/Nginx)
+                                </th>
+                                <th>
+                                    App Instance
+                                </th>
+                            </tr>
+                            {% for group_obj in response.data.groups.all %}
+                                {% for url_obj in group_obj.urlconfighandler.all %}
+                                    <tr>
+                                        <td>
+                                            Real
+                                        </td>
+                                        <td>
+                                            {{ url_obj.url }}
+                                        </td>
+                                        <td>
+                                            {% for cloud_obj in url_obj.cloud.all  %}
+                                                {{ cloud_obj.server.ipaddress }} <br />
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            {% for cloud_obj in url_obj.forward.all  %}
+                                                {{ cloud_obj.server.ipaddress }} <br />
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            {% for docker_obj in url_obj.docker.all  %}
+                                                {{ docker_obj.asset.server.ipaddress }}:{{ docker_obj.port }}<br />
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
     </div>
-
-
-
-
 
 {% endblock %}
 
