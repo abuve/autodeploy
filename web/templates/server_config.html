@@ -66,87 +66,111 @@
             {% include 'include/server_config_header.html' %}
             <!-- nav end -->
 
-        <div class="row" style="padding-top: 10px">
-            <div class="col-md-12">
-
-                <div class="guige">
-                    <table class="guige-table">
+        <div class="row" style="padding-top: 20px">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Basic Info</h3>
+                    </div>
+                    <table class="table table-bordered table-striped">
                         <tbody>
-
-                        <tr>
-                            <th colspan="5" class="title f14 th"><span class="padding-l-8">基础信息</span></th>
-                        </tr>
-                        <tr>
-                            <td>名称</td>
-                            <td colspan="4">值</td>
-                        </tr>
-                        <tr>
-                            <td>Application Name</td>
-                            <td colspan="4">xbet_test</td>
-                        </tr>
-                        <tr>
-                            <td>System</td>
-                            <td colspan="4">Xbet</td>
-                        </tr>
-                        <tr>
-                            <td>Application Type</td>
-                            <td colspan="4">Java</td>
-                        </tr>
-                        <tr>
-                            <td>Group Number</td>
-                            <td colspan="4">3</td>
-                        </tr>
-                        <tr>
-                            <td>Instance Number</td>
-                            <td colspan="4">6</td>
-                        </tr>
-                        <tr>
-                            <td>Leader</td>
-                            <td colspan="4">admin</td>
-                        </tr>
-                        <tr>
-                            <td>Member</td>
-                            <td colspan="4">user1, user2, user3, test1, test2</td>
-                        </tr>
-
+                            <tr>
+                                <td style="width: 150px;">
+                                    <strong>Application Name</strong>
+                                </td>
+                                <td>
+                                    {{ response.data.name }}
+                                </td>
+                                <td style="width: 150px;">
+                                    <strong>System Name</strong>
+                                </td>
+                                <td>
+                                    {{ response.data.project_id.name }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 150px;">
+                                    <strong>Application Type</strong>
+                                </td>
+                                <td>
+                                    {{ response.data.get_app_type_display }}
+                                </td>
+                                <td style="width: 150px;">
+                                    <strong>Nusiness Unit</strong>
+                                </td>
+                                <td>
+                                    {{ response.data.project_id.business_unit.name }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 150px;">
+                                    <strong>OM</strong>
+                                </td>
+                                <td colspan="3">
+                                    admin1, admin2
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 150px;">
+                                    <strong>DEV</strong>
+                                </td>
+                                <td colspan="3">
+                                    User1, User2
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
-
                 </div>
-
-                <div class="guige">
-                    <table class="guige-table">
-                        <tbody>
-
-                        <tr>
-                            <th colspan="5" class="title f14 th"><span class="padding-l-8">System Info</span></th>
-                        </tr>
-
-                        <tr>
-                            <td style="width:500px">Docker Compose Config File Path</td>
-                            <td colspan="4">/opt/compose-conf/FPMS/aaaa/</td>
-                        </tr>
-
-                        <tr>
-                            <td style="width:500px">Docker Container Logs Path</td>
-                            <td colspan="4">/opt/container-logs/FPMS/aaaa/</td>
-                        </tr>
-
-                        <tr>
-                            <td style="width:500px">Docker Container Logs Path</td>
-                            <td colspan="4">/opt/container-logs/FPMS/aaaa/</td>
-                        </tr>
-
-                        </tbody>
-                    </table>
-
-                </div>
-
             </div>
 
         </div>
 
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Logs Url</h3>
+                    </div>
+                    <table class="table table-bordered table-striped">
+                        <tbody>
+                            <tr>
+                                <th style="width: 20%;">
+                                    Group Name
+                                </th>
+                                <th style="width: 20%;">
+                                    Group Tag
+                                </th>
+                                <th>
+                                    Http Url
+                                </th>
+                            </tr>
+                            {% for group_obj in response.data.groups.all %}
+                                {% for log_obj in group_obj.webconfiglogscenter.all %}
+                                    <tr>
+                                        <td>
+                                            {{ group_obj.name }}
+                                        </td>
+                                        <td>
+                                            real
+                                        </td>
+                                        <td style="width: 150px;">
+                                            <a href="{{ log_obj.url }}" target="_blank">{{ log_obj.url }}</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+
+
     </div>
+
+
 
 
 
