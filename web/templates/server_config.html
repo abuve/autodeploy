@@ -97,6 +97,7 @@
 
     <div class="row" style="padding: 10px 8px;">
             <div class="col-md-5">
+                <!-- 基础信息 -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">Basic Info</h3>
@@ -151,6 +152,7 @@
                     </table>
                 </div>
 
+                <!-- 应用日志地址 -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">Logs Url</h3>
@@ -186,9 +188,109 @@
                         </tbody>
                     </table>
                 </div>
+
+                <!-- 资产信息展示 -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">App Asset Information</h3>
+                    </div>
+                    <table class="table table-bordered table-striped">
+                        <tbody>
+                            <tr>
+                                <th style="width: 20%;">
+                                    Group Name
+                                </th>
+                                <th style="width: 20%;">
+                                    Group Tag
+                                </th>
+                                <th>
+                                    IP
+                                </th>
+                                <th>
+                                    HostName
+                                </th>
+                                <th>
+                                    IDC
+                                </th>
+                            </tr>
+                            {% for group_obj in response.data.groups.all %}
+                                {% for asset_obj in group_obj.instance.all %}
+                                    <tr>
+                                        <td>
+                                            {{ group_obj.name }}
+                                        </td>
+                                        <td>
+                                            real
+                                        </td>
+                                        <td>
+                                            {{ asset_obj.server.ipaddress }}
+                                        </td>
+                                        <td>
+                                            {{ asset_obj.server.hostname }}
+                                        </td>
+                                        <td>
+                                            {{ asset_obj.idc.name }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Docker信息展示 -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">App Docker Instance</h3>
+                    </div>
+                    <table class="table table-bordered table-striped">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    Group Name
+                                </th>
+                                <th>
+                                    Group Tag
+                                </th>
+                                <th>
+                                    Host IP
+                                </th>
+                                <th>
+                                    Host Port
+                                </th>
+                                <th>
+                                    Container Name
+                                </th>
+                            </tr>
+                            {% for group_obj in response.data.groups.all %}
+                                {% for docker_obj in group_obj.docker.all %}
+                                    <tr>
+                                        <td>
+                                            {{ docker_obj.name }}
+                                        </td>
+                                        <td>
+                                            real
+                                        </td>
+                                        <td>
+                                            {{ docker_obj.asset.server.ipaddress }}
+                                        </td>
+                                        <td>
+                                            {{ docker_obj.port }}
+                                        </td>
+                                        <td>
+                                            {{ docker_obj.name }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
 
             <div class="col-md-7">
+                <!-- URL 映射关系 -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">Url Maps</h3>
