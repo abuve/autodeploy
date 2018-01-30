@@ -133,7 +133,13 @@ class ServerGroup(BaseServiceList):
                                                                                      'app_id__name',
                                                                                      'app_id__project_id__name',
                                                                                      'group_type').order_by("-id")
-            response.data = list(get_group_from_db)
+            id_list = []
+            data_list = []
+            for obj in get_group_from_db:
+                if obj.get('id') not in id_list:
+                    data_list.append(obj)
+                    id_list.append(obj.get('id'))
+            response.data = data_list
         except Exception as e:
             print(Exception, e)
             response.status = False
