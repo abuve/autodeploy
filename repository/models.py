@@ -239,9 +239,6 @@ class UrlConfigHandler(models.Model):
     group_id = models.ForeignKey(AppGroups, verbose_name='所属分组', null=True, blank=True,
                                       on_delete=models.SET_NULL, related_name='urlconfighandler')
     url = models.CharField('URL地址', max_length=400)
-    # cloud = models.ManyToManyField(CMDB_MODELS.Asset, related_name='urlconfighandler_cloud')
-    # forward = models.ManyToManyField(CMDB_MODELS.Asset, related_name='urlconfighandler_forward')
-    # docker = models.ManyToManyField(CMDB_MODELS.DockerInstance, related_name='urlconfighandler_docker')
     cloud = models.ManyToManyField(AppGroups, related_name='urlconfighandler_cloud')
     forward = models.ManyToManyField(AppGroups, related_name='urlconfighandler_forward')
     docker = models.ManyToManyField(AppGroups, related_name='urlconfighandler_docker')

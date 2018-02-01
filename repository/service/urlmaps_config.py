@@ -80,9 +80,9 @@ class ServerUrlMaps(BaseServiceList):
             )
             add_to_db.save()
 
-            add_to_db.cloud.add(repository_models.AppGroups.objects.get(id=urlmaps_cloud_id))
-            add_to_db.forward.add(repository_models.AppGroups.objects.get(id=urlmaps_forward_id))
-            add_to_db.docker.add(repository_models.AppGroups.objects.get(id=urlmaps_instance_id))
+            if urlmaps_cloud_id: add_to_db.cloud.add(repository_models.AppGroups.objects.get(id=urlmaps_cloud_id))
+            if urlmaps_forward_id: add_to_db.forward.add(repository_models.AppGroups.objects.get(id=urlmaps_forward_id))
+            if urlmaps_instance_id: add_to_db.docker.add(repository_models.AppGroups.objects.get(id=urlmaps_instance_id))
 
         except Exception as e:
             print(Exception, e)
@@ -111,6 +111,7 @@ class ServerUrlMaps(BaseServiceList):
             response.error = {}
             post_dict = QueryDict(request.body, encoding='utf-8')
 
+            print(post_dict)
             urlmaps_id = post_dict.get('urlmaps_id')
             urlmaps_url = post_dict.get('urlmaps_url')
             urlmaps_group_id = post_dict.get('urlmaps_group_id')
@@ -129,9 +130,9 @@ class ServerUrlMaps(BaseServiceList):
             get_data_from_db.forward.clear()
             get_data_from_db.docker.clear()
 
-            get_data_from_db.cloud.add(repository_models.AppGroups.objects.get(id=urlmaps_cloud_id))
-            get_data_from_db.forward.add(repository_models.AppGroups.objects.get(id=urlmaps_forward_id))
-            get_data_from_db.docker.add(repository_models.AppGroups.objects.get(id=urlmaps_instance_id))
+            if urlmaps_cloud_id: get_data_from_db.cloud.add(repository_models.AppGroups.objects.get(id=urlmaps_cloud_id))
+            if urlmaps_forward_id: get_data_from_db.forward.add(repository_models.AppGroups.objects.get(id=urlmaps_forward_id))
+            if urlmaps_instance_id: get_data_from_db.docker.add(repository_models.AppGroups.objects.get(id=urlmaps_instance_id))
 
         except Exception as e:
             print(Exception, e)

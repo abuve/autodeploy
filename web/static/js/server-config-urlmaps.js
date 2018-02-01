@@ -38,7 +38,8 @@ var LogsTableInit = function () {
                 },
                 {
                     field: 'url',
-                    title: 'Url'
+                    title: 'Url',
+                    formatter: urlFormatter
                 },
                 {
                     field: 'memo',
@@ -91,6 +92,12 @@ var ButtonInit = function () {
 
     return oInit;
 };
+
+function urlFormatter(value, row, index) {
+    return [
+        '<a href="' + row.url + '" target="_blank">' + row.url + '</a>'
+    ]
+}
 
 function button_operateFormatter(value, row, index) {
     return [

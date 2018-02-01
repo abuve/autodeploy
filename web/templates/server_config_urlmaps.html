@@ -29,7 +29,7 @@
             <div class="col-md-12">
 
                 <div id="urlmaps_toolbar" class="btn-group">
-                    <a class="btn btn-default no-radius" data-toggle="modal" data-target="#create_url_maps_modal" onclick="bond_logs_fn()"><i class="fa fa-plus-circle"></i> Create Url Maps</a>
+                    <a class="btn btn-default no-radius" data-toggle="modal" data-target="#create_url_maps_modal" onclick="create_urlmaps_fn()"><i class="fa fa-plus-circle"></i> Create Url Maps</a>
                 </div>
 
                 <table id="urlmaps_table"></table>
@@ -112,6 +112,7 @@
                             <td style="line-height:34px;" align="right">Cloud Select : *</td>
                             <td>
                                 <select class="form-control" name="urlmaps_cloud_id">
+                                    <option value="">云服务器组</option>
                                     {% for obj in response.data.groups.all %}
                                         <option value="{{ obj.id }}">{{ obj.name }}</option>
                                     {% endfor %}
@@ -122,6 +123,7 @@
                             <td style="line-height:34px;" align="right">Forward Select : *</td>
                             <td>
                                 <select class="form-control" name="urlmaps_forward_id">
+                                    <option value="">转发服务器组</option>
                                     {% for obj in response.data.groups.all %}
                                         <option value="{{ obj.id }}">{{ obj.name }}</option>
                                     {% endfor %}
@@ -132,6 +134,7 @@
                             <td style="line-height:34px;" align="right">Instance Select : *</td>
                             <td>
                                 <select class="form-control" name="urlmaps_instance_id">
+                                    <option value="">Docker实例服务器组</option>
                                     {% for obj in response.data.groups.all %}
                                         <option value="{{ obj.id }}">{{ obj.name }}</option>
                                     {% endfor %}

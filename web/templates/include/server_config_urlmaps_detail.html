@@ -16,7 +16,7 @@
     </tr>
         <tr>
             <td>
-                {{ response.data.url }}
+                <a href="{{ response.data.url }}" target="_blank">{{ response.data.url }}</a>
             </td>
             <td>
                 {% for cloud_group_obj in response.data.cloud.all  %}

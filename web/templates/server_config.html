@@ -321,7 +321,7 @@
                                             Real
                                         </td>
                                         <td>
-                                            {{ url_obj.url }}
+                                            <a href="{{ url_obj.url }}" target="_blank">{{ url_obj.url }}</a>
                                         </td>
                                         <td>
                                             {% for cloud_group_obj in url_obj.cloud.all  %}
