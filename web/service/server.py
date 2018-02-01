@@ -229,6 +229,7 @@ class Server(BaseServiceList):
         try:
             response.data = models.Applications.objects.filter(id=server_id).first()
             response.asset_data = CMDB_MODELS.Asset.objects.all()
+            response.urlmaps_data = models.UrlConfigHandler.objects.filter(group_id__app_id=server_id).first()
         except Exception as e:
             print(Exception, e)
             response.status = False

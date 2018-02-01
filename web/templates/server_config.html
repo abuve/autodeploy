@@ -324,18 +324,24 @@
                                             {{ url_obj.url }}
                                         </td>
                                         <td>
-                                            {% for cloud_obj in url_obj.cloud.all  %}
-                                                {{ cloud_obj.server.ipaddress }} <br />
+                                            {% for cloud_group_obj in url_obj.cloud.all  %}
+                                                {% for asset_obj in cloud_group_obj.instance.all %}
+                                                    {{ asset_obj.server.ipaddress }} <br />
+                                                {% endfor %}
                                             {% endfor %}
                                         </td>
                                         <td>
-                                            {% for cloud_obj in url_obj.forward.all  %}
-                                                {{ cloud_obj.server.ipaddress }} <br />
+                                            {% for cloud_group_obj in url_obj.forward.all  %}
+                                                {% for asset_obj in cloud_group_obj.instance.all %}
+                                                    {{ asset_obj.server.ipaddress }} <br />
+                                                {% endfor %}
                                             {% endfor %}
                                         </td>
                                         <td>
-                                            {% for docker_obj in url_obj.docker.all  %}
-                                                {{ docker_obj.asset.server.ipaddress }}:{{ docker_obj.port }}<br />
+                                            {% for cloud_group_obj in url_obj.docker.all  %}
+                                                {% for docker_obj in cloud_group_obj.docker.all %}
+                                                    {{ docker_obj.asset.server.ipaddress }}:{{ docker_obj.port }} <br />
+                                                {% endfor %}
                                             {% endfor %}
                                         </td>
                                     </tr>

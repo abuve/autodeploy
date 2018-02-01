@@ -1,0 +1,44 @@
+<table class="table table-bordered table-striped">
+    <tbody>
+    <tr>
+        <th nowrap="nowrap">
+            Http URL
+        </th>
+        <th nowrap="nowrap">
+            Cloud Server
+        </th>
+        <th nowrap="nowrap">
+            Forward Server(Ha/Nginx)
+        </th>
+        <th nowrap="nowrap">
+            App Instance
+        </th>
+    </tr>
+        <tr>
+            <td>
+                {{ response.data.url }}
+            </td>
+            <td>
+                {% for cloud_group_obj in response.data.cloud.all  %}
+                    {% for asset_obj in cloud_group_obj.instance.all %}
+                        {{ asset_obj.server.ipaddress }} <br />
+                    {% endfor %}
+                {% endfor %}
+            </td>
+            <td>
+                {% for cloud_group_obj in response.data.forward.all  %}
+                    {% for asset_obj in cloud_group_obj.instance.all %}
+                        {{ asset_obj.server.ipaddress }} <br />
+                    {% endfor %}
+                {% endfor %}
+            </td>
+            <td>
+                {% for cloud_group_obj in response.data.docker.all  %}
+                    {% for docker_obj in cloud_group_obj.docker.all %}
+                        {{ docker_obj.asset.server.ipaddress }}:{{ docker_obj.port }} <br />
+                    {% endfor %}
+                {% endfor %}
+            </td>
+        </tr>
+    </tbody>
+</table>

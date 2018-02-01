@@ -4,6 +4,7 @@ from repository.views import group_config
 from repository.views import instance_config
 from repository.views import docker_config
 from repository.views import logs_config
+from repository.views import urlmaps_config
 
 from django.contrib.auth.decorators import login_required
 
@@ -15,7 +16,6 @@ urlpatterns = [
     url(r'^webconf/nginx/version-tree-(?P<server_id>\d+).html$', login_required(web_config.WebConfigVersionListView.as_view())),
     url(r'^webconf/nginx/file-data-(?P<server_id>\d+).html$', login_required(web_config.WebConfigFileData.as_view())),
     url(r'^webconf/nginx/file-push-(?P<server_id>\d+).html$', login_required(web_config.WebConfigFilePush.as_view())),
-
     url(r'^webconf/nginx/get_version_status.html$', login_required(web_config.WebConfigVersionStatus.as_view())),
 
     url(r'^config/group/(?P<server_id>\d+).html$', login_required(group_config.GroupConfigView.as_view()), name='server-config-group'),
@@ -34,5 +34,10 @@ urlpatterns = [
     url(r'^config/logs/(?P<server_id>\d+).html$', login_required(logs_config.LogsConfigView.as_view()), name='server-config-logs'),
     url(r'^config/logs/json-(?P<server_id>\d+).html$', login_required(logs_config.LogsConfigJsonView.as_view())),
     url(r'^config/logs/update-server-logs.html$', login_required(logs_config.UpdateServerLogsView.as_view())),
+
+    url(r'^config/urlmaps/(?P<server_id>\d+).html$', login_required(urlmaps_config.UrlMapsConfigView.as_view()), name='server-config-urlmaps'),
+    url(r'^config/urlmaps/json-(?P<server_id>\d+).html$', login_required(urlmaps_config.UrlMapsConfigJsonView.as_view())),
+    url(r'^config/urlmaps/get_urlmaps_detail.html$', login_required(urlmaps_config.UrlMapsDetailView.as_view())),
+    url(r'^config/urlmaps/update-server-urlmaps.html$', login_required(urlmaps_config.UpdateUrlMapsView.as_view())),
 
 ]
