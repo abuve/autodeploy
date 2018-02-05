@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^config/instance/(?P<server_id>\d+).html$', login_required(instance_config.InstanceConfigView.as_view()), name='server-config-instance'),
     url(r'^config/instance/json-(?P<server_id>\d+).html$', login_required(instance_config.InstanceConfigJsonView.as_view())),
     url(r'^config/instance/update-server-instance.html$', login_required(instance_config.UpdateServerInstanceView.as_view())),
+    url(r'^config/instance/get-instance-by-groupid.html$', login_required(instance_config.GetInstanceByGroupIdView.as_view())),
 
     url(r'^config/docker/(?P<server_id>\d+).html$', login_required(docker_config.DockerConfigView.as_view()), name='server-config-docker'),
     url(r'^config/docker/json-(?P<server_id>\d+).html$', login_required(docker_config.DockerConfigJsonView.as_view())),
@@ -39,5 +40,6 @@ urlpatterns = [
     url(r'^config/urlmaps/json-(?P<server_id>\d+).html$', login_required(urlmaps_config.UrlMapsConfigJsonView.as_view())),
     url(r'^config/urlmaps/get_urlmaps_detail.html$', login_required(urlmaps_config.UrlMapsDetailView.as_view())),
     url(r'^config/urlmaps/update-server-urlmaps.html$', login_required(urlmaps_config.UpdateUrlMapsView.as_view())),
+    url(r'^config/urlmaps/update-server-urlmaps-groups.html$', login_required(urlmaps_config.UpdateUrlMapsGroupsView.as_view())),
 
 ]

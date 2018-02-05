@@ -324,24 +324,18 @@
                                             <a href="{{ url_obj.url }}" target="_blank">{{ url_obj.url }}</a>
                                         </td>
                                         <td>
-                                            {% for cloud_group_obj in url_obj.cloud.all  %}
-                                                {% for asset_obj in cloud_group_obj.instance.all %}
-                                                    {{ asset_obj.server.ipaddress }} <br />
-                                                {% endfor %}
+                                            {% for asset_obj in url_obj.cloud.all  %}
+                                                {{ asset_obj.server.ipaddress }} <br />
                                             {% endfor %}
                                         </td>
                                         <td>
-                                            {% for cloud_group_obj in url_obj.forward.all  %}
-                                                {% for asset_obj in cloud_group_obj.instance.all %}
-                                                    {{ asset_obj.server.ipaddress }} <br />
-                                                {% endfor %}
+                                            {% for asset_obj in url_obj.forward.all  %}
+                                                {{ asset_obj.server.ipaddress }} <br />
                                             {% endfor %}
                                         </td>
                                         <td>
-                                            {% for cloud_group_obj in url_obj.docker.all  %}
-                                                {% for docker_obj in cloud_group_obj.docker.all %}
-                                                    {{ docker_obj.asset.server.ipaddress }}:{{ docker_obj.port }} <br />
-                                                {% endfor %}
+                                            {% for docker_obj in url_obj.docker.all  %}
+                                                {{ docker_obj.asset.server.ipaddress }}:{{ docker_obj.port }} <br />
                                             {% endfor %}
                                         </td>
                                     </tr>

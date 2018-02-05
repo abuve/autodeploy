@@ -60,9 +60,9 @@ var LogsTableInit = function () {
                 {
                     field: 'name',
                     title: 'Options',
-                    width: 240,
+                    width: 420,
                     align: 'center',
-                    formatter: button_operateFormatter
+                    formatter: button_operateFoarmatter
                 },
             ]
         });
@@ -99,12 +99,18 @@ function urlFormatter(value, row, index) {
     ]
 }
 
-function button_operateFormatter(value, row, index) {
+function button_operateFoarmatter(value, row, index) {
     return [
         '<div class="btn-group">',
-        '<a type="button" class="btn btn-default btn-xs" onclick="detail_urlmaps_data_fn(' + row.id + ')"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Detail</a>',
-        '<a type="button" class="btn btn-default btn-xs" onclick="edit_urlmaps_data_fn(' + row.id + ')"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>',
-        '<a type="button" class="btn btn-default btn-xs" onclick="delete_urlmaps_data_fn(' + row.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>',
+        '<a type="button" class="btn btn-default btn-xs" onclick="detail_urlmaps_data_fn(' + row.id + ')"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Detail</a>',
+        '<a type="button" class="btn btn-default btn-xs no-radius" onclick="edit_urlmaps_data_fn(' + row.id + ')"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>',
+        '<a type="button" class="btn btn-default btn-xs no-radius" onclick="delete_urlmaps_data_fn(' + row.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>',
+        '</div>',
+        '&nbsp;',
+        '<div class="btn-group">',
+        '<a type="button" class="btn btn-primary btn-xs no-radius" onclick="update_urlmaps_group_fn(\'cloud\',' + row.group_id_id + ',' + row.id + ')"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span> Cloud</a>',
+        '<a type="button" class="btn btn-primary btn-xs no-radius" onclick="update_urlmaps_group_fn(\'forward\',' + row.group_id_id + ',' + row.id + ')"><span class="glyphicon glyphicon-indent-left" aria-hidden="true"></span> Forward</a>',
+        '<a type="button" class="btn btn-primary btn-xs" onclick="update_urlmaps_group_fn(\'docker\',' + row.group_id_id + ',' + row.id + ')"><span class="glyphicon glyphicon-leaf" aria-hidden="true"></span> Docker</a>',
         '</div>'
     ].join('');
 }
@@ -158,6 +164,97 @@ function edit_urlmaps_data_fn(urlmaps_id) {
     });
 }
 
+function update_urlmaps_group_fn(group_type, group_id, urlmaps_id) {
+    // 判断当前分组选择的实例分组
+    // $('select[name="urlmaps_group_id"]').val(group_id);
+    $('input[name="urlmaps_group_type"]').val(group_type);
+
+    // 根据当前分组id 获取相应的选择实例
+    $.ajax({
+        url: '/server/config/urlmaps/update-server-urlmaps-groups.html',
+        type: 'get',
+        dataType: 'json',
+        traditional:true,
+        data: {'group_type': group_type, 'group_id': group_id, 'urlmaps_id': urlmaps_id},
+        success: function (data, response, status) {
+            $('input[name="urlmaps_groups_url"]').val(data.urlmaps_obj[0].url);
+            $("#select1").html("");
+            // for(var index in data.left_select_list){
+            //     $("#select1").append("<option value=" + data.left_select_list[index][0] + ">" + data.left_select_list[index][1] + "</option>")
+            // }
+            $("#select2").html("");
+            if (group_type == 'docker') {
+                for(var index in data.right_select_list){
+                    $("#select2").append("<option value=" + data.right_select_list[index].id + ">" + data.right_select_list[index].asset__server__ipaddress + ":" + data.right_select_list[index].port + "</option>")
+                }
+            } else {
+                for(var index in data.right_select_list){
+                    $("#select2").append("<option value=" + data.right_select_list[index].id + ">" + data.right_select_list[index].server__ipaddress + "</option>")
+                }
+            }
+        }
+    });
+    $("#do_update_urlmaps_groups").attr("onclick", "do_update_urlmaps_groups(" + group_id + ',' + urlmaps_id + ")")
+    $('#urlmaps_group_modal').modal('show')
+}
+
+function load_instance_component_fn(value) {
+
+    var selectedOption = value.options[value.selectedIndex];
+    var group_type = $('input[name="urlmaps_group_type"]').val();
+
+    if (selectedOption.value != 'None') {
+        var group_id = selectedOption.value
+
+        $.ajax({
+            url: '/server/config/instance/get-instance-by-groupid.html',
+            type: 'get',
+            dataType: 'json',
+            traditional:true,
+            data: {'group_id': group_id, 'group_type': group_type},
+            success: function (data, response, status) {
+                if (data.status) {
+                    $("#select1").html("")
+                    //$("#select2").html("")
+                    if (group_type=='docker') {
+                        for(var i in data.data){
+                            $("#select1").append("<option value=" + data.data[i].id + ">" + data.data[i].asset__server__ipaddress + ":" + data.data[i].port + "</option>")
+                        }
+                    } else {
+                        for(var i in data.data){
+                            $("#select1").append("<option value=" + data.data[i].id + ">" + data.data[i].server__ipaddress + "</option>")
+                        }
+                    }
+                }
+            }
+        });
+
+    }
+}
+
+function do_update_urlmaps_groups(group_id, urlmaps_id) {
+    instance_list = []
+    var group_type = $('input[name="urlmaps_group_type"]').val();
+    $("#select2 option").each(function(){
+        instance_list.push($(this).val())
+    })
+    $.ajax({
+            url: '/server/config/urlmaps/update-server-urlmaps-groups.html',
+            type: 'post',
+            dataType: 'json',
+            traditional: true,
+            data: {
+                'group_id': group_id,
+                'group_type': group_type,
+                'urlmaps_id': urlmaps_id,
+                'instance_list': instance_list,
+            },
+            success: function (data, response, status) {
+                $('#urlmaps_group_modal').modal('hide')
+            }
+        });
+}
+
 function checkUrl(urlString){
     if(urlString!=""){
         var reg=/(http|ftp|https|ws):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
@@ -177,9 +274,6 @@ function update_urlmaps_fn(update_type, urlmaps_id) {
 
     var urlmaps_url = $('input[name="urlmaps_url"]').val();
     var urlmaps_group_id = $('select[name="urlmaps_group_id"]').val();
-    var urlmaps_cloud_id = $('select[name="urlmaps_cloud_id"]').val();
-    var urlmaps_forward_id = $('select[name="urlmaps_forward_id"]').val();
-    var urlmaps_instance_id = $('select[name="urlmaps_instance_id"]').val();
     var urlmaps_memo = $('select[name="urlmaps_memo"]').val();
 
     if (checkUrl(urlmaps_url)) {
@@ -192,9 +286,6 @@ function update_urlmaps_fn(update_type, urlmaps_id) {
                 'urlmaps_id': urlmaps_id,
                 'urlmaps_url': urlmaps_url,
                 'urlmaps_group_id': urlmaps_group_id,
-                'urlmaps_cloud_id': urlmaps_cloud_id,
-                'urlmaps_forward_id': urlmaps_forward_id,
-                'urlmaps_instance_id': urlmaps_instance_id,
                 'urlmaps_memo': urlmaps_memo,
             },
             success: function (data, response, status) {
@@ -219,3 +310,51 @@ function do_delete_urlmaps_fn(urlmaps_id) {
         }
     });
 }
+
+$(function(){
+	//移到右边
+	$('#add').click(function(){
+		//先判断是否有选中
+		if(!$("#select1 option").is(":selected")){
+			alert("请选择需要移动的选项")
+		}
+		//获取选中的选项，删除并追加给对方
+		else{
+			$('#select1 option:selected').appendTo('#select2');
+		}
+	});
+
+	//移到左边
+	$('#remove').click(function(){
+		//先判断是否有选中
+		if(!$("#select2 option").is(":selected")){
+			alert("请选择需要移动的选项")
+		}
+		else{
+			$('#select2 option:selected').appendTo('#select1');
+		}
+	});
+
+	//全部移到右边
+	$('#add_all').click(function(){
+		//获取全部的选项,删除并追加给对方
+		$('#select1 option').appendTo('#select2');
+	});
+
+	//全部移到左边
+	$('#remove_all').click(function(){
+		$('#select2 option').appendTo('#select1');
+	});
+
+	//双击选项
+	$('#select1').dblclick(function(){ //绑定双击事件
+		//获取全部的选项,删除并追加给对方
+		$("option:selected",this).appendTo('#select2'); //追加给对方
+	});
+
+	//双击选项
+	$('#select2').dblclick(function(){
+		$("option:selected",this).appendTo('#select1');
+	});
+
+});

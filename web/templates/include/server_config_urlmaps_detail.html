@@ -19,24 +19,18 @@
                 <a href="{{ response.data.url }}" target="_blank">{{ response.data.url }}</a>
             </td>
             <td>
-                {% for cloud_group_obj in response.data.cloud.all  %}
-                    {% for asset_obj in cloud_group_obj.instance.all %}
-                        {{ asset_obj.server.ipaddress }} <br />
-                    {% endfor %}
+                {% for asset_obj in response.data.cloud.all  %}
+                    {{ asset_obj.server.ipaddress }} <br />
                 {% endfor %}
             </td>
             <td>
-                {% for cloud_group_obj in response.data.forward.all  %}
-                    {% for asset_obj in cloud_group_obj.instance.all %}
-                        {{ asset_obj.server.ipaddress }} <br />
-                    {% endfor %}
+                {% for asset_obj in response.data.forward.all  %}
+                    {{ asset_obj.server.ipaddress }} <br />
                 {% endfor %}
             </td>
             <td>
-                {% for cloud_group_obj in response.data.docker.all  %}
-                    {% for docker_obj in cloud_group_obj.docker.all %}
-                        {{ docker_obj.asset.server.ipaddress }}:{{ docker_obj.port }} <br />
-                    {% endfor %}
+                {% for docker_obj in response.data.docker.all  %}
+                    {{ docker_obj.asset.server.ipaddress }}:{{ docker_obj.port }} <br />
                 {% endfor %}
             </td>
         </tr>

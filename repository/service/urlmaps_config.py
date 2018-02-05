@@ -49,10 +49,12 @@ class ServerUrlMaps(BaseServiceList):
                                                                                               'id',
                                                                                               'url',
                                                                                               'memo',
+                                                                                              'group_id_id',
                                                                                               'group_id__name',
                                                                                               'group_id__app_id__name',
                                                                                               'group_id__app_id__project_id__name',
                                                                                               ).order_by("-id")
+
             response.data = list(server_logs_list)
         except Exception as e:
             print(Exception, e)
@@ -68,9 +70,6 @@ class ServerUrlMaps(BaseServiceList):
 
             urlmaps_url = post_dict.get('urlmaps_url')
             urlmaps_group_id = post_dict.get('urlmaps_group_id')
-            urlmaps_cloud_id = post_dict.get('urlmaps_cloud_id')
-            urlmaps_forward_id = post_dict.get('urlmaps_forward_id')
-            urlmaps_instance_id = post_dict.get('urlmaps_instance_id')
             urlmaps_memo = post_dict.get('urlmaps_memo')
 
             add_to_db = repository_models.UrlConfigHandler(
@@ -79,10 +78,6 @@ class ServerUrlMaps(BaseServiceList):
                 memo = urlmaps_memo
             )
             add_to_db.save()
-
-            if urlmaps_cloud_id: add_to_db.cloud.add(repository_models.AppGroups.objects.get(id=urlmaps_cloud_id))
-            if urlmaps_forward_id: add_to_db.forward.add(repository_models.AppGroups.objects.get(id=urlmaps_forward_id))
-            if urlmaps_instance_id: add_to_db.docker.add(repository_models.AppGroups.objects.get(id=urlmaps_instance_id))
 
         except Exception as e:
             print(Exception, e)
@@ -115,9 +110,6 @@ class ServerUrlMaps(BaseServiceList):
             urlmaps_id = post_dict.get('urlmaps_id')
             urlmaps_url = post_dict.get('urlmaps_url')
             urlmaps_group_id = post_dict.get('urlmaps_group_id')
-            urlmaps_cloud_id = post_dict.get('urlmaps_cloud_id')
-            urlmaps_forward_id = post_dict.get('urlmaps_forward_id')
-            urlmaps_instance_id = post_dict.get('urlmaps_instance_id')
             urlmaps_memo = post_dict.get('urlmaps_memo')
 
             get_data_from_db = repository_models.UrlConfigHandler.objects.get(id=urlmaps_id)
@@ -125,14 +117,6 @@ class ServerUrlMaps(BaseServiceList):
             get_data_from_db.url = urlmaps_url
             get_data_from_db.memo = urlmaps_memo
             get_data_from_db.save()
-
-            get_data_from_db.cloud.clear()
-            get_data_from_db.forward.clear()
-            get_data_from_db.docker.clear()
-
-            if urlmaps_cloud_id: get_data_from_db.cloud.add(repository_models.AppGroups.objects.get(id=urlmaps_cloud_id))
-            if urlmaps_forward_id: get_data_from_db.forward.add(repository_models.AppGroups.objects.get(id=urlmaps_forward_id))
-            if urlmaps_instance_id: get_data_from_db.docker.add(repository_models.AppGroups.objects.get(id=urlmaps_instance_id))
 
         except Exception as e:
             print(Exception, e)
@@ -144,6 +128,65 @@ class ServerUrlMaps(BaseServiceList):
         response = BaseResponse()
         urlmaps_id = request.GET.get('urlmaps_id')
         get_edit_urlmaps_data = repository_models.UrlConfigHandler.objects.filter(id=urlmaps_id).values("id", "group_id_id", "url", "cloud__id", "forward__id", "docker__id", "memo")
-        print(list(get_edit_urlmaps_data))
         response.data = list(get_edit_urlmaps_data)
         return response.data
+
+    def get_urlmaps_groups_by_id(request):
+        response = BaseResponse()
+        try:
+            response.error = {}
+            group_type = request.GET.get('group_type')
+            group_id = request.GET.get('group_id')
+            urlmaps_id = request.GET.get('urlmaps_id')
+
+            urlmaps_obj = repository_models.UrlConfigHandler.objects.filter(id=urlmaps_id).values()
+            if group_type == 'cloud':
+                instance_in_group = CMDB_MODELS.Asset.objects.filter(instances__id=group_id).values('id', 'server__ipaddress')
+                instance_in_urlmaps = CMDB_MODELS.Asset.objects.filter(urlconfighandler_cloud__id=urlmaps_id).values('id', 'server__ipaddress')
+            elif group_type == 'forward':
+                instance_in_group = CMDB_MODELS.Asset.objects.filter(instances__id=group_id).values('id', 'server__ipaddress')
+                instance_in_urlmaps = CMDB_MODELS.Asset.objects.filter(urlconfighandler_forward__id=urlmaps_id).values('id', 'server__ipaddress')
+            elif group_type == 'docker':
+                instance_in_group = CMDB_MODELS.Asset.objects.filter(instances__id=group_id).values('id','server__ipaddress')
+                instance_in_urlmaps = CMDB_MODELS.DockerInstance.objects.filter(urlconfighandler_docker__id=urlmaps_id).values('id', 'asset__server__ipaddress', 'port')
+                print(instance_in_urlmaps)
+
+            response.urlmaps_obj = list(urlmaps_obj)
+            response.left_select_list = list(instance_in_group)
+            response.right_select_list = list(instance_in_urlmaps)
+
+        except Exception as e:
+            print(Exception, e)
+            response.status = False
+            response.message = str(e)
+        return response
+
+    def update_urlmaps_groups(request):
+        response = BaseResponse()
+        try:
+            response.error = {}
+            post_dict = QueryDict(request.body, encoding='utf-8')
+            urlmaps_id = post_dict.get('urlmaps_id')
+            instance_list = post_dict.getlist('instance_list')
+            group_type = post_dict.get('group_type')
+
+            urlmaps_obj = repository_models.UrlConfigHandler.objects.get(id=urlmaps_id)
+
+            if group_type == 'cloud':
+                urlmaps_obj.cloud.clear()
+                for instance_id in instance_list:
+                    urlmaps_obj.cloud.add(CMDB_MODELS.Asset.objects.get(id=instance_id))
+            elif group_type == 'forward':
+                urlmaps_obj.forward.clear()
+                for instance_id in instance_list:
+                    urlmaps_obj.forward.add(CMDB_MODELS.Asset.objects.get(id=instance_id))
+            elif group_type == 'docker':
+                urlmaps_obj.docker.clear()
+                for instance_id in instance_list:
+                    urlmaps_obj.docker.add(CMDB_MODELS.DockerInstance.objects.get(id=instance_id))
+
+        except Exception as e:
+            print(Exception, e)
+            response.status = False
+            response.message = str(e)
+        return response

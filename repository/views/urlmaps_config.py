@@ -43,3 +43,13 @@ class UpdateUrlMapsView(View):
     def delete(self, request):
         response = urlmaps_config.ServerUrlMaps.delete_urlmaps(request)
         return JsonResponse(response.__dict__)
+
+
+class UpdateUrlMapsGroupsView(View):
+    def get(self, request, *args, **kwargs):
+        response = urlmaps_config.ServerUrlMaps.get_urlmaps_groups_by_id(request)
+        return JsonResponse(response.__dict__)
+
+    def post(self, request):
+        response = urlmaps_config.ServerUrlMaps.update_urlmaps_groups(request)
+        return JsonResponse(response.__dict__)
