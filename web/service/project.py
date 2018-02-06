@@ -65,7 +65,7 @@ class Project(BaseServiceList):
                                '<button type="button" class="btn btn-default dropdown-toggle btn-xs"data-toggle="1dropdown"> <span class="caret"></span> <span class="sr-only">切换下拉菜单</span> </button> <ul class="dropdown-menu" role="menu" style="margin:2px 164px; min-width:130px"> <li><a href="#">More Option</a></li> </ul>' + \
                                 '</div>',
                     'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id', 'name': '@name'}},
-                'attr': {'width': '300px'}
+                'attr': {'style': 'text-align: center','width': '360px'}
             },
         ]
         # 额外搜索条件
