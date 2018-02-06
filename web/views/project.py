@@ -54,3 +54,8 @@ class ProjectAppViewsView(View):
         return render(request, 'project_appviews.html', {'response': response})
 
 
+class ProjectProjectViewsView(View):
+    def get(self, request, project_nid):
+        response = project.Project.project_config(project_nid)
+        return render(request, 'project_projectviews.html', {'response': response})
+
