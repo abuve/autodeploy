@@ -41,7 +41,10 @@ class ServerJsonView(View):
 class ServerDetailView(View):
     def get(self, request, asset_nid):
         response = server.Server.server_config(asset_nid)
-        return render(request, 'server_config.html', {'response': response})
+        if request.GET.get('data_from') == 'appviews':
+            return render(request, 'project_appviews_detail.html', {'response': response})
+        else:
+            return render(request, 'server_config.html', {'response': response})
 
 
 class ServerDetaiGroupView(View):

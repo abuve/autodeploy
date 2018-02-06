@@ -48,10 +48,9 @@ class UpdateProjectView(View):
         return render(request, 'edit_project.html', {'response': response})
 
 
-
-
-
-
-
+class ProjectAppViewsView(View):
+    def get(self, request, project_nid):
+        response = project.Project.project_config(project_nid)
+        return render(request, 'project_appviews.html', {'response': response})
 
 
