@@ -9,8 +9,10 @@ class PageInfo(object):
     def __init__(self, currentPage, totalItems, perItems=20, pageNum=11):
         try:
             currentPage = int(currentPage)
+            perItems = int(perItems)
         except Exception as e:
             currentPage = 1
+            perItems = int(perItems)
 
         self.current_page = currentPage
         self.per_items = perItems
