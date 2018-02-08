@@ -29,4 +29,5 @@ urlpatterns = [
     url(r'^server/', include('repository.urls')),
     url(r'^', include('web.urls')),
     url(r'', include('web.urls')),
+    url(r'user_center/', include('user_center.urls')),
 ]

@@ -1,6 +1,6 @@
 # import the User object
 # from django.contrib.auth.models import User
-from cmdb.models import UserProfile as User
+from user_center.models import UserProfile as User
 import random
 import string
 
