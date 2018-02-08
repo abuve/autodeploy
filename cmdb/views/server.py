@@ -47,13 +47,11 @@ class AssetCreateView(View):
 
 
 def test(request):
-    data = {
-               110000:{id: "110000", areaname: "北京", pid: "0", shortname: "北京", level: "1", position: "tr_0", sort: "1"},
-               120000:{id: "120000", areaname: "天津", pid: "0", shortname: "天津", level: "1", position: "tr_0", sort: "2"},
-               130000:{id: "130000", areaname: "河北省", pid: "0", shortname: "河北", level: "1", position: "tr_0", sort: "3"},
-               140000:{id: "140000", areaname: "山西省", pid: "0", shortname: "山西", level: "1", position: "tr_0", sort: "4"},
-               150000:{id: "150000", areaname: "内蒙古自治区", pid: "0", shortname: "内蒙古", level: "1", position: "tr_0", sort: "5"},
-           }
+
+    get_asset_data = CMDB_MODELS.Asset.objects.filter(device_type_id=3)
+    for asset_obj in get_asset_data:
+        asset_obj.sn = asset_obj.asset_num
+        asset_obj.save()
 
     return HttpResponse(1)
 
