@@ -4,3 +4,10 @@
 # @Site    : 
 # @File    : admin.py
 # @Software: PyCharm
+
+from django.contrib import admin
+from user_center import models
+
+
+admin.site.register(models.UserProfile)
+admin.site.register(models.UserGroup)
