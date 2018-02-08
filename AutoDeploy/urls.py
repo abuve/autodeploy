@@ -27,6 +27,6 @@ urlpatterns = [
     url(r'^api/', include('api.urls')),
     url(r'^cmdb/', include('cmdb.urls')),
     url(r'^server/', include('repository.urls')),
-    url(r'^', include('cmdb.urls')),
+    url(r'^', include('web.urls')),
     url(r'', include('web.urls')),
 ]

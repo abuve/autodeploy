@@ -241,8 +241,8 @@ function load_instance_fn(value) {
             type: 'get',
             dataType: 'json',
             traditional:true,
+            data: {'limit': 100},
             success: function (data, response, status) {
-                console.log(data)
                 if (data.status) {
                     $("#docker_instance").html("")
                     for(var i in data.data.data_list){

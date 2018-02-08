@@ -24,7 +24,7 @@ class DiskInline(admin.TabularInline):
 #     list_display = ('id', 'hostname', 'manufacturer')
 #     inlines = [MemoryInline, DiskInline]
 
-admin.site.register(User)
+#admin.site.register(User)
 admin.site.register(models.Asset)
 admin.site.register(models.Server)
 admin.site.register(models.UserProfile)

@@ -30,6 +30,7 @@ urlpatterns = [
     # url(r'^user.html$', user.UserJsonView.as_view()),
 
 
+    url(r'^$', login_required(server.ServerListView.as_view())),
     url(r'^server.html$', login_required(server.ServerListView.as_view())),
     url(r'^servers.html$', login_required(server.ServerJsonView.as_view())),
     url(r'^server-config-(?P<asset_nid>\d+).html$', login_required(server.ServerDetailView.as_view()), name='server-config'),
@@ -60,6 +61,9 @@ urlpatterns = [
     url(r'^projects.html$', login_required(project.ProjectJsonView.as_view())),
     url(r'^add-project.html$', login_required(project.AddProjectView.as_view())),
     url(r'^edit-project-(?P<project_nid>\d+).html$', login_required(project.UpdateProjectView.as_view())),
+
+    url(r'^project/projectviews/(?P<project_nid>\d+).html$', login_required(project.ProjectProjectViewsView.as_view()), name='project-projectviews'),
+    url(r'^project/appviews/(?P<project_nid>\d+).html$', login_required(project.ProjectAppViewsView.as_view()), name='project-appviews'),
 
     # url(r'^chart-(?P<chart_type>\w+).html$', home.ChartView.as_view()),
 ]

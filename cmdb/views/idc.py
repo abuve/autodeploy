@@ -24,7 +24,7 @@ class IdcListView(View):
 class IdcJsonView(View):
     def post(self, request):
         response = idc.Idc.add_data(request)
-        return HttpResponseRedirect('cmdb/idc-list.html')
+        return HttpResponseRedirect('/cmdb/idc-list.html')
 
     def get(self, request):
         obj = idc.Idc()

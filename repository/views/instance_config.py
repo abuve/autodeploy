@@ -38,3 +38,8 @@ class UpdateServerInstanceView(View):
     def delete(self, request):
         response = instance_config.ServerInstance.delete_server_instance(request)
         return JsonResponse(response.__dict__)
+
+class GetInstanceByGroupIdView(View):
+    def get(self, request, *args, **kwargs):
+        response = instance_config.ServerInstance.get_instance_by_groupid(request)
+        return JsonResponse(response.__dict__)

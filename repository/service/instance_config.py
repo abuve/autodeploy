@@ -111,3 +111,14 @@ class ServerInstance(BaseServiceList):
         get_edit_instance_data = CMDB_MODELS.Asset.objects.filter(id=instance_id).values("id", "instances__id")
         response.data = list(get_edit_instance_data)
         return response.data
+
+    def get_instance_by_groupid(request):
+        response = BaseResponse()
+        group_id = request.GET.get('group_id')
+        group_type = request.GET.get('group_type')
+        if group_type == 'docker':
+            get_instance_data = CMDB_MODELS.DockerInstance.objects.filter(dockers__id=group_id).values("id", 'asset__server__ipaddress', 'port')
+        else:
+            get_instance_data = CMDB_MODELS.Asset.objects.filter(instances__id=group_id).values("id", "server__ipaddress")
+        response.data = list(get_instance_data)
+        return response

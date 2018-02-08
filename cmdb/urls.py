@@ -9,7 +9,6 @@ from cmdb.views import idc
 from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
-    url(r'^$', login_required(server.ServerListView.as_view())),
     url(r'^server-list.html$', login_required(server.ServerListView.as_view())),
     url(r'^server-json.html$', login_required(server.ServerJsonView.as_view())),
 
@@ -28,8 +27,8 @@ urlpatterns = [
     url(r'^business-detail-(?P<business_nid>\d+).html$', login_required(business.BusinessDetailView.as_view())),
 
     # cmdb report with no asset id, it's need admin to approved.
-    #url(r'^report/asset_report_use_asset_id/$', approval.asset_report_use_asset_id),
-    #url(r'^report/asset_report_with_no_id/$', approval.asset_with_no_asset_id),
+    # url(r'^report/asset_report_use_asset_id/$', approval.asset_report_use_asset_id),
+    # url(r'^report/asset_report_with_no_id/$', approval.asset_with_no_asset_id),
 
     url(r'^idc-list.html$', login_required(idc.IdcListView.as_view())),
     url(r'^idcs.html$', login_required(idc.IdcJsonView.as_view())),

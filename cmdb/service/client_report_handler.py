@@ -85,9 +85,11 @@ class Asset(object):
             try:
                 data = json.loads(data)
 
+                print(data)
+
                 # 暂时不开放sn检测，因为sn不唯一，容易造成数据错乱，如果资产已经存在，手动关联资产编号
-                # if self.mandatory_check(data, check_from_asset=True):
-                #     return {"asset_id" : self.asset_obj.asset_num}
+                if self.mandatory_check(data, check_from_asset=True):
+                    return {"asset_id" : self.asset_obj.asset_num}
                 if self.mandatory_check(data, check_from_approval=True):
                     if self.asset_obj.asset_resume_num:
                         return {"asset_id": self.asset_obj.asset_resume_num}

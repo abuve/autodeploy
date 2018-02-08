@@ -58,12 +58,14 @@ class Project(BaseServiceList):
                 'display': 1,
                 'text': {
                     'content': '<div class="btn-group">' + \
-                                '<a type="button" class="btn btn-default btn-xs" href="/edit-project-{nid}.html"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>' + \
+                               '<a type="button" class="btn btn-default btn-xs" href="/project/projectviews/{nid}.html"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> ProjectViews</a>' + \
+                               '<a type="button" class="btn btn-default btn-xs" href="/project/appviews/{nid}.html"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> AppViews</a>' + \
+                               '<a type="button" class="btn btn-default btn-xs" href="/edit-project-{nid}.html"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>' + \
                                '<a type="button" class="btn btn-default btn-xs" onclick=delete_project_data_fn({nid})><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>' + \
                                '<button type="button" class="btn btn-default dropdown-toggle btn-xs"data-toggle="1dropdown"> <span class="caret"></span> <span class="sr-only">切换下拉菜单</span> </button> <ul class="dropdown-menu" role="menu" style="margin:2px 164px; min-width:130px"> <li><a href="#">More Option</a></li> </ul>' + \
                                 '</div>',
                     'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id', 'name': '@name'}},
-                'attr': {'width': '300px'}
+                'attr': {'style': 'text-align: center','width': '360px'}
             },
         ]
         # 额外搜索条件
@@ -178,11 +180,17 @@ class Project(BaseServiceList):
 
     @staticmethod
     def project_config(project_id):
-
         response = BaseResponse()
         try:
             response.data = models.ProjectInfo.objects.filter(id=project_id).first()
-            # response.asset_data = CMDB_MODELS.Asset.objects.all()
+            td_rowspan = {}
+            for app_obj in response.data.applications.all():
+                count = 1
+                for group_obj in app_obj.groups.all():
+                    count += len(group_obj.webconfiglogscenter.all())
+                td_rowspan[app_obj.name] = count
+            print(td_rowspan)
+            response.td_rowspan = td_rowspan
         except Exception as e:
             print(Exception, e)
             response.status = False

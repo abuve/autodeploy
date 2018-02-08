@@ -64,7 +64,7 @@ class Server(BaseServiceList):
                 'display': 1,
                 'text': {
                     'content': '<div class="btn-group">' + \
-                                '<a type="button" class="btn btn-default btn-xs" href="/server-config-{nid}.html"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Config</a>' + \
+                                '<a type="button" class="btn btn-default btn-xs" href="/server-config-{nid}.html" target="_blank"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Config</a>' + \
                                 '<a type="button" class="btn btn-default btn-xs" href="/edit-server-{nid}.html"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>' + \
                                '<a type="button" class="btn btn-default btn-xs" onclick=delete_server_data_fn({nid})><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>' + \
                                '<button type="button" class="btn btn-default dropdown-toggle btn-xs"data-toggle="1dropdown"> <span class="caret"></span> <span class="sr-only">切换下拉菜单</span> </button> <ul class="dropdown-menu" role="menu" style="margin:2px 164px; min-width:130px"> <li><a href="#">More Option</a></li> </ul>' + \
@@ -229,6 +229,7 @@ class Server(BaseServiceList):
         try:
             response.data = models.Applications.objects.filter(id=server_id).first()
             response.asset_data = CMDB_MODELS.Asset.objects.all()
+            response.urlmaps_data = models.UrlConfigHandler.objects.filter(group_id__app_id=server_id).first()
         except Exception as e:
             print(Exception, e)
             response.status = False

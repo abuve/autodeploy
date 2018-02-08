@@ -143,7 +143,7 @@ class Docker(BaseServiceList):
             conditions = self.assets_condition(request)
 
             asset_count = models.DockerInstance.objects.filter(conditions).count()
-            page_info = PageInfo(request.GET.get('pager', None), asset_count)
+            page_info = PageInfo(request.GET.get('pager', None), asset_count, request.GET.get('limit', 20))
             asset_list = models.DockerInstance.objects.filter(conditions).extra(select=self.extra_select).values(
                 *self.values_list)[page_info.start:page_info.end]
 

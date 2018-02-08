@@ -62,3 +62,22 @@ function delete_project_app_fn(update_type, project_id) {
     });
 }
 
+function load_appviews_detail_fn(app_id) {
+    // 激活头部菜单
+    $(".appviews_nav_control").removeClass('active')
+    $("#" + app_id).addClass('active')
+
+    $.ajax({
+        url: '/server-config-' + app_id + '.html',
+        type: 'get',
+        traditional:true,
+        data: {'data_from': 'appviews'},
+        success: function (data, response, status) {
+            $("#appviews_detail_html").html(data)
+        }
+    });
+}
+
+function default_appviews_detail_fn(app_id) {
+    load_appviews_detail_fn(app_id)
+}
