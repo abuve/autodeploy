@@ -1,24 +1,20 @@
 /**
  * Created by abbott on 1/26/2018.
  */
-function delete_user_data_fn(user_id) {
+function delete_group_data_fn(group_id) {
     $("#delete_data_html_area").html("Confirm remove Application? All the data will be delete!");
-    $("#delete_user_app_fn").attr("onclick", "delete_user_app_fn('delete', " + user_id + ")");
+    $("#delete_group_app_fn").attr("onclick", "delete_group_app_fn('delete', " + group_id + ")");
     $("#delete_app_modal").modal('show')
 }
 
-function update_user_app_fn(update_type, user_id) {
+function update_group_app_fn(update_type, group_id) {
 
-    var user_name = $('input[name="user_name"]').val();
-    var user_phone = $('input[name="user_phone"]').val();
-    var user_email = $('input[name="user_email"]').val();
-    var user_department = $('input[name="user_department"]').val();
-    var user_group = $('select[name="user_group"]').val();
+    var group_name = $('input[name="group_name"]').val();
 
-    // if (user_name.length == 0 ) {
-    //             alert("Please fill user name.");
-    //             return false;
-    // }
+    if (group_name.length == 0 ) {
+                alert("Please fill group name.");
+                return false;
+    }
     // if (user_phone.length == 0 ) {
     //             alert("Please fill user phone.");
     //             return false;
@@ -33,25 +29,25 @@ function update_user_app_fn(update_type, user_id) {
     // }
 
     $.ajax({
-        url: '/user_center/users.html',
+        url: '/user_center/groups.html',
         type: update_type,
         dataType: 'json',
         traditional:true,
-        data: {'user_id': user_id, 'user_name': user_name, 'user_phone': user_phone, 'user_email': user_email, 'user_department': user_department, 'user_group': user_group},
+        data: {'group_id': group_id, 'group_name': group_name},
         success: function (data, response, status) {
-            window.location.href = "/user_center/user-list.html"
+            window.location.href = "/user_center/group-list.html"
         }
     });
 }
 
-function delete_user_app_fn(update_type, user_id) {
+function delete_group_app_fn(update_type, group_id) {
 
     $.ajax({
-        url: '/user_center/users.html',
+        url: '/user_center/groups.html',
         type: update_type,
         dataType: 'json',
         traditional:true,
-        data: {'user_id': user_id},
+        data: {'group_id': group_id},
         success: function (data, response, status) {
             $("#delete_app_modal").modal('hide');
             $('#do_refresh').trigger("click");

@@ -12,46 +12,45 @@ from django.shortcuts import HttpResponse, HttpResponseRedirect
 from django.http import JsonResponse
 
 
-from user_center.service import userprofile
+from user_center.service import usergroups
 
 
 
-class UserProfileListView(View):
+class GroupProfileListView(View):
     def get(self, request, *args, **kwargs):
-        return render(request, 'user_center/user_list.html')
+        return render(request, 'user_center/group_list.html')
 
 
-class UserJsonView(View):
+class GroupJsonView(View):
     def post(self, request):
-        response = project.Project.add_data(request)
-        return HttpResponseRedirect('/project.html')
+        response = usergroups.UserGroups.add_data(request)
+        return HttpResponseRedirect('/user_center/group-list.html')
 
     def get(self, request):
-        obj = userprofile.UserProfile()
-        response = obj.fetch_user(request)
+        obj = usergroups.UserGroups()
+        response = obj.fetch_group(request)
         return JsonResponse(response.__dict__)
 
     def delete(self, request):
-        response = userprofile.UserProfile.delete_data(request)
+        response = usergroups.UserGroups.delete_data(request)
         return JsonResponse(response.__dict__)
 
     def put(self, request):
-        response = userprofile.UserProfile.put_data(request)
+        response = usergroups.UserGroups.put_data(request)
         return JsonResponse(response.__dict__)
 
 
-class AddProjectView(View):
+class AddGroupView(View):
     def get(self, request, *args, **kwargs):
-        # response = server_project.ServerProject.get_project_info(request)
-        return render(request, 'add_project.html')
+        # response = usergroups.UserGroups.get_group_info(request)
+        return render(request, 'user_center/add_group.html')
 
 
-class UpdateUserView(View):
-    def get(self, request, user_id):
+class UpdateGroupView(View):
+    def get(self, request, group_id):
         # project_info = server_project.ServerProject.get_project_info(request)
-        group_info = userprofile.UserProfile.get_group_info(request)
-        response = userprofile.UserProfile.user_config(user_id)
-        return render(request, 'user_center/edit_user.html', {'response': response, 'group_info': group_info})
+        response = usergroups.UserGroups.group_config(group_id)
+        return render(request, 'user_center/edit_group.html', {'response': response})
 
 
 
