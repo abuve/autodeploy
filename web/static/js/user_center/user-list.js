@@ -2,7 +2,7 @@
  * Created by abbott on 1/26/2018.
  */
 function delete_user_data_fn(user_id) {
-    $("#delete_data_html_area").html("Confirm remove Application? All the data will be delete!");
+    $("#delete_data_html_area").html("Confirm remove User? All the data will be delete!");
     $("#delete_user_app_fn").attr("onclick", "delete_user_app_fn('delete', " + user_id + ")");
     $("#delete_app_modal").modal('show')
 }

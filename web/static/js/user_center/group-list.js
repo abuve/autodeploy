@@ -2,7 +2,7 @@
  * Created by abbott on 1/26/2018.
  */
 function delete_group_data_fn(group_id) {
-    $("#delete_data_html_area").html("Confirm remove Application? All the data will be delete!");
+    $("#delete_data_html_area").html("Confirm remove Group? All the data will be delete!");
     $("#delete_group_app_fn").attr("onclick", "delete_group_app_fn('delete', " + group_id + ")");
     $("#delete_app_modal").modal('show')
 }
