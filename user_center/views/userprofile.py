@@ -47,10 +47,10 @@ class AddProjectView(View):
 
 
 class UpdateUserView(View):
-    def get(self, request, user_nid):
+    def get(self, request, user_id):
         # project_info = server_project.ServerProject.get_project_info(request)
         group_info = userprofile.UserProfile.get_group_info(request)
-        response = userprofile.UserProfile.user_config(user_nid)
+        response = userprofile.UserProfile.user_config(user_id)
         return render(request, 'user_center/edit_user.html', {'response': response, 'group_info': group_info})
 
 
