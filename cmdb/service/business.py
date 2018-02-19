@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.http.request import QueryDict
 
 from cmdb import models
+from user_center import models as user_center_models
 from utils.base import BaseServiceList
 from utils.pager import PageInfo
 from utils.response import BaseResponse
@@ -216,9 +217,9 @@ class Business(BaseServiceList):
             edit_data_to_db.contact.clear()
 
             for obj_id in add_business_admin_list:
-                edit_data_to_db.manager.add(models.UserGroup.objects.get(id=obj_id))
+                edit_data_to_db.manager.add(user_center_models.UserGroup.objects.get(id=obj_id))
             for obj_id in add_business_contact_list:
-                edit_data_to_db.contact.add(models.UserGroup.objects.get(id=obj_id))
+                edit_data_to_db.contact.add(user_center_models.UserGroup.objects.get(id=obj_id))
 
         except Exception as e:
             response.status = False
@@ -245,10 +246,9 @@ class Business(BaseServiceList):
             add_data_to_db.save()
 
             for obj_id in add_business_admin_list:
-                print(obj_id)
-                add_data_to_db.manager.add(models.UserGroup.objects.get(id=obj_id))
+                add_data_to_db.manager.add(user_center_models.UserGroup.objects.get(id=obj_id))
             for obj_id in add_business_contact_list:
-                add_data_to_db.contact.add(models.UserGroup.objects.get(id=obj_id))
+                add_data_to_db.contact.add(user_center_models.UserGroup.objects.get(id=obj_id))
 
         except Exception as e:
             response.status = False
@@ -269,7 +269,7 @@ class Business(BaseServiceList):
     # public functions
     @property
     def get_user_groups(self):
-        result = models.UserGroup.objects.values()
+        result = user_center_models.UserGroup.objects.values()
         return (list(result))
 
     def get_business_detail_json(self, obj_id):
