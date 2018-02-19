@@ -1,33 +1,5 @@
 from django.db import models
 from user_center import models as user_center_models
-from django.contrib.auth.models import AbstractUser
-
-# class UserProfile(AbstractUser):
-#     """
-#     用户信息
-#     """
-#     phone = models.CharField(u'座机', max_length=32)
-#     mobile = models.CharField(u'手机', max_length=32)
-#
-#     class Meta:
-#         verbose_name_plural = "用户信息"
-#
-#     def __str__(self):
-#         return self.username
-#
-#
-# class UserGroup(models.Model):
-#     """
-#     用户组
-#     """
-#     name = models.CharField(max_length=32, unique=True)
-#     users = models.ManyToManyField('UserProfile')
-#
-#     class Meta:
-#         verbose_name_plural = "用户组表"
-#
-#     def __str__(self):
-#         return self.name
 
 
 class BusinessUnit(models.Model):
