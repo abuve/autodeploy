@@ -22,7 +22,7 @@
             <td colspan="4">
                 {% for obj in response.data.manager.all %}
                     {% for user in obj.users.all %}
-                        {{ user.name }} |
+                        {{ user.username }} |
                     {% endfor %}
                 {% endfor %}
             </td>
@@ -33,7 +33,7 @@
             <td colspan="4">
                 {% for obj in response.data.contact.all %}
                     {% for user in obj.users.all %}
-                        {{ user.name }} |
+                        {{ user.username }} |
                     {% endfor %}
                 {% endfor %}
             </td>
