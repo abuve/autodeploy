@@ -66,7 +66,7 @@ class Asset(models.Model):
     device_type_id = models.IntegerField(choices=device_type_choices, default=1)
     device_status_id = models.IntegerField(choices=device_status_choices, default=1)
     asset_num = models.CharField(verbose_name='资产编号', max_length=20, unique=True)
-    sn = models.CharField('SN号', max_length=64, null=True, blank=True)
+    sn = models.CharField('SN号', max_length=64, unique=True)
     idc = models.ForeignKey('IDC', verbose_name='IDC机房', null=True, blank=True, on_delete=models.SET_NULL)
     business_unit = models.ForeignKey('BusinessUnit', verbose_name='归属业务线', null=True, blank=True, on_delete=models.SET_NULL)
     tag = models.ManyToManyField('Tag')
