@@ -95,6 +95,7 @@ class Asset(object):
                     return {"asset_id" : self.asset_obj.asset_num}
                 if self.mandatory_check(data, check_from_approval=True):
                     if self.asset_obj.asset_resume_num:
+                        # 如果资产SN 发生变化，手动重置这个字段
                         return {"asset_id": self.asset_obj.asset_resume_num}
                     else:
                         # the asset is already exist in aporoval zone, waiting administrator to confirm.
