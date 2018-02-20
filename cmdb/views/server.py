@@ -48,11 +48,6 @@ class AssetCreateView(View):
 
 def test(request):
 
-    get_asset_data = CMDB_MODELS.Asset.objects.filter(device_type_id=3)
-    for asset_obj in get_asset_data:
-        asset_obj.sn = asset_obj.asset_num
-        asset_obj.save()
-
     return HttpResponse(1)
 
 
