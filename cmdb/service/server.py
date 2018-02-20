@@ -315,7 +315,6 @@ class Server(BaseServiceList):
         try:
             print(asset_id)
             response.data = models.Asset.objects.filter(id=asset_id).first()
-            print(response.data)
 
         except Exception as e:
             response.status = False

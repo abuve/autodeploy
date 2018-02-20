@@ -35,14 +35,14 @@
     </div>
 
     <div class="form-group col-md-6">
-        <div class="col-md-4 control-label">Update Date :</div>
+        <div class="col-md-4 control-label">Update Date：</div>
         <div class="col-md-7 control-label text-left">{{ response.data.latest_date|date:"Y-m-d H:m:s" }}</div>
     </div>
 
     <div class="dotted  col-md-12"></div>
 
     <div class="form-group col-md-6">
-        <div class="col-md-4 control-label">IDC:</div>
+        <div class="col-md-4 control-label">IDC：</div>
         <div class="col-md-7 control-label text-left">{{ response.data.idc.name }}</div>
     </div>
 
@@ -64,13 +64,13 @@
     <div class="dotted col-md-12"></div>
 
     <div class="form-group col-md-6">
-        <div class="col-md-4 control-label">Business Unit:</div>
+        <div class="col-md-4 control-label">Business Unit：</div>
         <div class="col-md-7 control-label text-left">{{ response.data.business_unit.name }}</div>
     </div>
 
     <div class="col-md-12">
         <div class="form-group col-md-6">
-            <div class="col-md-4 control-label">Business Contacts </div>
+            <div class="col-md-4 control-label">Business Contacts：</div>
             <div class="col-md-8 control-label text-left">
 
                 {% for group_obj in response.data.business_unit.contact.all %}
@@ -85,15 +85,6 @@
                     {% endfor %}
                 {% endfor %}
 
-                {% for obj in response.data.business_unit.contact.users.all %}
-                    <div>
-                        <p>{{ obj.username }}</p>
-                        <div style="margin-left: 20px;">
-                            <p>Email: {{ obj.email }}</p>
-                            <p>Phone: {{ obj.phone }}</p>
-                        </div>
-                    </div>
-                {% endfor %}
             </div>
 
         </div>
