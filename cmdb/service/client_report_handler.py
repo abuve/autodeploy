@@ -40,6 +40,11 @@ class Asset(object):
             return True
 
         try:
+            # 检查该资产是否包含有效sn 号，没有sn 的数据不予以处理
+            if not data['sn']:
+                self.response_msg('error', 'SN value error', "The field [sn] is mandatory and not provided in your reporting data")
+                return False
+
             if check_from_asset:
                 self.asset_obj = CMDB_MODELS.Asset.objects.get(sn=data['sn'])
             elif check_from_approval:
@@ -84,8 +89,6 @@ class Asset(object):
         if data:
             try:
                 data = json.loads(data)
-
-                print(data)
 
                 # 暂时不开放sn检测，因为sn不唯一，容易造成数据错乱，如果资产已经存在，手动关联资产编号
                 if self.mandatory_check(data, check_from_asset=True):
