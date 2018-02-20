@@ -394,6 +394,17 @@
     }
 
     /*
+     为搜索框绑定回车事件
+     */
+    function bind_search_event() {
+        $('.event-condition').bind('keypress',function(event){
+            if(event.keyCode == "13") {
+                initialize(1);
+            }
+        });
+    }
+
+    /*
      初始化默认的第一个条件
      */
     function initDefaultSearchCondition(item) {
@@ -402,20 +413,23 @@
         if (item.condition_type == 'input') {
             tag = $.CreateInput({
                 'is-condition': 'true',
-                'class': 'form-control no-radius',
+                'class': 'form-control no-radius event-condition',
                 'name': item.name,
                 'placeholder': '逗号分割多条件'
             }, {});
         } else if (item.condition_type == 'select') {
             tag = $.CreateSelect({
                 'is-condition': 'true',
-                'class': 'form-control select-icon no-radius',
+                'class': 'form-control select-icon no-radius event-condition',
                 'name': item.name
             }, {}, NB_GLOBAL_DICT[item.global_name], null, 'id', 'name');
         }
         var $current = $('#search_condition');
         $current.children().first().text(item.text);
         $current.after(tag);
+
+        // 为搜索框绑定回车事件
+        bind_search_event()
 
     }
 
@@ -432,14 +446,14 @@
             if (condition_type == 'input') {
                 tag = $.CreateInput({
                     'is-condition': 'true',
-                    'class': 'form-control no-radius',
+                    'class': 'form-control no-radius event-condition',
                     'name': name,
                     'placeholder': '逗号分割多条件'
                 }, {});
             } else if (condition_type == 'select') {
                 tag = $.CreateSelect({
                     'is-condition': 'true',
-                    'class': 'form-control select-icon no-radius',
+                    'class': 'form-control select-icon no-radius event-condition',
                     'name': name
                 }, {}, NB_GLOBAL_DICT[global_name], null, 'id', 'name');
             }
@@ -447,6 +461,9 @@
             $current.children().first().text(text);
             $current.next().remove();
             $current.after(tag);
+
+            // 为搜索框绑定回车事件
+            bind_search_event()
 
         });
     }
