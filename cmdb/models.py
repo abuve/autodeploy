@@ -103,8 +103,8 @@ class Server(models.Model):
 
     os_type = models.CharField('系统', max_length=16, null=True, blank=True)
     os_release = models.CharField('系统版本', max_length=200, null=True, blank=True)
-    cpu_count = models.IntegerField('CPU核数', null=True, blank=True)
-    cpu_physical_count = models.IntegerField('CPU物理个数', null=True, blank=True)
+    cpu_count = models.IntegerField('CPU物理个数', null=True, blank=True)
+    cpu_core_count = models.IntegerField('CPU核数', null=True, blank=True)
     cpu_model = models.CharField('CPU型号', max_length=128, null=True, blank=True)
     create_date = models.DateTimeField(auto_now_add=True, blank=True)
 

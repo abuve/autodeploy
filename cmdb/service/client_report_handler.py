@@ -293,7 +293,7 @@ class Asset(object):
                                             update_fields=['slot', 'sn', 'model', 'capacity'],
                                             identify_field='slot'
                                             )
-        cpu = self.__update_cpu_component()
+        # cpu = self.__update_cpu_component()
         # manufactory = self.__update_manufactory_component()
 
         server = self.__update_server_component()
@@ -478,7 +478,7 @@ class Asset(object):
 
     def __update_server_component(self):
         update_fields = ['model', 'os_type', 'os_release', 'hostname', 'CpuUsage', 'MemUsage', 'DiskUsage',
-                         'configuration', 'Memory', 'DeviceSize', 'LoadInfo', 'ipaddress', 'cpu_count', 'cpu_model']
+                         'configuration', 'Memory', 'DeviceSize', 'LoadInfo', 'ipaddress', 'cpu_count', 'cpu_model', 'cpu_core_count']
         if hasattr(self.asset_obj, 'server'):
             self.__compare_componet(model_obj=self.asset_obj.server,
                                     fields_from_db=update_fields,
