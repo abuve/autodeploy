@@ -71,7 +71,7 @@ class Asset(models.Model):
     business_unit = models.ForeignKey('BusinessUnit', verbose_name='归属业务线', null=True, blank=True, on_delete=models.SET_NULL)
     tag = models.ManyToManyField('Tag')
     memo = models.CharField(verbose_name='备注', max_length=200, null=True, blank=True)
-    latest_date = models.DateTimeField(null=True)
+    latest_date = models.DateTimeField(auto_now=True)
     create_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:

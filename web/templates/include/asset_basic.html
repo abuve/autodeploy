@@ -29,6 +29,10 @@
         <div class="col-md-7 control-label text-left">{{ response.data.device_status_id }}</div>
     </div>
 
+    <div class="form-group col-md-6">
+        <div class="col-md-4 control-label">Asset Number：</div>
+        <div class="col-md-7 control-label text-left">{{ response.data.asset_num }}</div>
+    </div>
 
     <div class="form-group col-md-6">
         <div class="col-md-4 control-label">Update Date :</div>
@@ -68,12 +72,24 @@
         <div class="form-group col-md-6">
             <div class="col-md-4 control-label">Business Contacts </div>
             <div class="col-md-8 control-label text-left">
+
+                {% for group_obj in response.data.business_unit.contact.all %}
+                    {% for user_obj in group_obj.users.all %}
+                        <div>
+                            <p>{{ user_obj.username }}</p>
+                            <div style="margin-left: 20px;">
+                                <p>Email: {{ user_obj.email }}</p>
+                                <p>Phone: {{ user_obj.phone }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
                 {% for obj in response.data.business_unit.contact.users.all %}
                     <div>
-                        <p>{{ obj.name }}</p>
+                        <p>{{ obj.username }}</p>
                         <div style="margin-left: 20px;">
                             <p>Email: {{ obj.email }}</p>
-                            <p>Tel: {{ obj.mobile }}</p>
                             <p>Phone: {{ obj.phone }}</p>
                         </div>
                     </div>
