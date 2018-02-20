@@ -281,7 +281,7 @@ class Asset(object):
                                             update_fields = ['slot','sn','model','capacity'],
                                             identify_field = 'slot'
                                             )
-        # cpu = self.__update_cpu_component()
+        cpu = self.__update_cpu_component()
         # manufactory = self.__update_manufactory_component()
 
         server = self.__update_server_component()
