@@ -17,7 +17,10 @@ from django.conf.urls import url
 from django.conf.urls import include
 from django.contrib import admin
 
+from django.contrib.auth.decorators import login_required
+
 from PySAMLSP import views as auth_views
+from cmdb.views import dashboard
 
 urlpatterns = [
     url(r'^acs/', auth_views.acs, name='acs'),
@@ -30,4 +33,6 @@ urlpatterns = [
     url(r'^', include('web.urls')),
     url(r'', include('web.urls')),
     url(r'user_center/', include('user_center.urls')),
+    url(r'dashboard.html$', login_required(dashboard.DashBoardIndexView.as_view())),
+    url(r'dashboard_chart_ajax/', login_required(dashboard.DashBoardChartAjaxView.as_view())),
 ]
