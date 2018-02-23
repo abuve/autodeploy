@@ -63,12 +63,12 @@ function show_business_bar(data_obj) {
             bottom: '3%',
             containLabel: true
         },
+        yAxis: {
+            type: 'value'
+        },
         xAxis:  {
             type: 'category',
             data: data_obj.business_list
-        },
-        yAxis: {
-            type: 'value'
         },
         series: data_obj.data_count
     };

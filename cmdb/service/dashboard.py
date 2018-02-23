@@ -59,13 +59,13 @@ class DashBoard(BaseServiceList):
         business_name_list = [business_obj[0] for business_obj in get_business_name]
 
         data_count_dic = []
-        for business_name in business_name_list:
+        for asset_type in asset_type_list:
             asset_count_list = []
-            for asset_type in asset_type_list:
-                asset_count = CMDB_MODELS.BusinessUnit.objects.filter(name=business_name, asset__device_type_id=asset_type_dict[asset_type]).count()
+            for business_name in business_name_list:
+                asset_count = CMDB_MODELS.BusinessUnit.objects.filter(name=business_name,asset__device_type_id=asset_type_dict[asset_type]).count()
                 asset_count_list.append(asset_count)
             data_dic = {
-                'name': business_name,
+                'name': asset_type,
                 'type': 'bar',
                 'stack': '统计',
                 'label': {
