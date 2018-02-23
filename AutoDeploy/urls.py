@@ -23,6 +23,8 @@ from PySAMLSP import views as auth_views
 from cmdb.views import dashboard
 
 urlpatterns = [
+    url(r'^$', include('cmdb.urls')),
+    url(r'^', include('web.urls')),
     url(r'^acs/', auth_views.acs, name='acs'),
     url(r'^auth/', auth_views.auth, name='auth'),
     url(r'^logout.html$', auth_views.logout, name='logout'),
@@ -30,8 +32,6 @@ urlpatterns = [
     url(r'^api/', include('api.urls')),
     url(r'^cmdb/', include('cmdb.urls')),
     url(r'^server/', include('repository.urls')),
-    url(r'^', include('web.urls')),
-    url(r'', include('web.urls')),
     url(r'user_center/', include('user_center.urls')),
     url(r'dashboard.html$', login_required(dashboard.DashBoardIndexView.as_view())),
     url(r'dashboard_chart_ajax/', login_required(dashboard.DashBoardChartAjaxView.as_view())),

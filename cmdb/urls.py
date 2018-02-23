@@ -5,10 +5,13 @@ from cmdb.views import approval
 from cmdb.views import docker
 from cmdb.views import business
 from cmdb.views import idc
+from cmdb.views import dashboard
 
 from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
+    url(r'^$', login_required(dashboard.DashBoardIndexView.as_view())),
+
     url(r'^server-list.html$', login_required(server.ServerListView.as_view())),
     url(r'^server-json.html$', login_required(server.ServerJsonView.as_view())),
 
