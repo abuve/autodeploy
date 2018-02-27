@@ -29,8 +29,6 @@ urlpatterns = [
     # url(r'^users.html$', user.UserListView.as_view()),
     # url(r'^user.html$', user.UserJsonView.as_view()),
 
-
-    url(r'^$', login_required(server.ServerListView.as_view())),
     url(r'^server.html$', login_required(server.ServerListView.as_view())),
     url(r'^servers.html$', login_required(server.ServerJsonView.as_view())),
     url(r'^server-config-(?P<asset_nid>\d+).html$', login_required(server.ServerDetailView.as_view()), name='server-config'),

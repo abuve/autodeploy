@@ -5,23 +5,24 @@ from django.views import View
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
 from django.http import JsonResponse
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from repository.service import logs_config
 
 
-class LogsConfigView(View):
+class LogsConfigView(LoginRequiredMixin, View):
     def get(self, request, server_id):
         response = logs_config.ServerLogs.get_server_logs(server_id)
         return render(request, 'server_config_logs.html', {'response': response})
 
 
-class LogsConfigJsonView(View):
+class LogsConfigJsonView(LoginRequiredMixin, View):
     def get(self, request, server_id):
         response = logs_config.ServerLogs.get_server_logs_json(server_id)
         return HttpResponse(json.dumps(response.data))
 
 
-class UpdateServerLogsView(View):
+class UpdateServerLogsView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         response = logs_config.ServerLogs.get_logs_by_id(request)
         return HttpResponse(json.dumps(response))

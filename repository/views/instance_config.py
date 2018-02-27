@@ -5,24 +5,25 @@ from django.views import View
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
 from django.http import JsonResponse
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from repository.service import web_config
 from repository.service import instance_config
 
 
-class InstanceConfigView(View):
+class InstanceConfigView(LoginRequiredMixin, View):
     def get(self, request, server_id):
         response = instance_config.ServerInstance.get_asset_instance(server_id)
         return render(request, 'server_config_instance.html', {'response': response})
 
 
-class InstanceConfigJsonView(View):
+class InstanceConfigJsonView(LoginRequiredMixin, View):
     def get(self, request, server_id):
         response = instance_config.ServerInstance.get_server_instances_json(server_id)
         return HttpResponse(json.dumps(response.data))
 
 
-class UpdateServerInstanceView(View):
+class UpdateServerInstanceView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         response = instance_config.ServerInstance.get_instance_by_id(request)
         return HttpResponse(json.dumps(response))
@@ -39,7 +40,7 @@ class UpdateServerInstanceView(View):
         response = instance_config.ServerInstance.delete_server_instance(request)
         return JsonResponse(response.__dict__)
 
-class GetInstanceByGroupIdView(View):
+class GetInstanceByGroupIdView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         response = instance_config.ServerInstance.get_instance_by_groupid(request)
         return JsonResponse(response.__dict__)

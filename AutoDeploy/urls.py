@@ -23,7 +23,7 @@ from PySAMLSP import views as auth_views
 from cmdb.views import dashboard
 
 urlpatterns = [
-    url(r'^$', include('cmdb.urls')),
+    url(r'', include('cmdb.urls')),
     url(r'^', include('web.urls')),
     url(r'^acs/', auth_views.acs, name='acs'),
     url(r'^auth/', auth_views.auth, name='auth'),

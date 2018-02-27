@@ -4,18 +4,19 @@ import json
 from django.views import View
 from django.shortcuts import render
 from django.shortcuts import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
 
 from cmdb.service import server
 from cmdb import models as CMDB_MODELS
 
 
-class ServerListView(View):
+class ServerListView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, 'cmdb_server_list.html')
 
 
-class ServerJsonView(View):
+class ServerJsonView(LoginRequiredMixin, View):
     def post(self, request):
         response = server.Server.asset_data_create(request)
         return JsonResponse(response.__dict__)
@@ -34,13 +35,13 @@ class ServerJsonView(View):
         return JsonResponse(response.__dict__)
 
 
-class AssetDetailView(View):
+class AssetDetailView(LoginRequiredMixin, View):
     def get(self, request, asset_nid):
         response = server.Server.assets_detail(asset_nid)
         return render(request, 'cmdb_asset_detail.html', {"response": response})
 
 
-class AssetCreateView(View):
+class AssetCreateView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         response = server.Server().asset_create()
         return render(request, 'cmdb_asset_create.html', {'response': response})

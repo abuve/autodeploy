@@ -4,17 +4,18 @@ import json
 from django.views import View
 from django.shortcuts import render
 from django.shortcuts import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
 
 from cmdb.service import dashboard
 
 
-class DashBoardIndexView(View):
+class DashBoardIndexView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         response = dashboard.DashBoard.get_basic_count()
         return render(request, 'dashboard_index.html', {'response': response})
 
-class DashBoardChartAjaxView(View):
+class DashBoardChartAjaxView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         response = dashboard.DashBoard().get_chart_ajax()
         return JsonResponse(response.__dict__)
