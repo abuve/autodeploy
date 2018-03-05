@@ -9,15 +9,15 @@ from django.http import JsonResponse
 from cmdb.service import approval
 from cmdb.service import client_report_handler
 
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from utils.mixin_utils import LoginRequiredMixin, PermissionRequiredMixin
 
 
-class ApprovalListView(LoginRequiredMixin, View):
+class ApprovalListView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, 'cmdb_approval_list.html')
 
 
-class ApprovalJsonView(LoginRequiredMixin, View):
+class ApprovalJsonView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def post(self, request):
         response = server.Server.add_data(request)
         return HttpResponseRedirect('/server.html')

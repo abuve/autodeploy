@@ -4,7 +4,7 @@ import json
 from django.views import View
 from django.shortcuts import render
 from django.shortcuts import HttpResponse, HttpResponseRedirect
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from utils.mixin_utils import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
 
 from cmdb.service import dashboard

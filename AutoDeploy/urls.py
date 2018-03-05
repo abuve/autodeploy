@@ -33,6 +33,6 @@ urlpatterns = [
     url(r'^cmdb/', include('cmdb.urls')),
     url(r'^server/', include('repository.urls')),
     url(r'user_center/', include('user_center.urls')),
-    url(r'dashboard.html$', login_required(dashboard.DashBoardIndexView.as_view())),
-    url(r'dashboard_chart_ajax/', login_required(dashboard.DashBoardChartAjaxView.as_view())),
+
+    url(r'system/', include('system.urls')),
 ]

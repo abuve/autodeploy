@@ -10,7 +10,8 @@ from django.contrib.auth import authenticate,login
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.contrib.auth import logout as django_logout
-# from permission_manager.cores import session_handler
+from user_center.models import UserProfile
+from utils import authSession
 
 from conf import settings as conf_settings
 
@@ -58,9 +59,10 @@ def acs(request):
                     if attr:
                         request.session['attr'] = attr
                         request.session.modified=True
-                        # add user permission
-                        #session_upload = session_handler.SessionUpload(request, user)
-                        #session_upload.load()
+                        # 将当前用户权限信息写入session.
+                        # ['url name': ['GET', 'POST']]
+                        auth_handler = authSession.SessionUpload(request)
+                        auth_handler.load()
                     return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
 
     return redirect('auth')

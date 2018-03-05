@@ -9,14 +9,15 @@ from django.http import JsonResponse
 from web.service import mission
 from web.service import server_project
 from repository import models as repository_models
+from utils.mixin_utils import LoginRequiredMixin, PermissionRequiredMixin
 
 
-class MissionListView(View):
+class MissionListView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, 'mission_list.html')
 
 
-class MissionJsonView(View):
+class MissionJsonView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request):
         obj = mission.Mission()
         response = obj.fetch_assets(request)
@@ -31,7 +32,7 @@ class MissionJsonView(View):
         return JsonResponse(response.__dict__)
 
 
-class MissionCreateView(View):
+class MissionCreateView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request):
         response = server_project.ServerProject.get_project_info(request)
         return render(request, 'mission_create.html', {'response': response})
@@ -41,14 +42,14 @@ class MissionCreateView(View):
         return JsonResponse(response.__dict__)
 
 
-class MissionDetailListView(View):
+class MissionDetailListView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, mission_id):
         response = {'mission_id': mission_id}
         return render(request, 'mission_detail_list.html', {'response': response})
 
 
 
-class MissionDetailListJsonView(View):
+class MissionDetailListJsonView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, mission_id):
         response = mission.Mission.get_mission_detail_json(request, mission_id)
         return HttpResponse(json.dumps(response.data))

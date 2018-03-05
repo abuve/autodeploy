@@ -9,18 +9,18 @@ import json
 from django.views import View
 from django.shortcuts import render
 from django.shortcuts import HttpResponse, HttpResponseRedirect
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from utils.mixin_utils import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
 
 from user_center.service import userprofile
 
 
-class UserProfileListView(LoginRequiredMixin, View):
+class UserProfileListView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, 'user_center/user_list.html')
 
 
-class UserJsonView(LoginRequiredMixin, View):
+class UserJsonView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def post(self, request):
         response = project.Project.add_data(request)
         return HttpResponseRedirect('/project.html')
@@ -39,13 +39,13 @@ class UserJsonView(LoginRequiredMixin, View):
         return JsonResponse(response.__dict__)
 
 
-class AddProjectView(LoginRequiredMixin, View):
+class AddProjectView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         # response = server_project.ServerProject.get_project_info(request)
         return render(request, 'add_project.html')
 
 
-class UpdateUserView(LoginRequiredMixin, View):
+class UpdateUserView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, user_id):
         # project_info = server_project.ServerProject.get_project_info(request)
         group_info = userprofile.UserProfile.get_group_info(request)

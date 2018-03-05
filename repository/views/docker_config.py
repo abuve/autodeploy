@@ -5,24 +5,24 @@ from django.views import View
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
 from django.http import JsonResponse
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from utils.mixin_utils import LoginRequiredMixin, PermissionRequiredMixin
 
 from repository.service import docker_config
 
 
-class DockerConfigView(LoginRequiredMixin, View):
+class DockerConfigView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, server_id):
         response = docker_config.ServerDocker.get_asset_instance(server_id)
         return render(request, 'server_config_docker.html', {'response': response})
 
 
-class DockerConfigJsonView(LoginRequiredMixin, View):
+class DockerConfigJsonView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, server_id):
         response = docker_config.ServerDocker.get_server_instances_json(server_id)
         return HttpResponse(json.dumps(response.data))
 
 
-class UpdateServerDockerView(LoginRequiredMixin, View):
+class UpdateServerDockerView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         response = docker_config.ServerDocker.get_docker_by_id(request)
         return HttpResponse(json.dumps(response))

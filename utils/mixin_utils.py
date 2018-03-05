@@ -8,9 +8,10 @@ from django.contrib.auth.mixins import AccessMixin
 from django.conf.urls import url
 import json
 # from users.models import AccessLogs
-# from users.models import UserProfile
-from django.http import HttpResponse
+from user_center.models import UserProfile
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
+from utils import authSession
 
 
 # 登录认证
@@ -18,9 +19,10 @@ class LoginRequiredMixin(AccessMixin):
     """
     登录认证
     """
-
-    @method_decorator(login_required(login_url='/accounts/login/'))
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
         return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
 
 
@@ -76,19 +78,18 @@ class deptcontrolMixin(AccessMixin):
         return super(deptcontrolMixin, self).dispatch(request, *args, **kwargs)
 
 
-class PermissionsMixin(AccessMixin):
+class PermissionRequiredMixin(AccessMixin):
     """
-    登录认证
+    权限认证
     """
-
-    @method_decorator(login_required(login_url='/accounts/login/'))
     def dispatch(self, request, *args, **kwargs):
-        u = UserProfile.objects.get(username=request.user)
-        access_url = ["/analysis/{0}/".format(uu.name) for uu in u.usergroups.all()]
-
-        if request.path_info in access_url or re.split("hall|threshold|change_passwd", request.path_info)[0] in access_url:
-            return super(PermissionsMixin, self).dispatch(request, *args, **kwargs)
-        else:
+        try:
+            auth_handler = authSession.SessionUpload(request)
+            if auth_handler.checkout():
+                return super(PermissionRequiredMixin, self).dispatch(request, *args, **kwargs)
+            else:
+                return HttpResponseRedirect('/system/403.html')
+        except Exception as e:
             return HttpResponse(403)
 
 

@@ -5,30 +5,30 @@ from django.views import View
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
 from django.http import JsonResponse
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from utils.mixin_utils import LoginRequiredMixin, PermissionRequiredMixin
 
 from repository.service import urlmaps_config
 
 
-class UrlMapsConfigView(LoginRequiredMixin, View):
+class UrlMapsConfigView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, server_id):
         response = urlmaps_config.ServerUrlMaps.get_server_urlmaps(server_id)
         return render(request, 'server_config_urlmaps.html', {'response': response})
 
 
-class UrlMapsDetailView(LoginRequiredMixin, View):
+class UrlMapsDetailView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def post(self, request):
         response = urlmaps_config.ServerUrlMaps.get_server_urlmaps_detial(request)
         return render(request, 'include/server_config_urlmaps_detail.html', {'response': response})
 
 
-class UrlMapsConfigJsonView(LoginRequiredMixin, View):
+class UrlMapsConfigJsonView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, server_id):
         response = urlmaps_config.ServerUrlMaps.get_server_urlmaps_json(server_id)
         return HttpResponse(json.dumps(response.data))
 
 
-class UpdateUrlMapsView(LoginRequiredMixin, View):
+class UpdateUrlMapsView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         response = urlmaps_config.ServerUrlMaps.get_urlmaps_by_id(request)
         return HttpResponse(json.dumps(response))
@@ -46,7 +46,7 @@ class UpdateUrlMapsView(LoginRequiredMixin, View):
         return JsonResponse(response.__dict__)
 
 
-class UpdateUrlMapsGroupsView(LoginRequiredMixin, View):
+class UpdateUrlMapsGroupsView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         response = urlmaps_config.ServerUrlMaps.get_urlmaps_groups_by_id(request)
         return JsonResponse(response.__dict__)

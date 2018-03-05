@@ -4,18 +4,18 @@ import json
 from django.views import View
 from django.shortcuts import render
 from django.shortcuts import HttpResponse, HttpResponseRedirect
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from utils.mixin_utils import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
 
 from cmdb.service import business
 
 
-class BusinessListView(LoginRequiredMixin, View):
+class BusinessListView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, 'cmdb_business_list.html')
 
 
-class BusinessJsonView(LoginRequiredMixin, View):
+class BusinessJsonView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def post(self, request):
         response = business.Business().add_data(request)
         return JsonResponse(response.__dict__)
@@ -34,7 +34,7 @@ class BusinessJsonView(LoginRequiredMixin, View):
         return JsonResponse(response.__dict__)
 
 
-class BusinessDetailView(LoginRequiredMixin, View):
+class BusinessDetailView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, business_nid):
         response = business.Business.get_buesiness_detail(business_nid)
         return render(request, 'include/cmdb_business_detail.html', {"response": response})

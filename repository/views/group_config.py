@@ -5,24 +5,24 @@ from django.views import View
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
 from django.http import JsonResponse
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from utils.mixin_utils import LoginRequiredMixin, PermissionRequiredMixin
 
 from repository.service import group_config
 
 
-class GroupConfigView(LoginRequiredMixin, View):
+class GroupConfigView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, server_id):
         response = group_config.ServerGroup.get_server_groups(server_id)
         return render(request, 'server_config_group.html', {'response': response})
 
 
-class GroupConfigJsonView(LoginRequiredMixin, View):
+class GroupConfigJsonView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, server_id):
         response = group_config.ServerGroup.get_server_groups_json(request, server_id)
         return HttpResponse(json.dumps(response.data))
 
 
-class UpdateServerGroupView(LoginRequiredMixin, View):
+class UpdateServerGroupView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         response = group_config.ServerGroup.get_group_by_id(request)
         return HttpResponse(json.dumps(response))
@@ -40,7 +40,7 @@ class UpdateServerGroupView(LoginRequiredMixin, View):
         return JsonResponse(response.__dict__)
 
 
-class UpdatePublicGroupView(LoginRequiredMixin, View):
+class UpdatePublicGroupView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         response = group_config.ServerGroup.get_public_group(request)
         return HttpResponse(json.dumps(response.data))

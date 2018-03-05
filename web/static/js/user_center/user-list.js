@@ -14,6 +14,7 @@ function update_user_app_fn(update_type, user_id) {
     var user_email = $('input[name="user_email"]').val();
     var user_department = $('input[name="user_department"]').val();
     var user_group = $('select[name="user_group"]').val();
+    var user_roles = $('select[name="user_roles"]').val();
 
     // if (user_name.length == 0 ) {
     //             alert("Please fill user name.");
@@ -37,7 +38,7 @@ function update_user_app_fn(update_type, user_id) {
         type: update_type,
         dataType: 'json',
         traditional:true,
-        data: {'user_id': user_id, 'user_name': user_name, 'user_phone': user_phone, 'user_email': user_email, 'user_department': user_department, 'user_group': user_group},
+        data: {'user_id': user_id, 'user_name': user_name, 'user_phone': user_phone, 'user_email': user_email, 'user_department': user_department, 'user_group': user_group, 'user_roles': user_roles},
         success: function (data, response, status) {
             window.location.href = "/user_center/user-list.html"
         }

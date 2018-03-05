@@ -73,6 +73,25 @@
                     </td>
                 </tr>
 
+                <tr>
+                    <td style="line-height:34px;" align="right">Roles : *</td>
+                    <td>
+                        <select class="form-control" name="user_roles" multiple="multiple">
+
+                        {% for k, v in response.roles_dic.items %}
+
+                            {% if v.select == True %}
+                                <option value="{{ k }}" selected="selected">{{ v.role_name }}</option>
+                            {% else %}
+                                <option value="{{ k }}">{{ v.role_name }}</option>
+                            {% endif %}
+
+                        {% endfor %}
+
+                        </select>
+                    </td>
+                </tr>
+
                 </tbody>
             </table>
 

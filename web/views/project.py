@@ -4,19 +4,17 @@ import json
 from django.views import View
 from django.shortcuts import render
 from django.shortcuts import HttpResponse, HttpResponseRedirect
+from utils.mixin_utils import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
-
-
 from web.service import project
 
 
-
-class ProjectListView(View):
+class ProjectListView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, 'project_list.html')
 
 
-class ProjectJsonView(View):
+class ProjectJsonView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def post(self, request):
         response = project.Project.add_data(request)
         return HttpResponseRedirect('/project.html')
@@ -35,26 +33,26 @@ class ProjectJsonView(View):
         return JsonResponse(response.__dict__)
 
 
-class AddProjectView(View):
+class AddProjectView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         # response = server_project.ServerProject.get_project_info(request)
         return render(request, 'add_project.html')
 
 
-class UpdateProjectView(View):
+class UpdateProjectView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, project_nid):
         # project_info = server_project.ServerProject.get_project_info(request)
         response = project.Project.project_config(project_nid)
         return render(request, 'edit_project.html', {'response': response})
 
 
-class ProjectAppViewsView(View):
+class ProjectAppViewsView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, project_nid):
         response = project.Project.project_config(project_nid)
         return render(request, 'project_appviews.html', {'response': response})
 
 
-class ProjectProjectViewsView(View):
+class ProjectProjectViewsView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, project_nid):
         response = project.Project.project_config(project_nid)
         return render(request, 'project_projectviews.html', {'response': response})
