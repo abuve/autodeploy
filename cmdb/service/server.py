@@ -139,8 +139,8 @@ class Server(BaseServiceList):
     def status_map(self):
         result = [
             {'id': 1, 'name': 'success'},
-            #{'id': 2, 'name': 'danger'},
-            {'id': 3, 'name': 'warning'}
+            {'id': 2, 'name': 'warning'},
+            {'id': 3, 'name': 'danger'}
         ]
         return result
 
