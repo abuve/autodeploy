@@ -4,19 +4,19 @@ import json
 from django.views import View
 from django.shortcuts import render
 from django.shortcuts import HttpResponse, HttpResponseRedirect
-from utils.mixin_utils import LoginRequiredMixin, PermissionRequiredMixin
+from utils.mixin_utils import LoginRequiredMixin, PermissionRequiredMixin, WriteAccessLogsMixin
 from django.http import JsonResponse
 
 from cmdb.service import server
 from cmdb import models as CMDB_MODELS
 
 
-class ServerListView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class ServerListView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, 'cmdb_server_list.html')
 
 
-class ServerJsonView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class ServerJsonView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def post(self, request):
         response = server.Server.asset_data_create(request)
         return JsonResponse(response.__dict__)
@@ -35,13 +35,13 @@ class ServerJsonView(LoginRequiredMixin, PermissionRequiredMixin, View):
         return JsonResponse(response.__dict__)
 
 
-class AssetDetailView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class AssetDetailView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, asset_nid):
         response = server.Server.assets_detail(asset_nid)
         return render(request, 'cmdb_asset_detail.html', {"response": response})
 
 
-class AssetCreateView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class AssetCreateView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         response = server.Server().asset_create()
         return render(request, 'cmdb_asset_create.html', {'response': response})

@@ -4,7 +4,7 @@ import json
 from django.views import View
 from django.shortcuts import render
 from django.shortcuts import HttpResponse, HttpResponseRedirect
-from utils.mixin_utils import LoginRequiredMixin, PermissionRequiredMixin
+from utils.mixin_utils import LoginRequiredMixin, PermissionRequiredMixin, WriteAccessLogsMixin
 from django.http import JsonResponse
 
 from web.service import server
@@ -17,12 +17,12 @@ from cmdb.service import idc
 from repository import models as repository_models
 
 
-class IdcListView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class IdcListView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, 'cmdb_idc_list.html')
 
 
-class IdcJsonView(LoginRequiredMixin, View):
+class IdcJsonView(WriteAccessLogsMixin, LoginRequiredMixin, View):
     def post(self, request):
         response = idc.Idc.add_data(request)
         return HttpResponseRedirect('/cmdb/idc-list.html')
@@ -41,32 +41,32 @@ class IdcJsonView(LoginRequiredMixin, View):
         return JsonResponse(response.__dict__)
 
 
-class ServerDetailView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class ServerDetailView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, asset_nid):
         response = server.Server.server_config(asset_nid)
         return render(request, 'server_config.html', {'response': response})
 
 
-class ServerDetaiGroupView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class ServerDetaiGroupView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, asset_nid):
         response = server_group.ServerGroup.get_server_groups_json(asset_nid)
         return HttpResponse(json.dumps(response))
 
 
-class AddIdcView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class AddIdcView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         # response = server_project.ServerProject.get_project_info(request)
         return render(request, 'add_idc.html')
 
 
-class UpdateIdcView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class UpdateIdcView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, idc_nid):
         # project_info = server_project.ServerProject.get_project_info(request)
         response = idc.Idc.idc_config(idc_nid)
         return render(request, 'edit_idc.html', {'response': response})
 
 
-class UpdateServerGroupView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class UpdateServerGroupView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         response = server_group.ServerGroup.get_group_by_id(request)
         return HttpResponse(json.dumps(response))
@@ -84,7 +84,7 @@ class UpdateServerGroupView(LoginRequiredMixin, PermissionRequiredMixin, View):
         return JsonResponse(response.__dict__)
 
 
-class UpdateServerInstanceView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class UpdateServerInstanceView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         response = server_instance.ServerInstance.get_instance_by_id(request)
         return HttpResponse(json.dumps(response))
@@ -102,19 +102,19 @@ class UpdateServerInstanceView(LoginRequiredMixin, PermissionRequiredMixin, View
         return JsonResponse(response.__dict__)
 
 
-class GetServerInstanceTypeView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class GetServerInstanceTypeView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         response = server.Server.instance_type_list(request)
         return HttpResponse(json.dumps(response))
 
 
-class ServerDetaiInstanceView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class ServerDetaiInstanceView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, asset_nid):
         response = server_instance.ServerInstance.get_server_instances_json(asset_nid)
         return HttpResponse(json.dumps(response))
 
 
-class UpdateYamlConfView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class UpdateYamlConfView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         service_handler = server_yaml_conf.ServerYamlConf()
         response = service_handler.get_yaml_conf(request)

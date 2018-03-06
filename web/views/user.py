@@ -3,17 +3,17 @@
 from django.views import View
 from django.shortcuts import render
 from django.http import JsonResponse
-from utils.mixin_utils import LoginRequiredMixin, PermissionRequiredMixin
+from utils.mixin_utils import LoginRequiredMixin, PermissionRequiredMixin, WriteAccessLogsMixin
 
 from web.service import user
 
 
-class UserListView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class UserListView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, 'users_list.html')
 
 
-class UserJsonView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class UserJsonView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request):
         obj = user.User()
         response = obj.fetch_users(request)

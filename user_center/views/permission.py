@@ -5,18 +5,18 @@ from django.views import View
 from django.shortcuts import render
 from django.shortcuts import HttpResponse, HttpResponseRedirect
 from django.http import JsonResponse
-from utils.mixin_utils import LoginRequiredMixin, PermissionRequiredMixin
+from utils.mixin_utils import LoginRequiredMixin, PermissionRequiredMixin, WriteAccessLogsMixin
 
 from user_center.service import permission
 
 
-class PermissionListView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class PermissionListView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request):
         #response = permission.PermissionConfig.nginx_config(server_id)
         return render(request, 'permission_list.html', {'response': 1})
 
 
-class PermissionJsonView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class PermissionJsonView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request):
         response = permission.PermissionConfig().fetch_data(request)
         return JsonResponse(response.__dict__)
@@ -34,12 +34,12 @@ class PermissionJsonView(LoginRequiredMixin, PermissionRequiredMixin, View):
         return JsonResponse(response.__dict__)
 
 
-class PermissionAddView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class PermissionAddView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request):
         return render(request, 'permission_add.html')
 
 
-class PermissionUpdateView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class PermissionUpdateView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, url_nid):
         response = permission.PermissionConfig.get_data_by_id(url_nid)
         return render(request, 'permission_edit.html', {'response': response})

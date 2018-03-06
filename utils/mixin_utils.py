@@ -7,8 +7,8 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import AccessMixin
 from django.conf.urls import url
 import json
-# from users.models import AccessLogs
 from user_center.models import UserProfile
+from system.models import AccessLogs
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from utils import authSession
@@ -28,11 +28,12 @@ class LoginRequiredMixin(AccessMixin):
 
 class WriteAccessLogsMixin(AccessMixin):
     """
-    写日志
+    日志记录
     """
 
     def dispatch(self, request, *args, **kwargs):
         username = request.user.get_username()
+        if len(username) == 0: username = 'nobody'
         routing = request.build_absolute_uri()
         cookies = json.dumps(request.COOKIES)[:200]
         if 'HTTP_X_FORWARDED_FOR' in request.META:
@@ -56,8 +57,6 @@ class WriteAccessLogsMixin(AccessMixin):
             if len(access_logs_obj.filter(cookies=cookies)) == 0:
                 access_logs_obj.create(username=username, routing=routing, ip_address=ipaddress,
                                        cookies=cookies, browser=browser, system=os).save()
-                # access_logs_obj.create(username=username, routing=routing, ip_address=ipaddress,
-                #                        cookies=cookies).save()
 
         return super(WriteAccessLogsMixin, self).dispatch(request, *args, **kwargs)
 
@@ -66,16 +65,6 @@ class RemoveSessionMixin(AccessMixin):
     def dispatch(self, request, *args, **kwargs):
         request.session.set_expiry(0)
         return super(RemoveSessionMixin, self).dispatch(request, *args, **kwargs)
-
-
-class deptcontrolMixin(AccessMixin):
-    def dispatch(self, request, *args, **kwargs):
-        # print(str(request.session['attr']))
-        if not 'om' in request.session['attr']['dept']:
-            if not kwargs['project'] in request.session['attr']['dept']:
-                self.raise_exception = True
-                return self.handle_no_permission()
-        return super(deptcontrolMixin, self).dispatch(request, *args, **kwargs)
 
 
 class PermissionRequiredMixin(AccessMixin):
@@ -91,13 +80,3 @@ class PermissionRequiredMixin(AccessMixin):
                 return HttpResponseRedirect('/system/403.html')
         except Exception as e:
             return HttpResponse(403)
-
-
-class PostCsrfTokenMixin(AccessMixin):
-    """
-    csrf_
-    """
-    # @method_decorator((login_url='/accounts/login/'))
-    @csrf_exempt
-    def dispatch(self, request, *args, **kwargs):
-        return super(PostCsrfTokenMixin, self).dispatch(request, *args, **kwargs)
