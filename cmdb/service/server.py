@@ -93,6 +93,13 @@ class Server(BaseServiceList):
                 'attr': {}
             },
             {
+                'q': 'memo',
+                'title': "Memo",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@memo'}},
+                'attr': {'name': 'memo', 'id': '@id', 'edit-enable': 'true', 'edit-type': 'input'}
+            },
+            {
                 'q': 'device_status_id',
                 'title': "Status",
                 'display': 1,
