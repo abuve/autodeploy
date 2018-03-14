@@ -252,3 +252,18 @@ class UrlConfigHandler(models.Model):
 
     def __str__(self):
         return self.url
+
+
+class WebConfigDomains(models.Model):
+    app_id = models.ForeignKey(Applications, verbose_name='所属应用', null=True, blank=True,
+                                      on_delete=models.SET_NULL, related_name='webconfigdomains')
+    domain = models.CharField(u'域名地址', max_length=200, unique=True)
+    ssl_tag = models.BooleanField(default=True)
+    memo = models.CharField(max_length=400, blank=True, null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "web配置域名管理"
+
+    def __str__(self):
+        return self.domain

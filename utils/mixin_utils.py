@@ -79,4 +79,5 @@ class PermissionRequiredMixin(AccessMixin):
             else:
                 return HttpResponseRedirect('/system/403.html')
         except Exception as e:
+            print('Error from PermissionRequired', Exception, e)
             return HttpResponse(403)

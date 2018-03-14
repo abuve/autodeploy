@@ -5,6 +5,7 @@ from repository.views import instance_config
 from repository.views import docker_config
 from repository.views import logs_config
 from repository.views import urlmaps_config
+from repository.views import domains_config
 
 from django.contrib.auth.decorators import login_required
 
@@ -41,5 +42,9 @@ urlpatterns = [
     url(r'^config/urlmaps/get_urlmaps_detail.html$', urlmaps_config.UrlMapsDetailView.as_view(), name='server-config-get-urlmaps-detail'),
     url(r'^config/urlmaps/update-server-urlmaps.html$', urlmaps_config.UpdateUrlMapsView.as_view(), name='server-config-urlmaps-update-server-urlmaps'),
     url(r'^config/urlmaps/update-server-urlmaps-groups.html$', urlmaps_config.UpdateUrlMapsGroupsView.as_view(), name='server-config-urlmaps-update-server-urlmaps-groups'),
+
+    url(r'^config/domains/(?P<server_id>\d+).html$', domains_config.DomainsConfigView.as_view(), name='server-config-domains'),
+    url(r'^config/domains/json-(?P<server_id>\d+).html$', domains_config.DomainsConfigJsonView.as_view(), name='server-config-domains-json'),
+    url(r'^config/domains/update-server-domains.html$', domains_config.UpdateDomainView.as_view(), name='server-config-domains-update-server-domains'),
 
 ]
