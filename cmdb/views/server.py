@@ -138,3 +138,35 @@ class AssetCreateView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequir
 #             print(obj[1])
 #             print(Exception, e)
 #     return HttpResponse(1)
+
+def test(request):
+    from repository import models
+    domain_obj = models.Applications.objects.get(name='eu-forward')
+    f = open('D:\domain.txt')
+    data = f.read().split('\n')
+    f.close()
+    for i in data:
+        data_into_db = models.WebConfigDomains(
+            app_id = domain_obj,
+            domain = i
+        )
+        try:
+            data_into_db.save()
+        except Exception as e:
+            print(Exception, e)
+            print(i)
+
+        # if len(i.split('.')) == 3:
+        #     domain_name = i.split('.')[1]
+        #     suffix = i.split('.')[2]
+        #     domain = domain_name + '.' + suffix
+        #     data_into_db = models.WebConfigDomains(
+        #         app_id = domain_obj,
+        #         domain = domain
+        #     )
+        #     try:
+        #         data_into_db.save()
+        #     except Exception as e:
+        #         print(Exception, e)
+        #         print(domain)
+    return HttpResponse(1)

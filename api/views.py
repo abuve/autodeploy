@@ -11,7 +11,7 @@ from django.utils.decorators import method_decorator
 from utils import auth
 from api import config
 from repository import models
-from api.service import asset
+from api.service import assets
 
 
 class AssetView(View):
@@ -42,7 +42,7 @@ class AssetView(View):
         # test = {'user': '用户名', 'pwd': '密码'}
         # return JsonResponse(test, json_dumps_params={"ensure_ascii": False})
 
-        response = asset.get_untreated_servers()
+        response = assets.get_untreated_servers()
         return JsonResponse(response.__dict__)
 
     @method_decorator(auth.api_auth)
