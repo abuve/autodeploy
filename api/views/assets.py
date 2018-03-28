@@ -25,7 +25,8 @@ class AssetsView(View):
                                          'option')}
             else:
                 response_data = api_handler.response_msg
-        except:
+        except Exception as e:
+            print(Exception, e)
             response_data = {'status': 500, 'msg': 'Non-canonical json data.'}
 
         return HttpResponse(json.dumps(response_data))

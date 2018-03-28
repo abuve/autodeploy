@@ -204,12 +204,14 @@
     function initialize(pager) {
         $.Show('#shade,#loading');
         var conditions = JSON.stringify(aggregationSearchCondition());
+        $.cookie('conditions', conditions);
         var $body = $('#table_body');
         $.ajax({
             url: requestUrl,
             type: 'GET',
             traditional: true,
             data: {'condition': conditions, 'pager': pager},
+            cache: true,
             dataType: 'JSON',
             success: function (response) {
                 $.Hide('#shade,#loading');

@@ -7,6 +7,7 @@ import time
 class ApiHandler:
     def __init__(self, request):
         self.request_data = request.body.decode('utf-8')
+        print(self.request_data)
         self.request_json_data = json.loads(self.request_data)
 
         try:

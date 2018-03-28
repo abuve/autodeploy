@@ -33,6 +33,6 @@ urlpatterns = [
     url(r'^cmdb/', include('cmdb.urls')),
     url(r'^server/', include('repository.urls')),
     url(r'user_center/', include('user_center.urls')),
-
+    url(r'omtools/', include('omtools.urls')),
     url(r'system/', include('system.urls')),
 ]
