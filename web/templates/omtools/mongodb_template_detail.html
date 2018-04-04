@@ -1,0 +1,35 @@
+
+
+<table class="table table-bordered table-striped">
+
+    {% for obj in response.data %}
+    <tr>
+        <td style="line-height:34px;" align="right" nowrap="nowrap">$1 : </td>
+        <td>
+            <textarea type="textarea" class="form-control" rows="5" id="mongoMission_var_1" name="mongoMission_var_1" placeholder="输入提案id，每行一个"></textarea>
+        </td>
+        <td>
+            <select class="form-control" name="mongoMission_v_type_1">
+                <option value="LIST">LIST</option>
+            </select>
+        </td>
+    </tr>
+    {% endfor %}
+
+    <tr>
+        <td style="line-height:34px;" align="right" nowrap="nowrap">$2 : </td>
+        <td>
+            <select class="form-control" name="mongoMission_var_2">
+                <option value="'Success'">'Success'</option>
+                <option value="'False'">'False'</option>
+            </select>
+        </td>
+        <td>
+            <select class="form-control" name="mongoMission_v_type_2">
+                <option value="SELECT">SELECT</option>
+            </select>
+        </td>
+    </tr>
+
+    </tbody>
+</table>

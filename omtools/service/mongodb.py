@@ -10,6 +10,8 @@ from utils.base import BaseServiceList
 from utils.pager import PageInfo
 from utils.response import BaseResponse
 
+from omtools.cores import redis_handler
+
 
 class MongodbConfig(BaseServiceList):
     def __init__(self):
@@ -32,6 +34,20 @@ class MongodbConfig(BaseServiceList):
                 'title': "Mission Name",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@title'}},
+                'attr': {}
+            },
+            {
+                'q': 'database',
+                'title': "Database",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@database'}},
+                'attr': {}
+            },
+            {
+                'q': 'document',
+                'title': "Document",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@document'}},
                 'attr': {}
             },
             {
@@ -83,7 +99,7 @@ class MongodbConfig(BaseServiceList):
                 'title': "Options",
                 'display': 1,
                 'text': {
-                    'content': '<div class="btn-group"><a type="button" class="btn btn-default btn-xs" onclick="show_mission_detail_fn({nid})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Details</a><a type="button" class="btn btn-default btn-xs" onclick="submit_mission_fn({nid})"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Submit</a></div>',
+                    'content': '<div class="btn-group"><a type="button" class="btn btn-default btn-xs" onclick="show_mission_detail_fn({nid})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Details</a></div>',
                     'kwargs': {'nid': '@id'}},
                 'attr': {'style': 'text-align: left; width: 260px'}
             },
@@ -168,27 +184,55 @@ class MongodbConfig(BaseServiceList):
         response = BaseResponse()
         try:
             post_data = QueryDict(request.body, encoding='utf-8')
-            mongoMission_title = post_data.get('mongoMission_title')
+            mongoMission_template_id = post_data.get('mongoMission_template_id')
             mongoMission_memo = post_data.get('mongoMission_memo')
-            option_exec = "db.proposal.update({'proposalId': $1 }, {$set: {'status': $2 }})"
 
-            for k,v in post_data.items():
-                if '_var' in k:
-                    var_count = k.split('mongoMission_var_')[1]
-                    var = post_data.get('mongoMission_var_%s' % var_count)
-                    var_type = post_data.get('mongoMission_v_type_%s' % var_count)
-                    if var_type == 'LIST':
-                        var = str(var.split('\r\n'))
-                    option_exec = option_exec.replace('$%s' % var_count, var)
+            template_data = OMTOOLS_MODELS.MongodbMissionTemplate.objects.get(id=int(mongoMission_template_id))
+            var_list = json.loads(template_data.var_dict)
+
+            m_db = template_data.database
+            m_document = template_data.document
+            m_op_type = template_data.get_op_type_display()
+            m_find = template_data.find
+            m_update = template_data.update
+            m_multi_tag = template_data.multi_tag
+
+            for k, v in post_data.items():
+                if '$$' in k:
+                    # 根据名称查找变量参数
+                    for var_obj in var_list:
+                        if k == var_obj['var_name']:
+                            if var_obj['choice'] == 'LIST':
+                                var = str(v.split('\r\n'))
+                            else:
+                                var = v
+
+                            m_find = m_find.replace(k, var)
+                            m_update = m_update.replace(k, var)
+
+            # 生成exec语句
+            if m_op_type == 'update':
+                option_exec = "%s.%s.update(%s, %s, {'multi':%s})" % (m_db, m_document, m_find, m_update, m_multi_tag)
+
 
             # 创建Mission
             data_obj = OMTOOLS_MODELS.MongodbMission(
-                title = mongoMission_title,
+                title = template_data.title,
+                op_type = template_data.op_type,
                 op_exec = option_exec,
+                database = m_db,
+                document = m_document,
+                find = m_find,
+                update = m_update,
+                multi_tag = m_multi_tag,
                 req_user_id = request.user.id,
-                memo = mongoMission_memo
+                memo = mongoMission_memo,
             )
             data_obj.save()
+
+            # 将任务编号写入redis 队列中
+            redis_queue = redis_handler.RedisQueue('mongodb')
+            redis_queue.put(data_obj.id)
 
         except Exception as e:
             print(Exception, e)
@@ -238,3 +282,26 @@ class MongodbConfig(BaseServiceList):
             response.status = False
             response.message = str(e)
         return response
+
+    @staticmethod
+    def get_template_by_id(request):
+        response = BaseResponse()
+        try:
+            template_id = request.GET.get('template_id')
+            response.data = OMTOOLS_MODELS.MongodbMissionTemplate.objects.filter(id=template_id).values().first()
+
+        except Exception as e:
+            response.status = False
+            response.message = str(e)
+        return response
+
+    @staticmethod
+    def get_template_data():
+        response = BaseResponse()
+        try:
+            response.data = OMTOOLS_MODELS.MongodbMissionTemplate.objects.all()
+        except Exception as e:
+            response.status = False
+            response.message = str(e)
+        return response
+

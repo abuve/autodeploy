@@ -67,59 +67,44 @@
                 </div>
                 <form id="add_mongoMission_form" method="post" action="/omtools/mongodb-json.html">
                     <div class="modal-body">
-                        <table class="table table-bordered table-striped">
-                            <tbody>
+                        <table class="table table-bordered table-striped" style="margin-bottom: -1px;">
                             <tr>
-                                <td style="line-height:34px;" align="right" nowrap="nowrap">Option Template : </td>
+                                <td style="line-height:34px;width: 180px;" align="right" nowrap="nowrap">选择任务模板 : </td>
                                 <td colspan="2">
-                                    <select class="form-control" name="mongoMission_title">
-                                        <option value="更新提案ID状态">更新提案ID状态</option>
+                                    <select class="form-control" name="mongoMission_template_id" onchange="load_template_component_fn(this)">
+                                        <option value="None">请选择操作模板</option>
+                                        {% for obj in response.data %}
+                                            <option value="{{ obj.id }}">{{ obj.title }}</option>
+                                        {% endfor %}
                                     </select>
                                 </td>
                             </tr>
+{#                            <tr>#}
+{#                                <td style="line-height:34px;" align="right" nowrap="nowrap">Option Exec : </td>#}
+{#                                <td style="line-height:34px;" colspan="2">#}
+{#                                    <b>db.proposal.update({'proposalId':  <span class="label label-default">$1</span> }, {$set: {'status':  <span class="label label-default">$2</span> }})</b>#}
+{#                                </td>#}
+{#                            </tr>#}
+
+
+                            </tbody>
+                        </table>
+
+                        <table class="table table-bordered table-striped" id="mongo_mission_var_detail" style="margin-bottom: -1px;"></table>
+
+                        <table class="table table-bordered table-striped" style="margin-bottom: -1px; display: none" id="mongoMission_memo">
                             <tr>
-                                <td style="line-height:34px;" align="right" nowrap="nowrap">Option Exec : </td>
-                                <td style="line-height:34px;" colspan="2">
-                                    <b>db.proposal.update({'proposalId':  <span class="label label-default">$1</span> }, {$set: {'status':  <span class="label label-default">$2</span> }})</b>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="line-height:34px;" align="right" nowrap="nowrap">$1 : </td>
-                                <td>
-                                    <textarea type="textarea" class="form-control" rows="5" id="mongoMission_var_1" name="mongoMission_var_1" placeholder="输入提案id，每行一个"></textarea>
-                                </td>
-                                <td>
-                                    <select class="form-control" name="mongoMission_v_type_1">
-                                        <option value="LIST">LIST</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="line-height:34px;" align="right" nowrap="nowrap">$2 : </td>
-                                <td>
-                                    <select class="form-control" name="mongoMission_var_2">
-                                        <option value="'Success'">'Success'</option>
-                                        <option value="'False'">'False'</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <select class="form-control" name="mongoMission_v_type_2">
-                                        <option value="SELECT">SELECT</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="line-height:34px;" align="right" nowrap="nowrap">Memo : </td>
+                                <td style="line-height:34px; width: 180px;" align="right" nowrap="nowrap">Memo : </td>
                                 <td colspan="2">
                                     <textarea type="textarea" class="form-control" name="mongoMission_memo" placeholder="任务备注"></textarea>
                                 </td>
                             </tr>
-                            </tbody>
                         </table>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" onclick="do_create_mongodbMission()">Create</button>
+                        <button type="button" id="create_mongodbMission_btn" class="btn btn-primary" style='display: none' onclick="do_create_mongodbMission()">Create</button>
                     </div>
                 </form>
             </div><!-- /.modal-content -->
@@ -140,7 +125,6 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" onclick="do_create_mongodbMission()">Create</button>
                     </div>
                 </form>
             </div><!-- /.modal-content -->
