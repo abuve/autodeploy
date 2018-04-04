@@ -25,15 +25,20 @@ class MongoFunction:
 
 
     def backup_mongodb(self):
+        time_now = datetime.datetime.now()
         mongodb_backup_conn = self.commons.mongo_conn_collection(self.commons.mongoconf.mongo_conn(self.commons.get_Mongodb_info[self.source_mongodb]['backup']), self.db, self.table)
         online_data = self.mongodb_execute_conn.find(self.query['condition'])
         online_data_count = self.mongodb_execute_conn.find(self.query['condition']).count()
         backup_insert = []
         for item in online_data:
-            item['backupTime'] = datetime.datetime.now()
+            item['old_id'] = item['_id']
+            item['backupTime'] = time_now
+            del item['_id']
             backup_insert.append(item)
         mongodb_backup_conn.insert_many(backup_insert)
-        backup_data_count = mongodb_backup_conn.find(self.query['condition']).count()
+        newquery = self.query['condition']
+        newquery['backupTime'] = time_now
+        backup_data_count = mongodb_backup_conn.find(newquery).count()
         if online_data_count != backup_data_count:
             mongodb_backup_conn.delete_many(self.query['condition'])
             self.backup_mongodb()
