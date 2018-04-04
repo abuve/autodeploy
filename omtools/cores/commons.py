@@ -6,7 +6,7 @@
 # @Software: PyCharm
 
 
-from mongoconf import *
+from omtools.cores.mongoconf import *
 from decimal import *
 import re
 import threading

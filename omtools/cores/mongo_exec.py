@@ -5,6 +5,7 @@ import platform, os, sys
 import django
 from pymongo import MongoClient
 from omtools.cores import redis_handler
+from omtools.cores import MongoHandler
 
 if platform.system() == 'Linux':
     sys.path.append('/app/project/AutoDeploy')
@@ -13,26 +14,6 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "AutoDeploy.settings")
 django.setup()
 
 from omtools import models as OMTOOLS_MODELS
-
-
-class MongodbHandler:
-    def __init__(self):
-
-        self.mongo_collection_conn = self.mongo_conn()["test"]["logs"]
-
-    def mongo_conn(self):
-        """
-        :param kwargs:mongo连接方式字典
-        :return: mongo认证后的client，方便使用
-        """
-        client = MongoClient(host=['10.168.11.54:27018'])
-        db_auth = client.admin
-        db_auth.authenticate("admin", "admin@)!&")
-        return client
-
-    def exec(self):
-
-        result = self.mongo_collection_conn.insert_one({"items": 111})
 
 
 class MissionHandler:
@@ -47,15 +28,25 @@ class MissionHandler:
         m_db = mission_obj.database
         m_document = mission_obj.document
         m_find = mission_obj.find
+        m_type = mission_obj.op_type
         m_update = mission_obj.update
         m_multi_tag = mission_obj.multi_tag
 
         query = {
-            'condition': m_find,
-            'set': m_update,
-            'property': {'multi': m_multi_tag},
+            'db': m_db,
+            'table': m_document,
+            'project': '',
+            'type': m_type,
+            'query': {
+                'condition': m_find,
+                'set': m_update,
+                'property': m_multi_tag,
+            }
         }
 
+        result = MongoHandler.MongoFunction(query).execute_mongodb()
+
+        print(result)
 
 if __name__ == '__main__':
     redis_queue = redis_handler.RedisQueue('mongodb')

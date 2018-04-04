@@ -2,11 +2,11 @@
 # @Time    : 4/2/2018 10:34 AM
 # @Author  : Abbott
 # @Site    : 
-# @File    : MongoFunction.py
+# @File    : MongoHandler.py
 # @Software: PyCharm
 
-from commons import *
-from logsutils import *
+from omtools.cores.commons import *
+#from logsutils import *
 import datetime
 
 class MongoFunction:
