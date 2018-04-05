@@ -66,12 +66,12 @@ class MongoFunction:
                 result = conn.find(query['condition'], query['property'])
             msg = 'task_id: {0}, status: {1}, result: {2}'.format(self.taskId, status, result)
             self.LoggingConf.logging_info(msg)
-            return {'status': status, 'result': result}
+            return {'status': status, 'msg': 'Success', 'result': result}
         except Exception as e:
             status = 500
-            msg = 'task_id: {0}, status: {1}'.format(self.taskId, status)
+            msg = 'task_id: {0}, status: {1}, exception: {2}-{3}'.format(self.taskId, status, Exception, e)
             self.LoggingConf.logging_error(msg)
-            return {'status': status}
+            return {'status': status, 'msg': msg}
 
     def update_query(self, conn, query):
         status = 200
@@ -83,12 +83,12 @@ class MongoFunction:
 
             msg = 'task_id: {0}, status: {1}, matched_count: {2}, modified_count: {3}'.format(self.taskId, status, result.matched_count, result.modified_count)
             self.LoggingConf.logging_info(msg)
-            return {'status': status, 'result': result}
+            return {'status': status, 'msg': msg}
         except Exception as e:
             status = 500
-            msg = 'task_id: {0}, status: {1}'.format(self.taskId, status)
+            msg = 'task_id: {0}, status: {1}, exception: {2}-{3}'.format(self.taskId, status, Exception, e)
             self.LoggingConf.logging_error(msg)
-            return {'status': status}
+            return {'status': status, 'msg': msg}
 
     def insert_query(self, conn, query):
         conn.insert(query['condition'])
