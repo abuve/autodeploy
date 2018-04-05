@@ -70,7 +70,7 @@ class MongoFunction:
         except Exception as e:
             status = 500
             msg = 'task_id: {0}, status: {1}'.format(self.taskId, status)
-            self.LoggingConf.logging_info(msg)
+            self.LoggingConf.logging_error(msg)
             return {'status': status}
 
     def update_query(self, conn, query):
@@ -85,6 +85,8 @@ class MongoFunction:
             self.LoggingConf.logging_info(msg)
             return {'status': status, 'result': result}
         except Exception as e:
+            msg = 'task_id: {0}, status: {1}'.format(self.taskId, status)
+            self.LoggingConf.logging_error(msg)
             status = 500
             return {'status': status}
 
