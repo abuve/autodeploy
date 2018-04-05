@@ -6,7 +6,7 @@
 # @Software: PyCharm
 
 from omtools.cores.commons import *
-from logsutils import *
+from omtools.cores.logsutils import *
 import datetime
 
 class MongoFunction:
