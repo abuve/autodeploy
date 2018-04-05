@@ -45,7 +45,7 @@ class MongoFunction:
             del item['_id']
             backup_insert.append(item)
         mongodb_backup_conn.insert_many(backup_insert)
-        newquery = self.query['condition']
+        newquery = self.query['condition'].copy()
         newquery['backupTime'] = self.time_now
         backup_data_count = mongodb_backup_conn.find(newquery).count()
         msg = 'task_id: {0}, online_data_count: {1}, backup_data_count: {2}'.format(self.taskId, online_data_count, backup_data_count)
