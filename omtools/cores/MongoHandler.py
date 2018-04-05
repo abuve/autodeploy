@@ -81,13 +81,13 @@ class MongoFunction:
             else:
                 result = conn.update(query['condition'], query['set'])
 
-            msg = 'task_id: {0}, status: {1}, result: {2}'.format(self.taskId, status, result[0])
+            msg = 'task_id: {0}, status: {1}, matched_count: {2}, modified_count: {3}'.format(self.taskId, status, result.matched_count, result.modified_count)
             self.LoggingConf.logging_info(msg)
             return {'status': status, 'result': result}
         except Exception as e:
+            status = 500
             msg = 'task_id: {0}, status: {1}'.format(self.taskId, status)
             self.LoggingConf.logging_error(msg)
-            status = 500
             return {'status': status}
 
     def insert_query(self, conn, query):
