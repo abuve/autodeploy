@@ -38,24 +38,32 @@ class MongoFunction:
         mongodb_backup_conn = self.commons.mongo_conn_collection(self.commons.mongoconf.mongo_conn(self.commons.get_Mongodb_info[self.source_mongodb]['backup']), self.db, self.table)
         online_data = self.mongodb_execute_conn.find(self.query['condition'])
         online_data_count = self.mongodb_execute_conn.find(self.query['condition']).count()
-        backup_insert = []
-        for item in online_data:
-            item['old_id'] = item['_id']
-            item['backupTime'] = self.time_now
-            del item['_id']
-            backup_insert.append(item)
-        mongodb_backup_conn.insert_many(backup_insert)
-        newquery = self.query['condition'].copy()
-        newquery['backupTime'] = self.time_now
-        backup_data_count = mongodb_backup_conn.find(newquery).count()
-        msg = 'task_id: {0}, online_data_count: {1}, backup_data_count: {2}'.format(self.taskId, online_data_count, backup_data_count)
-        self.LoggingConf.logging_info(msg)
-        if online_data_count != backup_data_count:
-            msg = 'task_id: {0}, backup failed, delete backup first, backup again.'.format(self.taskId, online_data_count,
-                                                                                        backup_data_count)
+        if online_data_count > 0:
+            backup_insert = []
+            for item in online_data:
+                item['old_id'] = item['_id']
+                item['backupTime'] = self.time_now
+                del item['_id']
+                backup_insert.append(item)
+            mongodb_backup_conn.insert_many(backup_insert)
+            newquery = self.query['condition'].copy()
+            newquery['backupTime'] = self.time_now
+            backup_data_count = mongodb_backup_conn.find(newquery).count()
+            msg = 'task_id: {0}, online_data_count: {1}, backup_data_count: {2}'.format(self.taskId, online_data_count, backup_data_count)
             self.LoggingConf.logging_info(msg)
-            mongodb_backup_conn.delete_many(newquery)
-            self.backup_mongodb()
+            if online_data_count != backup_data_count:
+                msg = 'task_id: {0}, backup failed, delete backup first, backup again.'.format(self.taskId, online_data_count,
+                                                                                            backup_data_count)
+                self.LoggingConf.logging_info(msg)
+                mongodb_backup_conn.delete_many(newquery)
+                self.backup_mongodb()
+            status = 200
+            return {'status': status, 'msg': msg}
+        else:
+            msg = 'task_id: {0}, matched_count: {1}, backup failed.'.format(self.taskId, online_data_count)
+            self.LoggingConf.logging_warning(msg)
+            status = 500
+            return {'status': status, 'msg': msg}
 
     def find_query(self, conn, query):
         status = 200
@@ -98,9 +106,12 @@ class MongoFunction:
 
     def execute_mongodb(self):
         if self.type == "update":
-            self.backup_mongodb()
-            result = self.update_query(self.mongodb_execute_conn, self.query)
-            return result
+            backup_result = self.backup_mongodb()
+            if backup_result['status'] == 200:
+                result = self.update_query(self.mongodb_execute_conn, self.query)
+                return result
+            else:
+                return backup_result
         elif self.type == "find":
             result = self.find_query(self.mongodb_execute_conn, self.query)
             return result
