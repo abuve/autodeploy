@@ -16,7 +16,7 @@ class MongoFunction:
 
         self.commons = commons()
 
-        self.logfile = ''
+        self.logfile = 'mongo.logs'
         self.LoggingConf = CommonLogging(self.logfile)
         self.time_now = datetime.datetime.now()
 
@@ -112,6 +112,10 @@ class MongoFunction:
 if __name__ == '__main__':
     query = {'db': 'logsdb', 'table': 'proposal', 'project': '', 'type': 'update',
              'query': {'condition': {'a': {'$in': ['1']}}, 'set': {'$set': {'b': '1'}}, 'property': True}}
+
+    query = {'query': {'condition': {'proposalId': {'$in': ['234234']}}, 'property': True,
+                       'set': {'$set': {'status': 'Success'}}}, 'table': 'proposal', 'type': 'update', 'project': '',
+             'db': 'logsdb', 'task_id': 1}
 
     # query = {'db': 'logsdb', 'table': 'proposal', 'project': '', 'type': 'find',
     #          'query': {'condition': {'a': {'$in': ['1']}}, 'set': None, 'property': None}}
