@@ -2,14 +2,13 @@ from bson.objectid import ObjectId
 import datetime
 from pymongo.errors import AutoReconnect
 import platform, os, sys
+if platform.system() == 'Linux':
+    sys.path.append('/app/project/AutoDeploy')
 import json
 import django
 from pymongo import MongoClient
 from omtools.cores import redis_handler
 from omtools.cores import MongoHandler
-
-if platform.system() == 'Linux':
-    sys.path.append('/app/project/AutoDeploy')
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "AutoDeploy.settings")
 django.setup()
