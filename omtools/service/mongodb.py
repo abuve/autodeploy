@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-import json
+import json, time
+import hashlib
 
 from django.db.models import Q
 from django.http.request import QueryDict
@@ -11,6 +12,7 @@ from utils.pager import PageInfo
 from utils.response import BaseResponse
 
 from omtools.cores import redis_handler
+from utils import smtp
 
 
 class MongodbConfig(BaseServiceList):
@@ -99,7 +101,10 @@ class MongodbConfig(BaseServiceList):
                 'title': "Options",
                 'display': 1,
                 'text': {
-                    'content': '<div class="btn-group"><a type="button" class="btn btn-default btn-xs" onclick="show_mission_detail_fn({nid})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Details</a></div>',
+                    'content': '<div class="btn-group">' +
+                               '<a type="button" class="btn btn-default btn-xs" onclick="show_mission_detail_fn({nid})"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 命令查看</a>' +
+                               '<a type="button" class="btn btn-default btn-xs" onclick="show_mission_opdetail_fn({nid})"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 执行结果</a>' +
+                               '</div>',
                     'kwargs': {'nid': '@id'}},
                 'attr': {'style': 'text-align: left; width: 260px'}
             },
@@ -126,7 +131,7 @@ class MongodbConfig(BaseServiceList):
         result = [
             {'id': 1, 'name': 'success'},
             {'id': 2, 'name': 'danger'},
-            # {'id': 3, 'name': 'danger'},
+            {'id': 3, 'name': 'warning'},
         ]
         return result
 
@@ -208,31 +213,44 @@ class MongodbConfig(BaseServiceList):
                                 var = v
 
                             m_find = m_find.replace(k, var)
+                            m_find = m_find.replace("'", '"')
                             m_update = m_update.replace(k, var)
+                            m_update = m_update.replace("'", '"')
 
             # 生成exec语句
             if m_op_type == 'update':
                 option_exec = "%s.%s.update(%s, %s, {'multi':%s})" % (m_db, m_document, m_find, m_update, m_multi_tag)
+            else:
+                option_exec = None
 
+            # 生成任务md5值，用于邮件审批
+            Token_STR = 'NEBB5oMQOPMpLTn6PneJKBDEMU0WeBxd'
+            time_stamp = str(int(time.time()))
+            md5_value = hashlib.md5(str(Token_STR + time_stamp).encode('utf-8'))
 
             # 创建Mission
             data_obj = OMTOOLS_MODELS.MongodbMission(
-                title = template_data.title,
-                op_type = template_data.op_type,
-                op_exec = option_exec,
-                database = m_db,
-                document = m_document,
-                find = m_find,
-                update = m_update,
-                multi_tag = m_multi_tag,
-                req_user_id = request.user.id,
-                memo = mongoMission_memo,
+                title=template_data.title,
+                op_type=template_data.op_type,
+                op_exec=option_exec,
+                database=m_db,
+                document=m_document,
+                find=m_find,
+                update=m_update,
+                multi_tag=m_multi_tag,
+                req_user_id=request.user.id,
+                approval_md5=md5_value.hexdigest(),
+                memo=mongoMission_memo,
             )
             data_obj.save()
 
-            # 将任务编号写入redis 队列中
-            redis_queue = redis_handler.RedisQueue('mongodb')
-            redis_queue.put(data_obj.id)
+            # 调用邮件接口，发送审核邮件
+            approval_email = template_data.approve_mail
+            mail_title = 'MongoDB自助任务审核 - %s' % template_data.title
+            approval_url = "http://cmdb.omtools.me/omtools/mongodb-approval.html?id=%s" % md5_value.hexdigest()
+            mail_content = "申请执行以下语句：<br><br>%s<br><br>审批地址：<a href='%s'>%s</a>" % (option_exec, approval_url, approval_url)
+            # mail_content = "审批地址：<a href='%s'>%s</a>" % (approval_url, approval_url)
+            smtp.sendMail("noreply@m1om.me", "bananaballs123!", [approval_email], mail_title, mail_content)
 
         except Exception as e:
             print(Exception, e)
@@ -305,3 +323,34 @@ class MongodbConfig(BaseServiceList):
             response.message = str(e)
         return response
 
+    @staticmethod
+    def get_approval_by_id(request):
+        response = BaseResponse()
+        try:
+            md5_id = request.GET.get('id')
+            response.data = OMTOOLS_MODELS.MongodbMission.objects.get(approval_md5=md5_id)
+        except Exception as e:
+            response.status = False
+            response.message = str(e)
+        return response
+
+    @staticmethod
+    def do_approval_by_id(request):
+        response = BaseResponse()
+        try:
+            md5_id = request.POST.get('id')
+            mission_obj = OMTOOLS_MODELS.MongodbMission.objects.get(approval_md5=md5_id)
+            response.data = mission_obj
+
+            # 更新任务状态
+            mission_obj.approved = True
+            mission_obj.save()
+
+            # 向redis接口提交任务
+            redis_queue = redis_handler.RedisQueue('mongodb')
+            redis_queue.put(mission_obj.id)
+
+        except Exception as e:
+            response.status = False
+            response.message = str(e)
+        return response

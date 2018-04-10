@@ -18,6 +18,8 @@ import signal
 import pymongo
 from dateutil.relativedelta import relativedelta
 
+from conf import settings
+
 
 class commons:
     """

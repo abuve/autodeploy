@@ -85,9 +85,8 @@ function load_template_component_fn(value) {
     }
 }
 
-
 function create_mongodbMission_fn() {
-    $("#mongoMission_add_modal").modal('show')
+    $("#mongoMission_add_modal").modal({show: true, backdrop: 'static', keyboard: false})
 }
 
 function do_create_mongodbMission() {
@@ -98,8 +97,32 @@ function do_create_mongodbMission() {
         return false;
     }
 
-    // 提交表单
-    $("#add_mongoMission_form").submit()
+    // 控制显示
+    $('#mission_create_loading').show()
+    $('#create_mongodbMission_cancel_btn').hide()
+    $('#create_mongodbMission_btn').hide()
+
+
+    $.ajax({
+        url: '/omtools/mongodb-json.html',
+        type: 'post',
+        dataType: 'json',
+        traditional:true,
+        data: $('#add_mongoMission_form').serialize(),
+        success: function (data, response, status) {
+            if (data.status) {
+                $("#mongoMission_add_modal").modal('hide')
+                document.getElementById("add_mongoMission_form").reset()
+                $('#do_refresh').trigger("click");
+
+                // 控制显示
+                $('#mission_create_loading').hide()
+                $('#create_mongodbMission_cancel_btn').show()
+                $('#create_mongodbMission_btn').show()
+            }
+        }
+    });
+
 }
 
 function show_mission_detail_fn(id) {
@@ -113,6 +136,22 @@ function show_mission_detail_fn(id) {
             if (data.status) {
                 $("#mission_exec_detail_modal").modal('show')
                 $("#mission_exec_detail_html").html(data.data.op_exec)
+            }
+        }
+    });
+}
+
+function show_mission_opdetail_fn(id) {
+    $.ajax({
+        url: '/omtools/mongodb-get-detail.html',
+        type: 'get',
+        dataType: 'json',
+        traditional:true,
+        data: {'id': id},
+        success: function (data, response, status) {
+            if (data.status) {
+                $("#mission_exec_opdetail_modal").modal('show')
+                $("#mission_exec_opdetail_html").html(data.data.op_detail)
             }
         }
     });

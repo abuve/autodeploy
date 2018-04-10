@@ -58,11 +58,10 @@
     </div>
 
     <!-- 创建任务 modal -->
-    <div class="modal fade" id="mongoMission_add_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="mongoMission_add_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
         <div class="modal-dialog">
             <div class="modal-content" style="margin-top: 150px">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title" id="myModalLabel">Create Mongodb Mission</h4>
                 </div>
                 <form id="add_mongoMission_form" method="post" action="/omtools/mongodb-json.html">
@@ -79,15 +78,6 @@
                                     </select>
                                 </td>
                             </tr>
-{#                            <tr>#}
-{#                                <td style="line-height:34px;" align="right" nowrap="nowrap">Option Exec : </td>#}
-{#                                <td style="line-height:34px;" colspan="2">#}
-{#                                    <b>db.proposal.update({'proposalId':  <span class="label label-default">$1</span> }, {$set: {'status':  <span class="label label-default">$2</span> }})</b>#}
-{#                                </td>#}
-{#                            </tr>#}
-
-
-                            </tbody>
                         </table>
 
                         <table class="table table-bordered table-striped" id="mongo_mission_var_detail" style="margin-bottom: -1px;"></table>
@@ -103,7 +93,8 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button id='mission_create_loading' style='display: none' type="button" class="btn btn-warning">任务提交中 <img src="/static/imgs/loading_oblong.gif"></button>
+                        <button type="button" id='create_mongodbMission_cancel_btn' class="btn btn-default" data-dismiss="modal">Cancel</button>
                         <button type="button" id="create_mongodbMission_btn" class="btn btn-primary" style='display: none' onclick="do_create_mongodbMission()">Create</button>
                     </div>
                 </form>
@@ -117,16 +108,32 @@
             <div class="modal-content" style="margin-top: 150px">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Mongodb Mission Detail</h4>
+                    <h4 class="modal-title" id="myModalLabel">命令查看</h4>
                 </div>
-                <form id="add_mongoMission_form" method="post" action="/omtools/mongodb-json.html">
-                    <div class="modal-body" >
-                        <p class="bg-info" style="padding: 10px; font-weight: bold" id="mission_exec_detail_html"></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    </div>
-                </form>
+                <div class="modal-body" >
+                    <p class="bg-info" style="padding: 10px; font-weight: bold" id="mission_exec_detail_html"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <!-- 执行详情 modal -->
+    <div class="modal fade" id="mission_exec_opdetail_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="margin-top: 150px">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">执行结果</h4>
+                </div>
+                <div class="modal-body" >
+                    <p class="bg-info" style="padding: 10px; font-weight: bold" id="mission_exec_opdetail_html"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </div>
@@ -162,6 +169,7 @@
     <script type="text/javascript" src="/static/js/omtools-mongodb.js"></script>
 
     <script>
+
         $(function () {
             $.initMenu('#menu_omtools_mongodb');
             $.nbDataList('/omtools/mongodb-json.html');

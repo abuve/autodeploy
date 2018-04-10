@@ -20,11 +20,15 @@ class MongodbMission(models.Model):
     multi_tag = models.BooleanField(u'批量更新', default=False)
     req_user = models.ForeignKey(USER_MODELS.UserProfile, related_name='mongo_req_user', null=True, blank=True)
     op_user = models.ForeignKey(USER_MODELS.UserProfile, related_name='mongo_op_user', null=True, blank=True)
+    approval_md5 = models.CharField(verbose_name=u'md5审核值', max_length=100)
+    approved = models.BooleanField(u'批准执行', default=False)
     status_choices = (
         (1, 'Success'),
         (2, 'Pendding'),
+        (3, 'Warning'),
     )
     status = models.IntegerField(verbose_name=u'任务状态', choices=status_choices, default=2)
+    op_detail = models.CharField(verbose_name='执行详情', max_length=200, null=True, blank=True, default='等待执行')
     date = models.DateTimeField(auto_now_add=True)
     memo = models.CharField(verbose_name='备注', max_length=200, null=True, blank=True)
 
@@ -54,6 +58,7 @@ class MongodbMissionTemplate(models.Model):
     var_dict = models.CharField(verbose_name=u'变量字典', max_length=2000)
     op_exec = models.CharField(verbose_name=u'模板语句', max_length=2000)
     multi_tag = models.BooleanField(u'批量更新',default=False)
+    approve_mail = models.EmailField(u'审批人邮箱', max_length=100, null=True, blank=True)
     memo = models.CharField(verbose_name='备注', max_length=200, null=True, blank=True)
 
     class Meta:

@@ -28,7 +28,7 @@ class MongodbJsonView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequir
 
     def post(self, request):
         response = mongodb.MongodbConfig.data_create(request)
-        return HttpResponseRedirect('/omtools/mongodb.html')
+        return JsonResponse(response.__dict__)
 
     def put(self, request):
         response = mongodb.MongodbConfig.data_update(request)
@@ -45,3 +45,13 @@ class MongodbTemplateView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRe
     def get(self, request):
         response = mongodb.MongodbConfig.get_template_by_id(request)
         return JsonResponse(response.__dict__)
+
+
+class MongodbApprovalView(WriteAccessLogsMixin, View):
+    def get(self, request):
+        response = mongodb.MongodbConfig.get_approval_by_id(request)
+        return render(request, 'omtools/mongodb_approval.html', {'response': response})
+
+    def post(self, request):
+        response = mongodb.MongodbConfig.do_approval_by_id(request)
+        return HttpResponseRedirect('/omtools/mongodb-approval.html?id=%s' % response.data.approval_md5)

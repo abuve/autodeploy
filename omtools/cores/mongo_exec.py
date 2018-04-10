@@ -2,6 +2,7 @@ from bson.objectid import ObjectId
 import datetime
 from pymongo.errors import AutoReconnect
 import platform, os, sys
+import json
 import django
 from pymongo import MongoClient
 from omtools.cores import redis_handler
@@ -28,7 +29,7 @@ class MissionHandler:
         m_db = mission_obj.database
         m_document = mission_obj.document
         m_find = mission_obj.find
-        m_type = mission_obj.op_type
+        m_type = mission_obj.get_op_type_display()
         m_update = mission_obj.update
         m_multi_tag = mission_obj.multi_tag
 
@@ -38,15 +39,24 @@ class MissionHandler:
             'project': '',
             'type': m_type,
             'query': {
-                'condition': m_find,
-                'set': m_update,
+                'condition': json.loads(m_find),
+                'set': json.loads(m_update),
                 'property': m_multi_tag,
-            }
+            },
+            'task_id': mission_obj.id
         }
 
         result = MongoHandler.MongoFunction(query).execute_mongodb()
 
         print(result)
+
+        if result['status'] == 200:
+            mission_obj.status = 1
+        elif result['status'] == 500:
+            mission_obj.status = 3
+
+        mission_obj.op_detail = result['msg']
+        mission_obj.save()
 
 if __name__ == '__main__':
     redis_queue = redis_handler.RedisQueue('mongodb')
