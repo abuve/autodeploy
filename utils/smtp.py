@@ -1,22 +1,8 @@
-from bson.objectid import ObjectId
-import datetime
-from pymongo.errors import AutoReconnect
-import platform, os, sys
-if platform.system() == 'Linux':
-    sys.path.append('/app/project/AutoDeploy')
-
 import smtplib, sys
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import COMMASPACE, formatdate
-
-import django
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "AutoDeploy.settings")
-django.setup()
-
-from omtools import models as OMTOOLS_MODELS
-
 
 def sendMail(username,password, send_to, subject, text, files={},server="smtp.gmail.com",port=587):
     assert isinstance(send_to, list)
