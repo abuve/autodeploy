@@ -9,10 +9,12 @@ from omtools.cores.commons import *
 from omtools.cores.logsutils import *
 import datetime
 
+from conf import settings
+
 class MongoFunction:
 
     def __init__(self, query_data):
-        self.source_mongodb = 'test'
+        self.source_mongodb = settings.mongodb_env
 
         self.commons = commons()
 
