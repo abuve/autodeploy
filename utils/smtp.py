@@ -28,7 +28,7 @@ def sendMail(username,password, send_to, subject, text, files={},server="smtp.gm
     return True
 
 if __name__ == '__main__':
-    mail_to = sys.argv[1]
+    mail_to = sys.argv[1].split(',')
     mail_title = sys.argv[2]
     mail_content = sys.argv[3]
-    sendMail("noreply@m1om.me", "bananaballs123!", [mail_to], mail_title, mail_content)
+    sendMail("noreply@m1om.me", "bananaballs123!", mail_to, mail_title, mail_content)

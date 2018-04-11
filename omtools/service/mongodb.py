@@ -12,6 +12,7 @@ from utils.response import BaseResponse
 
 from omtools.cores import redis_handler
 from utils import smtp
+from conf import settings
 
 
 class MongodbConfig(BaseServiceList):
@@ -249,7 +250,7 @@ class MongodbConfig(BaseServiceList):
             approval_url = "http://cmdb_cloud.omtools.me:9991/omtools/mongodb-approval.html?id=%s" % md5_value.hexdigest()
             mail_content = "申请执行以下语句：<br><br>%s<br><br>审批地址：<a href='%s'>%s</a>" % (option_exec, approval_url, approval_url)
             # smtp.sendMail("noreply@m1om.me", "bananaballs123!", [approval_email], mail_title, mail_content)
-            send_mail = subprocess.Popen(['python2.6', './utils/smtp.py', approval_email, mail_title, mail_content])
+            send_mail = subprocess.Popen([settings.pyenv, './utils/smtp.py', approval_email, mail_title, mail_content])
 
         except Exception as e:
             print(Exception, e)

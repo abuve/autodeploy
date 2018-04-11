@@ -58,7 +58,7 @@ class MongodbMissionTemplate(models.Model):
     var_dict = models.CharField(verbose_name=u'变量字典', max_length=2000)
     op_exec = models.CharField(verbose_name=u'模板语句', max_length=2000)
     multi_tag = models.BooleanField(u'批量更新',default=False)
-    approve_mail = models.EmailField(u'审批人邮箱', max_length=100, null=True, blank=True)
+    approve_mail = models.CharField(u'审批人邮箱', max_length=100, null=True, blank=True)
     memo = models.CharField(verbose_name='备注', max_length=200, null=True, blank=True)
 
     class Meta:
