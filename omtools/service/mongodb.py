@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
 import json, time
 import subprocess
 import hashlib
@@ -246,14 +244,12 @@ class MongodbConfig(BaseServiceList):
             data_obj.save()
 
             # 调用邮件接口，发送审核邮件
-            # approval_email = template_data.approve_mail
-            # mail_title = 'MongoDB自助任务审核 - %s' % template_data.title
-            # approval_url = "http://cmdb.omtools.me/omtools/mongodb-approval.html?id=%s" % md5_value.hexdigest()
-            # mail_content = "申请执行以下语句：<br><br>%s<br><br>审批地址：<a href='%s'>%s</a>" % (option_exec, approval_url, approval_url)
-            # mail_content = "审批地址：<a href='%s'>%s</a>" % (approval_url, approval_url)
+            approval_email = template_data.approve_mail
+            mail_title = 'MongoDB自助任务审核 - %s' % template_data.title
+            approval_url = "http://cmdb.omtools.me/omtools/mongodb-approval.html?id=%s" % md5_value.hexdigest()
+            mail_content = "申请执行以下语句：<br><br>%s<br><br>审批地址：<a href='%s'>%s</a>" % (option_exec, approval_url, approval_url)
             # smtp.sendMail("noreply@m1om.me", "bananaballs123!", [approval_email], mail_title, mail_content)
-            send_mail = subprocess.getstatusoutput("python ./utils/smtp.py %s %s" % (data_obj.id, template_data.id))
-            print(send_mail)
+            send_mail = subprocess.Popen(['python', './utils/smtp.py', approval_email, mail_title, mail_content])
 
         except Exception as e:
             print(Exception, e)

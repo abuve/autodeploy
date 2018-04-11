@@ -42,14 +42,7 @@ def sendMail(username,password, send_to, subject, text, files={},server="smtp.gm
     return True
 
 if __name__ == '__main__':
-    mission_id = sys.argv[1]
-    template_id = sys.argv[2]
-    mission_obj = OMTOOLS_MODELS.MongodbMission.objects.get(id=mission_id)
-    template_obj = OMTOOLS_MODELS.MongodbMissionTemplate.objects.get(id=template_id)
-
-    approval_email = template_obj.approve_mail
-    mail_title = 'MongoDB自助任务审核 - %s' % template_obj.title
-    approval_url = "http://cmdb.omtools.me/omtools/mongodb-approval.html?id=%s" % mission_obj.approval_md5
-    mail_content = "申请执行以下语句：<br><br>%s<br><br>审批地址：<a href='%s'>%s</a>" % (mission_obj.op_exec, approval_url, approval_url)
-
-    sendMail("noreply@m1om.me", "bananaballs123!", [approval_email], mail_title, mail_content)
+    mail_to = sys.argv[1]
+    mail_title = sys.argv[2]
+    mail_content = sys.argv[3]
+    sendMail("noreply@m1om.me", "bananaballs123!", [mail_to], mail_title, mail_content)
