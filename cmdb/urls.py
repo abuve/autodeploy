@@ -1,6 +1,7 @@
 from django.conf.urls import url
 
 from cmdb.views import server
+from cmdb.views import serverManage
 from cmdb.views import approval
 from cmdb.views import docker
 from cmdb.views import business
@@ -16,6 +17,9 @@ urlpatterns = [
 
     url(r'^server-list.html$', server.ServerListView.as_view(), name='cmdb-server-list'),
     url(r'^server-json.html$', server.ServerJsonView.as_view(), name='cmdb-server-json'),
+
+    url(r'^server-manage-list.html$', serverManage.ServerManageListView.as_view(), name='cmdb-server-manage-list'),
+    url(r'^server-manage-json.html$', serverManage.ServerManageJsonView.as_view(), name='cmdb-server-manage-json'),
 
     url(r'^asset-create.html$', server.AssetCreateView.as_view(), name='cmdb-asset-create'),
 

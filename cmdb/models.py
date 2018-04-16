@@ -57,6 +57,8 @@ class Asset(models.Model):
         (1, 'Server'),
         (2, 'Docker'),
         (3, 'CloudServer'),
+        (4, 'XenServer'),
+        (5, 'OpenvzServer'),
     )
     device_status_choices = (
         (1, 'Active'),
@@ -68,9 +70,22 @@ class Asset(models.Model):
     asset_num = models.CharField(verbose_name='资产编号', max_length=20, unique=True)
     sn = models.CharField('SN号', max_length=64, unique=True)
     idc = models.ForeignKey('IDC', verbose_name='IDC机房', null=True, blank=True, on_delete=models.SET_NULL)
+    manage_ip = models.GenericIPAddressField('管理IP', null=True, blank=True)
     business_unit = models.ForeignKey('BusinessUnit', verbose_name='归属业务线', null=True, blank=True, on_delete=models.SET_NULL)
+    raid_type_choices = (
+        ('RAID 1', 'RAID 1'),
+        ('RAID 5', 'RAID 5'),
+        ('RAID 01', 'RAID 01'),
+        ('RAID 10', 'RAID 10'),
+        ('RAID 1 & 5', 'RAID 1 & 5'),
+        ('RAID 1 & 10', 'RAID 1 & 10'),
+    )
+    raid_type = models.CharField(choices=raid_type_choices, max_length=20, default='RAID 10')
     tag = models.ManyToManyField('Tag')
+    function = models.CharField(verbose_name='功能用途', max_length=200, null=True, blank=True)
     memo = models.CharField(verbose_name='备注', max_length=200, null=True, blank=True)
+    power_cable = models.SmallIntegerField('电源数量', null=True, blank=True, default=2)
+    purchasing = models.DateField(u'采购时间', auto_now_add=True)
     latest_date = models.DateTimeField(auto_now=True)
     create_date = models.DateTimeField(auto_now_add=True)
 
@@ -91,8 +106,6 @@ class Server(models.Model):
     manufacturer = models.CharField(verbose_name='制造商', max_length=64, null=True, blank=True)
     model = models.CharField('型号', max_length=64, null=True, blank=True)
     ipaddress = models.GenericIPAddressField('IP地址', null=True, blank=True)
-    manage_ip = models.GenericIPAddressField('管理IP', null=True, blank=True)
-
     configuration = models.CharField(u'硬件配置', max_length=100, blank=True, null=True)
     Memory = models.IntegerField(u'内存配置', blank=True, null=True)
     DeviceSize = models.IntegerField(u'硬盘配置', blank=True, null=True)
@@ -100,7 +113,6 @@ class Server(models.Model):
     MemUsage = models.IntegerField(u'内存使用率', blank=True, null=True)
     DiskUsage = models.IntegerField(u'磁盘使用率', blank=True, null=True)
     LoadInfo = models.FloatField(u'系统负载', blank=True, null=True)
-
     os_type = models.CharField('系统', max_length=16, null=True, blank=True)
     os_release = models.CharField('系统版本', max_length=200, null=True, blank=True)
     cpu_count = models.IntegerField('CPU物理个数', null=True, blank=True)
