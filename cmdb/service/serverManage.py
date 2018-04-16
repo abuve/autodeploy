@@ -75,21 +75,21 @@ class ServerManage(BaseServiceList):
                 'q': 'server__cpu_core_count',
                 'title': "CPU",
                 'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@server__cpu_core_count'}},
+                'text': {'content': "{n}C", 'kwargs': {'n': '@server__cpu_core_count'}},
                 'attr': {}
             },
             {
                 'q': 'server__Memory',
                 'title': "RAM",
                 'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@server__Memory'}},
+                'text': {'content': "{n}GB", 'kwargs': {'n': '@server__Memory'}},
                 'attr': {}
             },
             {
                 'q': 'server__DeviceSize',
                 'title': "DISK",
                 'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@server__DeviceSize'}},
+                'text': {'content': "{n}GB", 'kwargs': {'n': '@server__DeviceSize'}},
                 'attr': {}
             },
             {
