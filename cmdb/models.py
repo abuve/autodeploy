@@ -59,6 +59,7 @@ class Asset(models.Model):
         (3, 'CloudServer'),
         (4, 'XenServer'),
         (5, 'OpenvzServer'),
+        (6, 'PublicIP'),
     )
     device_status_choices = (
         (1, 'Active'),
