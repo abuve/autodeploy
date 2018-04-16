@@ -63,15 +63,6 @@ class ServerManage(BaseServiceList):
                          'global-name': 'idc_list'}
             },
             {
-                'q': 'device_type_id',
-                'title': "Asset Type",
-                'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@@device_type_list'}},
-                'attr': {'name': 'device_type_id', 'id': '@device_type_id', 'origin': '@device_type_list', 'edit-enable': 'true',
-                         'edit-type': 'select',
-                         'global-name': 'device_type_list'}
-            },
-            {
                 'q': 'server__cpu_core_count',
                 'title': "CPU",
                 'display': 1,
@@ -109,15 +100,25 @@ class ServerManage(BaseServiceList):
                 'attr': {'name': 'power_cable', 'id': '@power_cable', 'edit-enable': 'true', 'edit-type': 'input'}
             },
             {
-                'q': 'function',
-                'title': "Function",
+                'q': 'rack',
+                'title': "RACK",
                 'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@function'}},
-                'attr': {'name': 'function', 'id': '@id', 'edit-enable': 'true', 'edit-type': 'input'}
+                'text': {'content': "{n}", 'kwargs': {'n': '@rack'}},
+                'attr': {'name': 'rack', 'id': '@rack', 'edit-enable': 'true', 'edit-type': 'input'}
+            },
+            {
+                'q': 'device_type_id',
+                'title': "Asset Type",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@@device_type_list'}},
+                'attr': {'name': 'device_type_id', 'id': '@device_type_id', 'origin': '@device_type_list',
+                         'edit-enable': 'true',
+                         'edit-type': 'select',
+                         'global-name': 'device_type_list'}
             },
             {
                 'q': 'memo',
-                'title': "Memo",
+                'title': "Notes",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@memo'}},
                 'attr': {'name': 'memo', 'id': '@id', 'edit-enable': 'true', 'edit-type': 'input'}

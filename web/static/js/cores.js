@@ -263,9 +263,9 @@
         $header.find('tr').append(ck);
 
         // 创建“序号列”
-        var num = document.createElement('th');
-        num.innerText = 'Order';
-        $header.find('tr').append(num);
+        // var num = document.createElement('th');
+        // num.innerText = 'Order';
+        // $header.find('tr').append(num);
 
 
         $.each(tbConfig, function (k, item) {
@@ -302,9 +302,9 @@
             $(tr).append(tagTd);
 
             // 创建每一行的序列号
-            var tagNum = document.createElement('td');
-            tagNum.innerHTML = startNum + k1 + 1;
-            $(tr).append(tagNum);
+            // var tagNum = document.createElement('td');
+            // tagNum.innerHTML = startNum + k1 + 1;
+            // $(tr).append(tagNum);
 
 
             $.each(tbConfig, function (k2, config) {
@@ -862,6 +862,9 @@
          body:表格中body选择器对象
          */
         'TableEditMode': function (ths, body, specialInEditFunc, specialOutEditFunc) {
+
+
+
             if ($(ths).hasClass('btn-warning')) {
                 $(ths).removeClass('btn-warning').find('span').text('Edit');
 

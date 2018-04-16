@@ -86,6 +86,7 @@ class Asset(models.Model):
     function = models.CharField(verbose_name='功能用途', max_length=200, null=True, blank=True)
     memo = models.CharField(verbose_name='备注', max_length=200, null=True, blank=True)
     power_cable = models.SmallIntegerField('电源数量', null=True, blank=True, default=2)
+    rack = models.SmallIntegerField('机柜编号', null=True, blank=True, default=1)
     purchasing = models.DateField(u'采购时间', auto_now_add=True)
     latest_date = models.DateTimeField(auto_now=True)
     create_date = models.DateTimeField(auto_now_add=True)
