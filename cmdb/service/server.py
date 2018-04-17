@@ -253,6 +253,7 @@ class Server(BaseServiceList):
                 sn = asset_sn,
                 idc_id = asset_data.get('idc_id'),
                 business_unit_id = asset_data.get('business_unit_id'),
+                manage_ip=asset_data.get('manage_ip'),
             )
             asset_obj.save()
 
@@ -261,7 +262,6 @@ class Server(BaseServiceList):
                 asset_id = asset_obj.id,
                 hostname = asset_data.get('hostname'),
                 ipaddress = asset_data.get('ipaddress'),
-                manage_ip = asset_data.get('manage_ip'),
                 Memory = Memory,
                 DeviceSize = DeviceSize,
                 cpu_count = cpu_count,
