@@ -14,7 +14,7 @@ class Asset(object):
         request_client = get_client_ip(self.request)
         self.mandatory_fields = ['sn', 'asset_id', 'asset_type']  # must contains 'sn' , 'asset_id' and 'asset_type'
         self.field_sets = {
-            'asset': ['manufactory'],
+            'asset': ['manufactory', 'sn'],
             'server': ['model', 'cpu_count', 'cpu_core_count', 'cpu_model', 'os_type', 'os_distribution', 'os_release'],
             'networkdevice': []
         }
