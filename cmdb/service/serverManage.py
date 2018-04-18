@@ -126,7 +126,7 @@ class ServerManage(BaseServiceList):
             },
             {
                 'q': 'purchasing',
-                'title': "Purchasing",
+                'title': "Purchase Date",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@purchasing'}},
                 'attr': {'name': 'purchasing', 'id': '@id', 'edit-enable': 'true', 'edit-type': 'input_date'}

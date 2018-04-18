@@ -588,7 +588,7 @@
         } else if (editType == 'input_date') {
             var text = $td.text();
             $td.addClass('padding-3');
-            var htmlTag = $.CreateInput({'value': text, 'class': 'padding-tb-5 form-control form_date', 'data-date-format': 'yyyy-mm-dd', 'readonly': 'readonly'}, {'width': '100%'});
+            var htmlTag = $.CreateInput({'value': text, 'class': 'padding-tb-5 form-control form_date', 'data-date-format': 'yyyy-mm-dd'}, {'width': '100%'});
             $td.empty().append(htmlTag);
 
             $('.form_date').datetimepicker({
