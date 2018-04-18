@@ -599,10 +599,10 @@
                 todayHighlight: 1,
                 startView: 2,
                 minView: 2,
-                forceParse: 0
+                forceParse: 1
             });
 
-            // $('.form_date').datetimepicker();
+            // $('.form_date').datetimepicker({allowInputToggle: true});
 
         }
 
