@@ -56,9 +56,10 @@
                 var newer;
                 if ($(this).attr('edit-type') == 'input') {
                     newer = $(this).text();
-
                 } else if ($(this).attr('edit-type') == 'select') {
                     newer = $(this).attr('id');
+                } else if ($(this).attr('edit-type') == 'input_date') {
+                    newer = $(this).text();
                 }
                 if (newer != undefined && original != newer) {
                     rows[name] = newer;
@@ -584,6 +585,25 @@
                 );
                 $td.empty().append(htmlTag);
             }
+        } else if (editType == 'input_date') {
+            var text = $td.text();
+            $td.addClass('padding-3');
+            var htmlTag = $.CreateInput({'value': text, 'class': 'padding-tb-5 form-control form_date', 'data-date-format': 'yyyy-mm-dd', 'readonly': 'readonly'}, {'width': '100%'});
+            $td.empty().append(htmlTag);
+
+            $('.form_date').datetimepicker({
+                language:  'fr',
+                weekStart: 1,
+                todayBtn:  1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0
+            });
+
+            // $('.form_date').datetimepicker();
+
         }
 
     }
@@ -592,6 +612,10 @@
         var editType = $td.attr('edit-type');
 
         if (editType == 'input') {
+            var text = $td.children().first().val();
+            $td.removeClass('padding-3');
+            $td.empty().text(text);
+        } else if (editType == 'input_date') {
             var text = $td.children().first().val();
             $td.removeClass('padding-3');
             $td.empty().text(text);
@@ -862,8 +886,6 @@
          body:表格中body选择器对象
          */
         'TableEditMode': function (ths, body, specialInEditFunc, specialOutEditFunc) {
-
-
 
             if ($(ths).hasClass('btn-warning')) {
                 $(ths).removeClass('btn-warning').find('span').text('Edit');

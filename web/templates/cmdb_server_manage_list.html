@@ -3,6 +3,7 @@
 {% block css %}
 
     <link rel="stylesheet" href="/static/plugins/ztree/css/metroStyle/metroStyle.css" type="text/css">
+    <link href="/static/plugins/datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
 
     <style type="text/css">
         .ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
@@ -133,6 +134,9 @@
 	<script type="text/javascript" src="/static/plugins/ztree/js/jquery.ztree.excheck.js"></script>
 	<script type="text/javascript" src="/static/plugins/ztree/js/jquery.ztree.exedit.js"></script>
 
+	<script type="text/javascript" src="/static/plugins/datetimepicker/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript" src="/static/plugins/datetimepicker/js/locales/bootstrap-datetimepicker.uk.js"></script>
+
     <script type="text/javascript" src="/static/js/cmdb-server-list.js"></script>
 
     <script>
@@ -140,6 +144,5 @@
             $.initMenu('#menu_cmdb_server_list');
             $.nbDataList('/cmdb/server-manage-json.html');
         });
-
     </script>
 {% endblock %}
