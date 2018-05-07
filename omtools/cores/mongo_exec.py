@@ -9,6 +9,7 @@ import django
 from pymongo import MongoClient
 from omtools.cores import redis_handler
 from omtools.cores import MongoHandler
+from django.db import connections
 
 
 class MissionHandler:
@@ -16,7 +17,12 @@ class MissionHandler:
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "AutoDeploy.settings")
         django.setup()
 
+    def __close_old_connections(self):
+        for conn in connections.all():
+            conn.close_if_unusable_or_obsolete()
+
     def get_mission_from_db(self, mission_id):
+        self.__close_old_connections()
         from omtools import models as OMTOOLS_MODELS
         data_from_db = OMTOOLS_MODELS.MongodbMission.objects.get(id=mission_id)
         return data_from_db
