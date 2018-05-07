@@ -10,15 +10,13 @@ from pymongo import MongoClient
 from omtools.cores import redis_handler
 from omtools.cores import MongoHandler
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "AutoDeploy.settings")
-django.setup()
-
 from omtools import models as OMTOOLS_MODELS
 
 
 class MissionHandler:
     def __init__(self):
-        pass
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "AutoDeploy.settings")
+        django.setup()
 
     def get_mission_from_db(self, mission_id):
         data_from_db = OMTOOLS_MODELS.MongodbMission.objects.get(id=mission_id)
