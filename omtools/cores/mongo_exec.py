@@ -10,8 +10,6 @@ from pymongo import MongoClient
 from omtools.cores import redis_handler
 from omtools.cores import MongoHandler
 
-from omtools import models as OMTOOLS_MODELS
-
 
 class MissionHandler:
     def __init__(self):
@@ -19,6 +17,7 @@ class MissionHandler:
         django.setup()
 
     def get_mission_from_db(self, mission_id):
+        from omtools import models as OMTOOLS_MODELS
         data_from_db = OMTOOLS_MODELS.MongodbMission.objects.get(id=mission_id)
         return data_from_db
 
