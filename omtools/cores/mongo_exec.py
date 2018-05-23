@@ -11,6 +11,8 @@ from omtools.cores import redis_handler
 from omtools.cores import MongoHandler
 from django.db import connections
 
+from conf import settings
+
 
 class MissionHandler:
     def __init__(self):
@@ -42,11 +44,13 @@ class MissionHandler:
             'type': m_type,
             'query': {
                 'condition': json.loads(m_find),
-                'set': json.loads(m_update),
+                'set': json.loads(m_update) if m_update else {},
                 'property': m_multi_tag,
             },
             'task_id': mission_obj.id
         }
+
+        print(query)
 
         result = MongoHandler.MongoFunction(query).execute_mongodb()
 
@@ -57,7 +61,23 @@ class MissionHandler:
         elif result['status'] == 500:
             mission_obj.status = 3
 
-        mission_obj.op_detail = result['msg']
+        if m_type == 'update':
+            mission_obj.op_detail = result['msg']
+        elif m_type == 'find':
+            if result['status'] == 200:
+                # put result data to file.
+                f = open('%s/web/static/download/mongo_data/%s.txt' %(settings.project_path, mission_obj.id), 'w')
+                result_from_api = list(result['result'])
+                if result_from_api:
+                    for line in result_from_api:
+                        f.write(str(line))
+                else:
+                    f.write('[]')
+                f.close()
+                mission_obj.op_detail = 'http://cmdb.omtools.me/static/download/mongo_data/%s.txt' % mission_obj.id
+            else:
+                mission_obj.op_detail = result['msg']
+
         mission_obj.save()
 
 if __name__ == '__main__':

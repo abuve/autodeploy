@@ -220,6 +220,8 @@ class MongodbConfig(BaseServiceList):
             # 生成exec语句
             if m_op_type == 'update':
                 option_exec = "%s.%s.update(%s, %s, {'multi':%s})" % (m_db, m_document, m_find, m_update, m_multi_tag)
+            elif m_op_type == 'find':
+                option_exec = "%s.%s.find(%s)" % (m_db, m_document, m_find)
             else:
                 option_exec = None
 
