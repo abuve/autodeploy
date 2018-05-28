@@ -52,11 +52,7 @@ class MissionHandler:
             'task_id': mission_obj.id
         }
 
-        print(query)
-
         result = MongoHandler.MongoFunction(query).execute_mongodb()
-
-        print(result)
 
         if result['status'] == 200:
             mission_obj.status = 1
@@ -72,7 +68,7 @@ class MissionHandler:
                 result_from_api = list(result['result'])
                 if result_from_api:
                     for line in result_from_api:
-                        f.write(str(line))
+                        f.write('%s\n' % str(line))
                 else:
                     f.write('[]')
                 f.close()
