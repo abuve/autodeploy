@@ -37,6 +37,21 @@ function load_template_component_fn(value) {
 
                     $body.append(tr);
 
+                    // 模板提示信息
+                    var tr = document.createElement('tr');
+                    var td = document.createElement('td');
+                    td.innerHTML = '参考示例 :'
+                    td.setAttribute('style', 'line-height: 34px; width: 180px;')
+                    td.setAttribute('align', 'right')
+                    $(tr).append(td);
+
+                    var td = document.createElement('td');
+                    td.innerHTML = '<p class="bg-warning" style="padding: 10px; font-weight: bold" >' + data.data.note + '</p>'
+                    td.setAttribute('colspan', '2')
+                    $(tr).append(td);
+
+                    $body.append(tr);
+
                     $.each(var_list, function (index) {
                         var tr = document.createElement('tr');
 
@@ -50,7 +65,7 @@ function load_template_component_fn(value) {
                         // 自定义变量值
                         var td = document.createElement('td');
                         if (var_list[index].type == 'textarea') {
-                            td.innerHTML = '<textarea type="textarea" class="form-control" rows="5" id="mongoMission_var_1" name="' + var_list[index].var_name + '" verify="' + var_list[index].verify + '" placeholder="输入提案id，每行一个"></textarea>'
+                            td.innerHTML = '<textarea type="textarea" class="form-control" rows="5" id="mongoMission_var_1" name="' + var_list[index].var_name + '" verify="' + var_list[index].verify + '" placeholder="' + var_list[index].placeholder + '"></textarea>'
                         }
                         if (var_list[index].type == 'select') {
                             var select_option_html = ""
