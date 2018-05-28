@@ -43,8 +43,10 @@ class MissionHandler:
             'project': '',
             'type': m_type,
             'query': {
-                'condition': json.loads(m_find),
-                'set': json.loads(m_update) if m_update else {},
+                #'condition': json.loads(m_find),
+                #'set': json.loads(m_update) if m_update else {},
+                'condition': eval(m_find),
+                'set': eval(m_update),
                 'property': m_multi_tag,
             },
             'task_id': mission_obj.id

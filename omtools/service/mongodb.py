@@ -13,6 +13,8 @@ from utils.response import BaseResponse
 from omtools.cores import redis_handler
 from utils import smtp
 from conf import settings
+import datetime
+from bson import ObjectId
 
 
 class MongodbConfig(BaseServiceList):
@@ -202,6 +204,19 @@ class MongodbConfig(BaseServiceList):
             m_update = template_data.update
             m_multi_tag = template_data.multi_tag
 
+            def __json_val_check(json_val):
+                for k, v in json_val.items():
+                    if type(v) == dict:
+                        __json_val_check(v)
+                    else:
+                        try:
+                            if 'ISODate' in v:
+                                json_val[k] = datetime.datetime.strptime(v.split('~')[1], '%Y-%m-%d %H:%M:%S')
+                            if 'ObjectId' in v:
+                                json_val[k] = ObjectId(v.split('~')[1])
+                        except:
+                            continue
+
             for k, v in post_data.items():
                 if '$$' in k:
                     # 根据名称查找变量参数
@@ -210,12 +225,19 @@ class MongodbConfig(BaseServiceList):
                             if var_obj['choice'] == 'LIST':
                                 var = str(v.split('\r\n'))
                             else:
-                                var = v
+                                try:
+                                    var = json.loads(v)
+                                    __json_val_check(var)
+                                except:
+                                    var = v
 
-                            m_find = m_find.replace(k, var)
-                            m_find = m_find.replace("'", '"')
-                            m_update = m_update.replace(k, var)
-                            m_update = m_update.replace("'", '"')
+                            m_find = m_find.replace(k, str(var))
+                            # m_find = m_find.replace("'", '"')
+                            if m_update:
+                                m_update = m_update.replace(k, var)
+                                # m_update = m_update.replace("'", '"')
+                            else:
+                                m_update = {}
 
             # 生成exec语句
             if m_op_type == 'update':
@@ -224,6 +246,8 @@ class MongodbConfig(BaseServiceList):
                 option_exec = "%s.%s.find(%s)" % (m_db, m_document, m_find)
             else:
                 option_exec = None
+
+            print(option_exec)
 
             # 生成任务md5值，用于邮件审批
             Token_STR = 'NEBB5oMQOPMpLTn6PneJKBDEMU0WeBxd'

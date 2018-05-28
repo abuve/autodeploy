@@ -9,3 +9,4 @@ __pycache__/
 config_data
 settings.py
 migrations
+download

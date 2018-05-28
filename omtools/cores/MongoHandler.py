@@ -8,6 +8,7 @@
 from omtools.cores.commons import *
 from omtools.cores.logsutils import *
 import datetime
+from bson import ObjectId
 
 from conf import settings
 
@@ -75,6 +76,7 @@ class MongoFunction:
     def find_query(self, conn, query):
         status = 200
         try:
+            print(query['condition'])
             result = conn.find(query['condition'])
             # if query['property'] is None:
             #     result = conn.find(query['condition'])
@@ -84,6 +86,7 @@ class MongoFunction:
             self.LoggingConf.logging_info(msg)
             return {'status': status, 'msg': 'Success', 'result': result}
         except Exception as e:
+            print(Exception, e)
             status = 500
             msg = 'task_id: {0}, status: {1}, exception: {2}-{3}'.format(self.taskId, status, Exception, e)
             self.LoggingConf.logging_error(msg)
@@ -141,6 +144,16 @@ if __name__ == '__main__':
 
     query = {'db': 'logsdb', 'table': 'playerConsumptionRecord', 'type': 'find', 'project': '', 'task_id': 154,
              'query': {'condition': {'orderNo': 'AG-180519001250193'}, 'set': {}, 'property': None}}
+
+    query = {'db': 'logsdb', 'table': 'playerConsumptionRecord', 'type': 'find', 'project': '', 'task_id': 154,
+             'query': {'createTime': {'$lt': datetime.datetime(2018, 5, 24, 4, 0), '$gte': datetime.datetime(2015, 5, 20, 4, 0)}, 'playerId': "ObjectId('5afd2f37f82f900010bef38c')"}}
+
+    query = {'db': 'logsdb', 'table': 'playerConsumptionRecord', 'type': 'find', 'project': '', 'task_id': 154,
+             'query': {'condition': {'createTime': {'$lt': datetime.datetime(2018, 5, 24, 4, 0),
+                                      '$gte': datetime.datetime(2015, 5, 20, 4, 0)},
+                                     'playerId': ObjectId('5866130dcdd5d001b7f164c4')
+                                     } }
+             }
 
     # query = {'db': 'logsdb', 'table': 'proposal', 'project': '', 'type': 'find',
     #          'query': {'condition': {'a': {'$in': ['1']}}, 'set': None, 'property': None}}
