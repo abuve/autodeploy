@@ -67,8 +67,11 @@ class MissionHandler:
                 f = open('%s/web/static/download/mongo_data/%s.txt' %(settings.project_path, mission_obj.id), 'w')
                 result_from_api = list(result['result'])
                 if result_from_api:
-                    for line in result_from_api:
-                        f.write('%s\n' % str(line))
+                    if len(result_from_api) >= 10000:
+                        f.write('query data can not more than 10000 rows.')
+                    else:
+                        for line in result_from_api:
+                            f.write('%s\n' % str(line))
                 else:
                     f.write('[]')
                 f.close()
