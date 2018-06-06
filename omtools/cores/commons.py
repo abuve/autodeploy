@@ -50,7 +50,7 @@ class commons:
         :return: mongo连接信息字典
         """
         conn_mongo = {
-            "online": {"logsdb": dict(host='10.168.11.134', user='root', passwd='70f30d42783f69d0a3a907eaed8ca0eb', port=27018),
+            "online": {"logsdb": dict(host='10.168.11.117', user='root', passwd='70f30d42783f69d0a3a907eaed8ca0eb', port=27018),
                        "backup": dict(host='10.168.11.141', user='root', passwd='70f30d42783f69d0a3a907eaed8ca0eb', port=27018),
                        "admindb": dict(host='10.168.11.135', user='root', passwd='70f30d42783f69d0a3a907eaed8ca0eb', port=27019),
                        "playerdb": dict(host='10.168.11.138', user='root', passwd='70f30d42783f69d0a3a907eaed8ca0eb', port=27020)},
