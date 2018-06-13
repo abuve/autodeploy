@@ -93,6 +93,12 @@ class Asset(models.Model):
 
     class Meta:
         verbose_name_plural = "资产表"
+
+    def __unicode__(self):
+        return self.server.ipaddress
+
+    #__str__ = __unicode__
+
     #
     # def __str__(self):
     #     return self.id

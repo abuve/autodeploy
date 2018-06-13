@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Time    : 1/26/2018 10:25 AM
-# @Author  : Abbott
-# @Site    :
-# @File    : userprofile.py
-# @Software: PyCharm
 
 import json
 from django.views import View
@@ -55,3 +50,14 @@ class MongodbApprovalView(WriteAccessLogsMixin, View):
     def post(self, request):
         response = mongodb.MongodbConfig.do_approval_by_id(request)
         return HttpResponseRedirect('/omtools/mongodb-approval.html?id=%s' % response.data.approval_md5)
+
+
+class MongodbLogsView(WriteAccessLogsMixin, View):
+    def get(self, request):
+        # response = mongodb.MongodbConfig.get_approval_by_id(request)
+        return render(request, 'omtools/logs_index.html', {'response': 1})
+
+    def post(self, request):
+        response = mongodb.MongodbConfig.do_approval_by_id(request)
+        return HttpResponseRedirect('/omtools/mongodb-approval.html?id=%s' % response.data.approval_md5)
+

@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from omtools.views import mongodb
+from omtools.views import logs
 
 from django.contrib.auth.decorators import login_required
 
@@ -9,5 +10,6 @@ urlpatterns = [
     url(r'^mongodb-get-detail.html$', mongodb.MongodbDetailView.as_view(), name='omtools-mongodb-detail'),
     url(r'^mongodb-get-template.html$', mongodb.MongodbTemplateView.as_view(), name='omtools-mongodb-template'),
     url(r'^mongodb-approval.html$', mongodb.MongodbApprovalView.as_view(), name='omtools-mongodb-approval'),
-
+    url(r'^logs.html$', logs.LogsIndexView.as_view(), name='omtools-logs-index'),
+    url(r'^logs-(?P<project_id>\d+).html$', logs.LogsDetailView.as_view(), name='omtools-logs-detail'),
 ]

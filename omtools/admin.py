@@ -4,3 +4,4 @@ from omtools import models
 
 admin.site.register(models.MongodbMission)
 admin.site.register(models.MongodbMissionTemplate)
+admin.site.register(models.LogsControl)
