@@ -12,7 +12,7 @@ from repository import models as REPOSITORY_MODELS
 from omtools.models import LogsControl
 
 
-class LogsIndexView(WriteAccessLogsMixin, View):
+class LogsIndexView(WriteAccessLogsMixin, LoginRequiredMixin, View):
     def get(self, request):
         response = REPOSITORY_MODELS.ProjectInfo.objects.all()
         return render(request, 'omtools/logs_index.html', {'response': response})
@@ -22,7 +22,7 @@ class LogsIndexView(WriteAccessLogsMixin, View):
         return HttpResponseRedirect('/omtools/mongodb-approval.html?id=%s' % response.data.approval_md5)
 
 
-class LogsDetailView(WriteAccessLogsMixin, View):
+class LogsDetailView(WriteAccessLogsMixin, LoginRequiredMixin, View):
     def get(self, request, project_id):
         response = REPOSITORY_MODELS.ProjectInfo.objects.get(id=project_id)
         response = LogsControl.objects.filter(project_id__id=project_id).order_by('server_node', '-server_type')
