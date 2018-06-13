@@ -2,6 +2,7 @@
 
 {% block css %}
 
+    <link href="/static/plugins/bootstrap/css/bootstrap-table.css" rel="stylesheet" />
 
 {% endblock %}
 
@@ -31,7 +32,15 @@
         </div>
     </div>
 
-    <div id="logsviews_detail_html"></div>
+    <div class="row" style="padding: 10px 8px;">
+        <div class="col-md-6">
+            <div id="omtools_logs_toolbar" class="btn-group">
+                {#            <a class="btn btn-default no-radius" data-toggle="modal" data-target="#add_group_modal" onclick="create_group_fn()"><i class="fa fa-plus-circle"></i> Create Logs</a>#}
+            </div>
+
+            <table id="omtools_logs_table"></table>
+        </div>
+    </div>
 
 {% endblock %}
 
@@ -39,6 +48,7 @@
     <script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
     <script type="text/javascript" src="/static/plugins/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="/static/js/cores.js"></script>
+    <script src="/static/plugins/bootstrap/js/bootstrap-table.js"></script>
     <script type="text/javascript" src="/static/js/omtools-logs.js"></script>
 
     <script>
