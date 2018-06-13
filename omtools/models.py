@@ -77,6 +77,7 @@ class MongodbMissionTemplate(models.Model):
 class LogsControl(models.Model):
     project_id = models.ForeignKey(REPOSITORY_MODELS.ProjectInfo, related_name='logscontrol')
     # server_obj = models.ForeignKey(CMDB_MODELS.Asset, related_name='logsserver')
+    server_ip = models.GenericIPAddressField(u'节点IP')
     server_node = models.CharField(u'节点名称', max_length=100)
     server_type_choices = (
         (0, '客服测试'),
