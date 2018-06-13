@@ -25,5 +25,5 @@ class LogsIndexView(WriteAccessLogsMixin, LoginRequiredMixin, View):
 class LogsDetailView(WriteAccessLogsMixin, LoginRequiredMixin, View):
     def get(self, request, project_id):
         response = REPOSITORY_MODELS.ProjectInfo.objects.get(id=project_id)
-        response = LogsControl.objects.filter(project_id__id=project_id).order_by('server_node', '-server_type')
+        response = LogsControl.objects.filter(project_id__id=project_id).order_by('server_node')
         return render(request, 'omtools/logs_detail.html', {'response': response})
