@@ -14,7 +14,7 @@ from omtools.models import LogsControl
 
 class LogsIndexView(WriteAccessLogsMixin, LoginRequiredMixin, View):
     def get(self, request):
-        response = REPOSITORY_MODELS.ProjectInfo.objects.all()
+        response = REPOSITORY_MODELS.ProjectInfo.objects.filter(name__in=['FPMS', 'PMS'])
         return render(request, 'omtools/logs_index.html', {'response': response})
 
     def post(self, request):

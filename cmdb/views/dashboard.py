@@ -10,12 +10,12 @@ from django.http import JsonResponse
 from cmdb.service import dashboard
 
 
-class DashBoardIndexView(WriteAccessLogsMixin, LoginRequiredMixin, View):
+class DashBoardIndexView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         response = dashboard.DashBoard.get_basic_count()
         return render(request, 'dashboard_index.html', {'response': response})
 
-class DashBoardChartAjaxView(WriteAccessLogsMixin, LoginRequiredMixin, View):
+class DashBoardChartAjaxView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         response = dashboard.DashBoard().get_chart_ajax()
         return JsonResponse(response.__dict__)

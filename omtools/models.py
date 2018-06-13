@@ -76,18 +76,19 @@ class MongodbMissionTemplate(models.Model):
 
 class LogsControl(models.Model):
     project_id = models.ForeignKey(REPOSITORY_MODELS.ProjectInfo, related_name='logscontrol')
-    #server_obj = models.ForeignKey(CMDB_MODELS.Asset, related_name='logsserver')
+    # server_obj = models.ForeignKey(CMDB_MODELS.Asset, related_name='logsserver')
     server_node = models.CharField(u'节点名称', max_length=100)
     server_type_choices = (
-        (0, '测试环境'),
+        (0, '客服测试'),
         (1, '正式环境'),
+        (2, '开发环境'),
     )
     server_type = models.SmallIntegerField(choices=server_type_choices, default=1)
-    logs_type_choices = (
-        (0, '错误日志'),
-        (1, '默认日志'),
-    )
-    logs_type = models.SmallIntegerField(choices=logs_type_choices, default=1)
+    # logs_type_choices = (
+    #     (0, '错误日志'),
+    #     (1, '默认日志'),
+    # )
+    logs_type = models.CharField('日志类型', max_length=100)
     url = models.URLField('日志地址', blank=True, null=True)
     memo = models.CharField(max_length=200, blank=True, null=True)
 
