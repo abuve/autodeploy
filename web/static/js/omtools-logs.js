@@ -55,6 +55,11 @@ var OmToolsLogsInit = function () {
                     formatter: logs_type_formatter
                 },
                 {
+                    field: 'logs_status',
+                    title: '状态',
+                    formatter: logs_status_formatter
+                },
+                {
                     field: 'memo',
                     title: '备注信息'
                 },
@@ -76,20 +81,25 @@ var OmToolsLogsInit = function () {
 };
 
 function logs_type_formatter(value, row, index) {
-    return '<a href="' + row.url + '" target="_blank">' + row.logs_type + '</a>'
+    if (row.logs_status == 1) {
+        return '<a href="' + row.url + '" target="_blank">' + row.logs_type + '</a>'
+    } else {
+        return '<span style="color:gray;">' + row.logs_type + '</span>'
+    }
 }
 
 function server_type_formatter(value, row, index) {
-    var type_map = {0: '客服测试', 1: '正式环境', 2: '开发环境'}
-    return type_map[row.server_type]
+    var type_map = {0: '客服测试', 1: '正式环境', 2: '开发环境'};
+    return type_map[row.server_type];
 }
 
-function delete_project_data_fn(project_id) {
-    $("#delete_data_html_area").html("Confirm remove Application? All the data will be delete!");
-    $("#delete_project_app_fn").attr("onclick", "delete_project_app_fn('delete', " + project_id + ")");
-    $("#delete_app_modal").modal('show')
+function logs_status_formatter(value, row, index) {
+    if (row.logs_status == 0) {
+        return '<button type="button" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> 关闭</button>' ;
+    } else if (row.logs_status == 1) {
+        return '<button type="button" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 正常</button>' ;
+    }
 }
-
 
 function load_logsviews_detail_fn(project_id) {
     // 激活头部菜单

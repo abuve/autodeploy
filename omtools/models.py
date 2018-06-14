@@ -91,7 +91,13 @@ class LogsControl(models.Model):
     # )
     logs_type = models.CharField('日志类型', max_length=100)
     url = models.URLField('日志地址', blank=True, null=True)
-    memo = models.CharField(max_length=200, blank=True, null=True)
+    logs_status_choices = (
+        (0, '关闭'),
+        (1, '正常'),
+    )
+    logs_status = models.SmallIntegerField('日志状态', choices=logs_status_choices, default=1)
+    order_value = models.SmallIntegerField('排序值', default=1)
+    memo = models.CharField('备注', max_length=200, blank=True, null=True)
 
     class Meta:
         verbose_name = "项目日志表"

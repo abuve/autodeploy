@@ -24,6 +24,9 @@ class LogsIndexView(WriteAccessLogsMixin, View):
 
 class LogsDetailView(WriteAccessLogsMixin, View):
     def get(self, request, project_id):
-        response = LogsControl.objects.filter(project_id__id=project_id).values('id', 'project_id__name', 'server_node', 'server_type', 'logs_type', 'url', 'memo').order_by('server_node')
+        response = LogsControl.objects.filter(project_id__id=project_id).values('id', 'project_id__name', 'server_node',
+                                                                                'server_type', 'logs_type', 'url',
+                                                                                'logs_status', 'memo').order_by(
+            'order_value')
         # return render(request, 'omtools/logs_detail.html', {'response': response})
         return HttpResponse(json.dumps(list(response)))
