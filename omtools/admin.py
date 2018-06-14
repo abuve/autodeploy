@@ -10,6 +10,7 @@ class AccessLogsControl(admin.ModelAdmin):
     search_fields = ('server_node', 'server_ip', 'server_type', 'logs_type', 'url', 'memo')
     list_display_links = ('project_id', 'server_ip', 'server_node', 'server_type', 'logs_type', 'url', 'memo')
     list_editable = ['logs_status', 'order_value']
+    list_filter = ('project_id', 'server_ip', 'server_node', 'server_type', 'logs_status')
 
 admin.site.site_header = 'OM CMDB Admin'
 admin.site.site_title = 'OM CMDB Admin'
