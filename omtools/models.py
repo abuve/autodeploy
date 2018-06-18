@@ -107,3 +107,18 @@ class LogsControl(models.Model):
         return "{0}\t{1}".format(self.project_id.name, self.server_node, self.url)
 
     __str__ = __unicode__
+
+
+class UrlMapsControl(models.Model):
+    project_id = models.ForeignKey(REPOSITORY_MODELS.ProjectInfo, related_name='urlmapscontrol')
+    url = models.CharField('URL地址', max_length=100)
+    forward = models.TextField(u'云服务器IP组', blank=True, null=True)
+    nginx = models.TextField(u'内部Nginx IP组', blank=True, null=True)
+    ha = models.TextField(u'内部HA IP组', blank=True, null=True)
+    backend = models.TextField(u'应用后端IP组', blank=True, null=True)
+    order_value = models.SmallIntegerField('排序值', default=1)
+    memo = models.CharField('备注', max_length=200, blank=True, null=True)
+
+    class Meta:
+        verbose_name = "URL地址映射"
+        verbose_name_plural = verbose_name
