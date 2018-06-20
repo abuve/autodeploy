@@ -200,7 +200,12 @@ class ApiHandler:
     def querybytype(self):
         if self.request_json_data.get('parameters').get('data'):
             search_value = self.request_json_data.get('parameters').get('data')
-            self.cmdb_data = self.cmdb_data.filter(device_type_id__in=search_value)
+            asset_type_list = []
+            asset_type_tuple = cmdb_models.Asset.device_type_choices
+            for type_obj in asset_type_tuple:
+                if type_obj[1] in search_value:
+                    asset_type_list.append(type_obj[0])
+            self.cmdb_data = self.cmdb_data.filter(device_type_id__in=asset_type_list)
             source_data = self.cmdb_data[self.start_tag: self.end_tag]
             response_data = self.__formatting_json(source_data)
         else:
