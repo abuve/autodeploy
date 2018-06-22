@@ -14,8 +14,7 @@ from omtools.models import UrlMapsControl
 
 class UrlmapsIndexView(WriteAccessLogsMixin, View):
     def get(self, request):
-        from django.db.models import Count
-        response = REPOSITORY_MODELS.ProjectInfo.objects.order_by('urlmapscontrol__url').annotate(total=Count('urlmapscontrol__url')).order_by('-total')
+        response = REPOSITORY_MODELS.ProjectInfo.objects.all()
         return render(request, 'omtools/urlmaps_index.html', {'response': response})
 
 
