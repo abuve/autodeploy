@@ -14,7 +14,7 @@ from omtools.models import UrlMapsControl
 
 class UrlmapsIndexView(WriteAccessLogsMixin, View):
     def get(self, request):
-        response = REPOSITORY_MODELS.ProjectInfo.objects.filter(name__in=['FPMS', 'PMS'])
+        response = REPOSITORY_MODELS.ProjectInfo.objects.all()
         return render(request, 'omtools/urlmaps_index.html', {'response': response})
 
 
