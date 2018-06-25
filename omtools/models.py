@@ -122,3 +122,14 @@ class UrlMapsControl(models.Model):
     class Meta:
         verbose_name = "URL地址映射"
         verbose_name_plural = verbose_name
+
+
+class DnsMonitorControl(models.Model):
+    project_id = models.ForeignKey(REPOSITORY_MODELS.ProjectInfo, related_name='dnsmonitorcontrol', blank=True, null=True)
+    domain = models.CharField('URL地址', max_length=100)
+    node1_status = models.BooleanField(u'监测节点1',default=False)
+    memo = models.CharField('备注', max_length=200, blank=True, null=True)
+
+    class Meta:
+        verbose_name = "DNS监测数据表"
+        verbose_name_plural = verbose_name

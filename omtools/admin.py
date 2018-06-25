@@ -31,5 +31,6 @@ admin.site.register(models.MongodbMission)
 admin.site.register(models.MongodbMissionTemplate)
 admin.site.register(models.LogsControl, AccessLogsControl)
 admin.site.register(models.UrlMapsControl, AccessUrlmapsControl)
+admin.site.register(models.DnsMonitorControl)
 
 
