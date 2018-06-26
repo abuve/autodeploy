@@ -15,7 +15,7 @@ from django.http.request import QueryDict
 
 class DnsMonitorIndexView(WriteAccessLogsMixin, View):
     def get(self, request):
-        response = DnsMonitorControl.objects.all()
+        response = DnsMonitorControl.objects.all().order_by('-project_id__name')
         return render(request, 'omtools/dnsmonitor_index.html', {'response': response})
 
     def post(self, request):
