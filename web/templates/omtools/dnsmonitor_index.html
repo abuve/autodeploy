@@ -16,13 +16,17 @@
         </div>
     </ol>
 
-{#    <div class="row" style="padding: 10px 8px;">#}
-{#        <div class="col-md-12">#}
-{#           <div class="alert alert-success" role="alert">EU</div>#}
-{#        </div>#}
-{#    </div>#}
+    <div class="row" style="padding: 10px 8px 0 8px;">
+        <div class="col-md-12">
+           <div class="alert alert-success" role="alert">
+               <strong>提示！</strong>
+               <p style="padding-top: 10px">根据监测结果显示，以下域名在中国大陆地区DNS解析出现异常，为避免对用户体验造成深度影响，建议域名停止使用。</p>
+               <p style="">更多详细信息可以访问 <a href="https://www.17ce.com/" target="_blank">https://www.17ce.com/</a> 点击ping功能，对域名进行深度解析。</p>
+           </div>
+        </div>
+    </div>
 
-    <div class="row" style="padding: 10px 8px;">
+    <div class="row" style="padding: 0px 8px 0 8px;">
         <div class="col-md-8">
             <table class="table table-bordered table-striped">
                 <tbody>
@@ -62,6 +66,15 @@
                 {% endfor %}
                 </tbody>
             </table>
+        </div>
+
+        <div class="col-md-4">
+            <div class="alert alert-info" role="alert">
+                <strong>各产品异常域名统计</strong><br><br>
+                {% for count_obj in domain_count.all %}
+                    {{ count_obj.project_id__name }} ({{ count_obj.domain__count }}) <br>
+                {% endfor %}
+            </div>
         </div>
     </div>
 

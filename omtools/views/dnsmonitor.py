@@ -11,12 +11,14 @@ from omtools.service import logs
 from repository import models as REPOSITORY_MODELS
 from omtools.models import DnsMonitorControl
 from django.http.request import QueryDict
+from django.db.models import Count
 
 
 class DnsMonitorIndexView(WriteAccessLogsMixin, View):
     def get(self, request):
         response = DnsMonitorControl.objects.all().order_by('project_id__name')
-        return render(request, 'omtools/dnsmonitor_index.html', {'response': response})
+        domain_count = DnsMonitorControl.objects.values('project_id__name').annotate(Count('domain'))
+        return render(request, 'omtools/dnsmonitor_index.html', {'response': response, 'domain_count': domain_count})
 
     def post(self, request):
         request_data = request.body.decode('utf-8')
