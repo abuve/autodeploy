@@ -34,29 +34,29 @@
                          域名地址
                     </th>
                     <th style="width: 300px;">
-                        监测节点1
+                         域名状态
                     </th>
                     <th>
-                         备注信息
+                         更新时间
                     </th>
                 </tr>
                 {% for monitor_obj in response.all %}
                     <tr>
-                        <td>
+                        <td nowrap="nowrap">
                             {{ monitor_obj.project_id.name }}
                         </td>
-                        <td>
+                        <td nowrap="nowrap">
                             {{ monitor_obj.domain }}
                         </td>
-                        <td>
+                        <td nowrap="nowrap">
                             {% if monitor_obj.node1_status %}
                                 <button type="button" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 正常</button>
                             {% else %}
                                 <button type="button" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> 异常</button>
                             {% endif %}
                         </td>
-                        <td>
-                            {{ monitor_obj.memo }}
+                        <td nowrap="nowrap">
+                            {{ monitor_obj.date | date:"Y-m-d H:i:s" }}
                         </td>
                     </tr>
                 {% endfor %}

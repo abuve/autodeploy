@@ -22,8 +22,9 @@ class DnsMonitorIndexView(WriteAccessLogsMixin, View):
         request_data = request.body.decode('utf-8')
         request_json = json.loads(request_data)
         domain = request_json.get('domain')
-        print(domain)
+        pro_name = request_json.get('pro_name')
         obj_from_db = DnsMonitorControl.objects.get_or_create(domain=domain)[0]
         obj_from_db.node1_status = False
+        obj_from_db.project_id = REPOSITORY_MODELS.ProjectInfo.objects.get(name=pro_name)
         obj_from_db.save()
         return HttpResponse(1)

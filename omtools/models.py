@@ -128,6 +128,7 @@ class DnsMonitorControl(models.Model):
     project_id = models.ForeignKey(REPOSITORY_MODELS.ProjectInfo, related_name='dnsmonitorcontrol', blank=True, null=True)
     domain = models.CharField('URL地址', max_length=100)
     node1_status = models.BooleanField(u'监测节点1',default=False)
+    date = models.DateTimeField(u'更新时间', auto_now=True)
     memo = models.CharField('备注', max_length=200, blank=True, null=True)
 
     class Meta:
