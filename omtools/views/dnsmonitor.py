@@ -17,7 +17,7 @@ from django.db.models import Count
 class DnsMonitorIndexView(WriteAccessLogsMixin, View):
     def get(self, request):
         response = DnsMonitorControl.objects.all().order_by('project_id__name')
-        domain_count = DnsMonitorControl.objects.values('project_id__name').annotate(Count('domain'))
+        domain_count = DnsMonitorControl.objects.values('project_id__name', 'project_id__cn_name').annotate(Count('domain'))
         return render(request, 'omtools/dnsmonitor_index.html', {'response': response, 'domain_count': domain_count})
 
     def post(self, request):
