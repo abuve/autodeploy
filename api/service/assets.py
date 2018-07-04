@@ -1,13 +1,13 @@
 __author__ = 'Aaron'
 
 from cmdb import models as cmdb_models
+from omtools import models as OMTOOLS_MODELS
 import json
 import time
 
 class ApiHandler:
     def __init__(self, request):
         self.request_data = request.body.decode('utf-8')
-        print(self.request_data)
         self.request_json_data = json.loads(self.request_data)
 
         try:
@@ -219,6 +219,24 @@ class ApiHandler:
             self.cmdb_data = self.cmdb_data.filter(business_unit__name__in=search_value)
             source_data = self.cmdb_data[self.start_tag: self.end_tag]
             response_data = self.__formatting_json(source_data)
+        else:
+            response_data = {'status': 502, 'msg': 'missing query data, please check.'}
+
+        return response_data
+
+    def querybydomain(self):
+        if self.request_json_data.get('parameters').get('data'):
+            search_value = self.request_json_data.get('parameters').get('data')
+            source_data = {}
+            if search_value == 'all':
+                domain_data = OMTOOLS_MODELS.ProductDomains.objects.values('project_id__name', 'domain', 'productdomainsipaddr__ip_addr').all()
+                for obj in domain_data:
+                    if not source_data.get(obj['project_id__name']):
+                        source_data[obj['project_id__name']] = {'ip_list': [], 'domain_list': []}
+                    source_data[obj['project_id__name']]['domain_list'].append(obj['domain'])
+                    source_data[obj['project_id__name']]['ip_list'].append(obj['productdomainsipaddr__ip_addr'])
+
+            response_data = source_data
         else:
             response_data = {'status': 502, 'msg': 'missing query data, please check.'}
 

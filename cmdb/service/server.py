@@ -66,7 +66,7 @@ class Server(BaseServiceList):
             {
                 'q': 'idc_id',
                 'title': "IDC",
-                'display': 1,
+                'display': 0,
                 'text': {'content': "{n}", 'kwargs': {'n': '@@idc_list'}},
                 'attr': {'name': 'idc_id', 'id': '@idc_id', 'origin': '@idc_list', 'edit-enable': 'true',
                          'edit-type': 'select',
@@ -85,6 +85,14 @@ class Server(BaseServiceList):
                 'display': 1,
                 'text': {'content': "<font color='red'>{business_unit__name}</font>", 'kwargs': {'business_unit__name': '@business_unit__name'}},
                 'attr': {}
+            },
+            {
+                'q': 'tag__id',
+                'title': "Function",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@@tag_list'}},
+                'attr': {'name': 'tag__id', 'id': '@tag__id', 'origin': '@tag_list', 'edit-enable': 'true',
+                         'edit-type': 'select', 'global-name': 'tag_list'}
             },
             {
                 'q': 'server__configuration',
@@ -158,6 +166,12 @@ class Server(BaseServiceList):
         result = map(lambda x: {'id': x.id, 'name': x.name}, values)
         return list(result)
 
+    @property
+    def tag_list(self):
+        values = models.Tag.objects.only('id', 'name')
+        result = map(lambda x: {'id': x.id, 'name': x.name}, values)
+        return list(result)
+
     @staticmethod
     def assets_condition(request):
         con_str = request.GET.get('condition', None)
@@ -198,7 +212,8 @@ class Server(BaseServiceList):
                 'device_type_list': self.device_type_list,
                 'idc_list': self.idc_list,
                 'business_unit_list': self.business_unit_list,
-                'status_map': self.status_map
+                'status_map': self.status_map,
+                'tag_list': self.tag_list
             }
             response.data = ret
             response.message = '获取成功'

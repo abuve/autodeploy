@@ -83,7 +83,6 @@ class Asset(models.Model):
     )
     raid_type = models.CharField(choices=raid_type_choices, max_length=20, default='RAID 10')
     tag = models.ManyToManyField('Tag')
-    function = models.CharField(verbose_name='功能用途', max_length=200, null=True, blank=True)
     memo = models.CharField(verbose_name='备注', max_length=200, null=True, blank=True)
     power_cable = models.SmallIntegerField('电源数量', null=True, blank=True, default=2)
     rack = models.SmallIntegerField('机柜编号', null=True, blank=True, default=1)
