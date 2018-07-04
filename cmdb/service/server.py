@@ -66,7 +66,7 @@ class Server(BaseServiceList):
             {
                 'q': 'idc_id',
                 'title': "IDC",
-                'display': 0,
+                'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@@idc_list'}},
                 'attr': {'name': 'idc_id', 'id': '@idc_id', 'origin': '@idc_list', 'edit-enable': 'true',
                          'edit-type': 'select',
