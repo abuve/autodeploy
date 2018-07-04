@@ -317,8 +317,14 @@ class Server(BaseServiceList):
                 nid = row_dict.pop('nid')
                 num = row_dict.pop('num')
                 try:
+                    tag_update = {'tag__id': row_dict.pop('tag__id')}
                     models.Asset.objects.filter(id=nid).update(**row_dict)
+                    # update m2m tag obj.
+                    asset_obj = models.Asset.objects.get(id=nid)
+                    asset_obj.tag.clear()
+                    asset_obj.tag.add(tag_update['tag__id'])
                 except Exception as e:
+                    print(Exception, e)
                     response.error.append({'num': num, 'message': str(e)})
                     response.status = False
                     error_count += 1
