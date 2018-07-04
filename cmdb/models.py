@@ -87,8 +87,10 @@ class Asset(models.Model):
     power_cable = models.SmallIntegerField('电源数量', null=True, blank=True, default=2)
     rack = models.SmallIntegerField('机柜编号', null=True, blank=True, default=1)
     purchasing = models.DateField(u'采购时间', auto_now_add=True)
+    creator = models.ForeignKey(user_center_models.UserProfile, null=True, blank=True, on_delete=models.SET_NULL)
     latest_date = models.DateTimeField(auto_now=True)
     create_date = models.DateTimeField(auto_now_add=True)
+
 
     class Meta:
         verbose_name_plural = "资产表"

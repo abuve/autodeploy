@@ -43,14 +43,14 @@ class Server(BaseServiceList):
             {
                 'q': 'server__hostname',
                 'title': "Hostname",
-                'display': 1,
+                'display': 0,
                 'text': {'content': "{n}", 'kwargs': {'n': '@server__hostname'}},
                 'attr': {}
             },
             {
                 'q': 'sn',
                 'title': "SN",
-                'display': 1,
+                'display': 0,
                 'text': {'content': "{n}", 'kwargs': {'n': '@sn'}},
                 'attr': {}
             },
@@ -98,7 +98,28 @@ class Server(BaseServiceList):
                 'q': 'server__configuration',
                 'title': "Configuration",
                 'display': 1,
-                'text': {'content': "{n}", 'kwargs': {'n': '@server__configuration'}},
+                'text': {'content': "( {cpu}C / {mem}G / {disk}G )", 'kwargs': {'cpu': '@server__cpu_count', 'mem': '@server__Memory', 'disk': '@server__DeviceSize'}},
+                'attr': {}
+            },
+            {
+                'q': 'server__cpu_count',
+                'title': "Configuration",
+                'display': 0,
+                'text': {'content': "{n}", 'kwargs': {'n': '@server__cpu_count'}},
+                'attr': {}
+            },
+            {
+                'q': 'server__Memory',
+                'title': "Configuration",
+                'display': 0,
+                'text': {'content': "{n}", 'kwargs': {'n': '@server__Memory'}},
+                'attr': {}
+            },
+            {
+                'q': 'server__DeviceSize',
+                'title': "Configuration",
+                'display': 0,
+                'text': {'content': "{n}", 'kwargs': {'n': '@server__DeviceSize'}},
                 'attr': {}
             },
             {
@@ -115,6 +136,13 @@ class Server(BaseServiceList):
                 'text': {'content': '<a type="button" class="btn btn-{class} btn-xs">{n}</a>', 'kwargs': {'n': '@@device_status_list', 'class': '@@status_map'}},
                 'attr': {'name': 'device_status_id', 'id': '@device_status_id', 'origin': '@device_status_list', 'edit-enable': 'true',
                          'edit-type': 'select','global-name': 'device_status_list'}
+            },
+            {
+                'q': 'creator__username',
+                'title': "Creator",
+                'display': 1,
+                'text': {'content': "{n}", 'kwargs': {'n': '@creator__username'}},
+                'attr': {}
             },
             {
                 'q': None,
@@ -230,6 +258,7 @@ class Server(BaseServiceList):
 
             ret['asset_type'] = self.device_type_list
             ret['idc'] = self.idc_list
+            ret['tag'] = self.tag_list
 
             response.data = ret
             response.message = '获取成功'
@@ -270,8 +299,10 @@ class Server(BaseServiceList):
                 idc_id = asset_data.get('idc_id'),
                 business_unit_id = asset_data.get('business_unit_id'),
                 manage_ip=asset_data.get('manage_ip'),
+                creator_id=request.user.id,
             )
             asset_obj.save()
+            asset_obj.tag.add(asset_data.get('tag_id'))
 
             # 创建server obj
             server_obj = models.Server(

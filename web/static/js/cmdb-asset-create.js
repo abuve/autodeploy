@@ -56,6 +56,7 @@ function isInteger(obj) {
 function cmdb_asset_create_fn() {
     var device_type_id = $('select[name="device_type_id"]').val()
     var idc_id = $('select[name="idc_id"]').val()
+    var tag_id = $('select[name="tag_id"]').val()
     var business_unit_id = $('input[name="business_unit_id"]').val()
     var hostname = $('input[name="hostname"]').val()
     var ipaddress = $('input[name="ipaddress"]').val()
@@ -122,6 +123,7 @@ function cmdb_asset_create_fn() {
             "device_type_id": device_type_id,
             "idc_id": idc_id,
             "business_unit_id": business_unit_id,
+            "tag_id": tag_id,
             "hostname": hostname,
             "ipaddress": ipaddress,
             "manage_ip": manage_ip,

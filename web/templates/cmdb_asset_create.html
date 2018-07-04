@@ -62,12 +62,22 @@
                     <td style="line-height:34px;" align="right">IDC : *</td>
                     <td>
                         <select class="form-control" name="idc_id">
-                        {% for obj in response.data.idc %}
-                            <option value="{{ obj.id }}">{{ obj.name }}</option>
-                        {% endfor %}
-                    </select>
+                            {% for obj in response.data.idc %}
+                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                            {% endfor %}
+                        </select>
                     </td>
 
+                </tr>
+                <tr>
+                    <td style="line-height:34px;" align="right">Function Usage : *</td>
+                    <td colspan="5">
+                        <select class="form-control" name="tag_id">
+                            {% for obj in response.data.tag %}
+                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
                 </tr>
                 <tr>
                     <td style="line-height:34px;" align="right">IP Address : *</td>
