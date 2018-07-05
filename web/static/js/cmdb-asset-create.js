@@ -64,6 +64,7 @@ function cmdb_asset_create_fn() {
     var cpu_count = $('input[name="cpu_count"]').val()
     var Memory = $('input[name="Memory"]').val()
     var DeviceSize = $('input[name="DeviceSize"]').val()
+    var memo = $('input[name="memo"]').val()
 
     // Business 验证
     if (! business_unit_id) {
@@ -91,7 +92,10 @@ function cmdb_asset_create_fn() {
     }
 
     // CPU 验证
-    if (cpu_count) {
+    if (! cpu_count) {
+        alert("Please enter CPU Cores Count.")
+        return false
+    } else {
         if (! isInteger(cpu_count)) {
             alert("Error CPU Count, Please check value.")
             return false
@@ -99,7 +103,10 @@ function cmdb_asset_create_fn() {
     }
 
     // Memory 验证
-    if (Memory) {
+    if (! Memory) {
+        alert("Please enter Memory Size.")
+        return false
+    } else {
         if (! isInteger(Memory)) {
             alert("Error Memory Size, Please check value.")
             return false
@@ -107,7 +114,10 @@ function cmdb_asset_create_fn() {
     }
 
     //Disk 验证
-    if (DeviceSize) {
+    if (! DeviceSize) {
+        alert("Please enter Disk Size.")
+        return false
+    } else {
         if (! isInteger(DeviceSize)) {
             alert("Error Device Size, Please check value.")
             return false
@@ -130,6 +140,7 @@ function cmdb_asset_create_fn() {
             "cpu_count": cpu_count,
             "Memory": Memory,
             "DeviceSize": DeviceSize,
+            "memo": memo,
         },
         success: function (data, response, status) {
             if (data.status) {

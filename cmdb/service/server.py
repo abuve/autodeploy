@@ -98,8 +98,8 @@ class Server(BaseServiceList):
                 'q': 'server__configuration',
                 'title': "Configuration",
                 'display': 1,
-                'text': {'content': "( {cpu}C / {mem}G / {disk}G )", 'kwargs': {'cpu': '@server__cpu_count', 'mem': '@server__Memory', 'disk': '@server__DeviceSize'}},
-                'attr': {}
+                'text': {'content': "{n}", 'kwargs': {'n': '@server__configuration'}},
+                'attr': {'name': 'server__configuration', 'id': '@id', 'edit-enable': 'true', 'edit-type': 'input'}
             },
             {
                 'q': 'server__cpu_count',
@@ -226,7 +226,7 @@ class Server(BaseServiceList):
             asset_count = models.Asset.objects.filter(conditions).count()
             page_info = PageInfo(request.GET.get('pager', None), asset_count)
             asset_list = models.Asset.objects.filter(conditions).extra(select=self.extra_select).values(
-                *self.values_list)[page_info.start:page_info.end]
+                *self.values_list).order_by('-id')[page_info.start:page_info.end]
 
             ret['table_config'] = self.table_config
             ret['condition_config'] = self.condition_config
@@ -300,6 +300,7 @@ class Server(BaseServiceList):
                 business_unit_id = asset_data.get('business_unit_id'),
                 manage_ip=asset_data.get('manage_ip'),
                 creator_id=request.user.id,
+                memo=asset_data.get('memo')
             )
             asset_obj.save()
             asset_obj.tag.add(asset_data.get('tag_id'))
@@ -312,6 +313,7 @@ class Server(BaseServiceList):
                 Memory = Memory,
                 DeviceSize = DeviceSize,
                 cpu_count = cpu_count,
+                configuration = '( %sC /%sG /%sG )' % (cpu_count, Memory, DeviceSize)
             )
             server_obj.save()
 
@@ -339,6 +341,13 @@ class Server(BaseServiceList):
     @staticmethod
     def put_assets(request):
         response = BaseResponse()
+        def __update_asset_tag(nid, tag_obj):
+            asset_obj = models.Asset.objects.get(id=nid)
+            asset_obj.tag.clear()
+            asset_obj.tag.add(tag_obj['tag__id'])
+        def __update_asset_configuration(nid, config_obj):
+            asset_obj = models.Asset.objects.get(id=nid)
+            print(config_obj)
         try:
             response.error = []
             put_dict = QueryDict(request.body, encoding='utf-8')
@@ -348,12 +357,11 @@ class Server(BaseServiceList):
                 nid = row_dict.pop('nid')
                 num = row_dict.pop('num')
                 try:
-                    tag_update = {'tag__id': row_dict.pop('tag__id')}
+                    if row_dict.get('tag__id'):
+                        __update_asset_tag(nid, {'tag__id': row_dict.pop('tag__id')})
+                    if row_dict.get('server__configuration'):
+                        __update_asset_configuration(nid, {'server__configuration': row_dict.pop('server__configuration')})
                     models.Asset.objects.filter(id=nid).update(**row_dict)
-                    # update m2m tag obj.
-                    asset_obj = models.Asset.objects.get(id=nid)
-                    asset_obj.tag.clear()
-                    asset_obj.tag.add(tag_update['tag__id'])
                 except Exception as e:
                     print(Exception, e)
                     response.error.append({'num': num, 'message': str(e)})
