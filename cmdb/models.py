@@ -114,7 +114,7 @@ class Server(models.Model):
     hostname = models.CharField(max_length=128, null=True, blank=True)
     manufacturer = models.CharField(verbose_name='制造商', max_length=64, null=True, blank=True)
     model = models.CharField('型号', max_length=64, null=True, blank=True)
-    ipaddress = models.GenericIPAddressField('IP地址', null=True, blank=True)
+    ipaddress = models.GenericIPAddressField('IP地址', unique=True)
     configuration = models.CharField(u'硬件配置', max_length=100, blank=True, null=True)
     Memory = models.IntegerField(u'内存配置', blank=True, null=True)
     DeviceSize = models.IntegerField(u'硬盘配置', blank=True, null=True)
