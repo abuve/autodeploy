@@ -137,6 +137,11 @@ class ApiHandler:
             except:
                 items_data['status'] = '-'
 
+            try:
+                items_data['function'] = [i for i in objects.function.all()]
+            except:
+                items_data['function'] = []
+
             items_list.append(items_data)
 
         formatting_data = {
