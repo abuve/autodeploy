@@ -274,50 +274,41 @@ class Server(BaseServiceList):
             asset_data = QueryDict(request.body, encoding='utf-8')
             new_asset_num = asset_num.asset_num_builder()
             asset_sn = asset_data.get('sn')
-
-            try:
-                Memory = int(asset_data.get('Memory'))
-            except:
-                Memory = None
-            try:
-                DeviceSize = int(asset_data.get('DeviceSize'))
-            except:
-                DeviceSize = None
-            try:
-                cpu_count = int(asset_data.get('cpu_count'))
-            except:
-                cpu_count = None
-
+            Memory = int(asset_data.get('Memory'))
+            DeviceSize = int(asset_data.get('DeviceSize'))
+            cpu_count = int(asset_data.get('cpu_count'))
             if not asset_sn:
                 asset_sn = new_asset_num
+            if not models.Server.objects.filter(ipaddress=asset_data.get('ipaddress')):
+                # 创建asset obj
+                asset_obj = models.Asset(
+                    device_type_id = asset_data.get('device_type_id'),
+                    asset_num = new_asset_num,
+                    sn = asset_sn,
+                    idc_id = asset_data.get('idc_id'),
+                    business_unit_id = asset_data.get('business_unit_id'),
+                    manage_ip=asset_data.get('manage_ip'),
+                    creator_id=request.user.id,
+                    memo=asset_data.get('memo')
+                )
+                asset_obj.save()
+                asset_obj.tag.add(asset_data.get('tag_id'))
 
-            # 创建asset obj
-            asset_obj = models.Asset(
-                device_type_id = asset_data.get('device_type_id'),
-                asset_num = new_asset_num,
-                sn = asset_sn,
-                idc_id = asset_data.get('idc_id'),
-                business_unit_id = asset_data.get('business_unit_id'),
-                manage_ip=asset_data.get('manage_ip'),
-                creator_id=request.user.id,
-                memo=asset_data.get('memo')
-            )
-            asset_obj.save()
-            asset_obj.tag.add(asset_data.get('tag_id'))
+                # 创建server obj
+                server_obj = models.Server(
+                    asset_id = asset_obj.id,
+                    hostname = asset_data.get('hostname'),
+                    ipaddress = asset_data.get('ipaddress'),
+                    Memory = Memory,
+                    DeviceSize = DeviceSize,
+                    cpu_count = cpu_count,
+                    configuration = '( %sC /%sG /%sG )' % (cpu_count, Memory, DeviceSize)
+                )
+                server_obj.save()
+            else:
+                response.status = False
+                response.message = 'Ipaddress is already in system, Please check.'
 
-            # 创建server obj
-            server_obj = models.Server(
-                asset_id = asset_obj.id,
-                hostname = asset_data.get('hostname'),
-                ipaddress = asset_data.get('ipaddress'),
-                Memory = Memory,
-                DeviceSize = DeviceSize,
-                cpu_count = cpu_count,
-                configuration = '( %sC /%sG /%sG )' % (cpu_count, Memory, DeviceSize)
-            )
-            server_obj.save()
-
-            response.message = '获取成功'
         except Exception as e:
             print(Exception, e)
             response.status = False
