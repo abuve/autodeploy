@@ -140,7 +140,7 @@ class Server(BaseServiceList):
             {
                 'q': 'creator__username',
                 'title': "Creator",
-                'display': 1,
+                'display': 0,
                 'text': {'content': "{n}", 'kwargs': {'n': '@creator__username'}},
                 'attr': {}
             },
