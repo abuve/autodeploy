@@ -138,7 +138,7 @@ class ApiHandler:
                 items_data['status'] = '-'
 
             try:
-                items_data['function'] = [i for i in objects.function.all()]
+                items_data['function'] = [i.name for i in objects.function.all()]
             except:
                 items_data['function'] = []
 
