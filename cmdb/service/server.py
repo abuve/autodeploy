@@ -99,7 +99,7 @@ class Server(BaseServiceList):
                 'title': "Configuration",
                 'display': 1,
                 'text': {'content': "{n}", 'kwargs': {'n': '@server__configuration'}},
-                'attr': {'name': 'server__configuration', 'id': '@id', 'edit-enable': 'true', 'edit-type': 'input'}
+                'attr': {}
             },
             {
                 'q': 'server__cpu_count',
