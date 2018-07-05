@@ -162,7 +162,6 @@ class Server(BaseServiceList):
         }
         super(Server, self).__init__(condition_config, table_config, extra_select)
 
-
     @property
     def device_status_list(self):
         result = map(lambda x: {'id': x[0], 'name': x[1]}, models.Asset.device_status_choices)
@@ -243,6 +242,7 @@ class Server(BaseServiceList):
                 'status_map': self.status_map,
                 'tag_list': self.tag_list
             }
+
             response.data = ret
             response.message = '获取成功'
         except Exception as e:
@@ -334,8 +334,9 @@ class Server(BaseServiceList):
         response = BaseResponse()
         def __update_asset_tag(nid, tag_obj):
             asset_obj = models.Asset.objects.get(id=nid)
-            asset_obj.tag.clear()
-            asset_obj.tag.add(tag_obj['tag__id'])
+            if int(tag_obj['tag__id']) not in [i.id for i in asset_obj.tag.all()]:
+                asset_obj.tag.clear()
+                asset_obj.tag.add(tag_obj['tag__id'])
         def __update_asset_configuration(nid, config_obj):
             asset_obj = models.Asset.objects.get(id=nid)
             print(config_obj)
