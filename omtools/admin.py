@@ -27,10 +27,16 @@ class AccessUrlmapsControl(admin.ModelAdmin):
     list_filter = ('project_id', )
 
 
+class AccessProductDomains(admin.ModelAdmin):
+    search_fields = ('domain', )
+
+
 admin.site.register(models.MongodbMission)
 admin.site.register(models.MongodbMissionTemplate)
 admin.site.register(models.LogsControl, AccessLogsControl)
 admin.site.register(models.UrlMapsControl, AccessUrlmapsControl)
 admin.site.register(models.DnsMonitorControl)
+admin.site.register(models.ProductDomains, AccessProductDomains)
+admin.site.register(models.ProductDomainsIPaddr)
 
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import json
+import json, datetime
 from django.views import View
 from django.shortcuts import render
 from django.shortcuts import HttpResponse, HttpResponseRedirect
@@ -10,23 +10,27 @@ from django.http import JsonResponse
 from omtools.service import logs
 from repository import models as REPOSITORY_MODELS
 from omtools.models import DnsMonitorControl
+from omtools.models import ProductDomains
 from django.http.request import QueryDict
 from django.db.models import Count
 
 
 class DnsMonitorIndexView(WriteAccessLogsMixin, View):
     def get(self, request):
-        response = DnsMonitorControl.objects.all().order_by('project_id__name')
+        response = ProductDomains.objects.filter(status=False).order_by('project_id__name')
         domain_count = DnsMonitorControl.objects.values('project_id__name', 'project_id__cn_name').annotate(Count('domain'))
-        return render(request, 'omtools/dnsmonitor_index.html', {'response': response, 'domain_count': domain_count})
+        current_date = datetime.datetime.now()
+        return render(request, 'omtools/dnsmonitor_index.html', {'response': response, 'domain_count': domain_count, 'current_date': current_date})
 
     def post(self, request):
         request_data = request.body.decode('utf-8')
         request_json = json.loads(request_data)
         domain = request_json.get('domain')
-        pro_name = request_json.get('pro_name')
-        obj_from_db = DnsMonitorControl.objects.get_or_create(domain=domain)[0]
-        obj_from_db.node1_status = False
-        obj_from_db.project_id = REPOSITORY_MODELS.ProjectInfo.objects.get(name=pro_name)
-        obj_from_db.save()
+        obj_from_db = ProductDomains.objects.filter(domain=domain)
+        if obj_from_db:
+            obj_from_db[0].status = False
+            obj_from_db[0].save()
+        else:
+            print('---domain not found--- %s' % domain)
+
         return HttpResponse(1)

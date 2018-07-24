@@ -59,7 +59,7 @@ class MongodbMissionTemplate(models.Model):
     update = models.CharField(verbose_name=u'update更新', max_length=100, null=True, blank=True)
     var_dict = models.CharField(verbose_name=u'变量字典', max_length=2000)
     op_exec = models.CharField(verbose_name=u'模板语句', max_length=2000)
-    multi_tag = models.BooleanField(u'批量更新',default=False)
+    multi_tag = models.BooleanField(u'批量更新', default=False)
     approve_mail = models.CharField(u'审批人邮箱', max_length=100, null=True, blank=True)
     note = models.TextField(verbose_name=u'提示信息', null=True, blank=True)
     memo = models.CharField(verbose_name='备注', max_length=200, null=True, blank=True)
@@ -124,10 +124,37 @@ class UrlMapsControl(models.Model):
         verbose_name_plural = verbose_name
 
 
+class ProductDomains(models.Model):
+    project_id = models.ForeignKey(REPOSITORY_MODELS.ProjectInfo, related_name='productdomains', blank=True, null=True, default=None)
+    domain = models.CharField(u'域名地址', max_length=200, unique=True)
+    ssl_tag = models.BooleanField(default=True)
+    status = models.BooleanField(u'域名状态', default=True)
+    memo = models.CharField(max_length=400, blank=True, null=True)
+    update_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "产品域名管理"
+
+    def __str__(self):
+        return self.domain
+
+
+class ProductDomainsIPaddr(models.Model):
+    ip_addr = models.GenericIPAddressField(unique=True)
+    domain = models.ManyToManyField(ProductDomains, related_name='productdomainsipaddr')
+
+    class Meta:
+        verbose_name_plural = "产品域名解析地址"
+
+    def __str__(self):
+        return self.ip_addr
+
+
 class DnsMonitorControl(models.Model):
-    project_id = models.ForeignKey(REPOSITORY_MODELS.ProjectInfo, related_name='dnsmonitorcontrol', blank=True, null=True)
+    project_id = models.ForeignKey(REPOSITORY_MODELS.ProjectInfo, related_name='dnsmonitorcontrol', blank=True,
+                                   null=True)
     domain = models.CharField('URL地址', max_length=100)
-    node1_status = models.BooleanField(u'监测节点1',default=False)
+    node1_status = models.BooleanField(u'监测节点1', default=False)
     date = models.DateTimeField(u'更新时间', auto_now=True)
     memo = models.CharField('备注', max_length=200, blank=True, null=True)
 

@@ -57,14 +57,14 @@
                             {{ monitor_obj.domain }}
                         </td>
                         <td nowrap="nowrap">
-                            {% if monitor_obj.node1_status %}
+                            {% if monitor_obj.status %}
                                 <button type="button" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 正常</button>
                             {% else %}
                                 <button type="button" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> 异常</button>
                             {% endif %}
                         </td>
                         <td nowrap="nowrap">
-                            {{ monitor_obj.date | date:"Y-m-d H:i:s" }}
+                            {{ monitor_obj.update_date | date:"Y-m-d H:i:s" }}
                         </td>
                     </tr>
                 {% endfor %}
