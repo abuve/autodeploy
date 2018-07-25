@@ -130,7 +130,7 @@ class ProductDomains(models.Model):
     ssl_tag = models.BooleanField(default=True)
     status = models.BooleanField(u'域名状态', default=True)
     memo = models.CharField(max_length=400, blank=True, null=True)
-    update_date = models.DateTimeField(auto_now=True)
+    update_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = "产品域名管理"

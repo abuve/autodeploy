@@ -1,7 +1,3 @@
-from django.test import TestCase
-
-# Create your tests here.
-
 import time, sys, datetime, re
 import dns.resolver
 import queue
@@ -14,8 +10,9 @@ import settings
 
 class DnsMonitorHandler:
     def __init__(self):
-        self.domain_data = self.domain_data_from_api()
         self.api_post_url = settings.api_post_url
+        self.data_api = settings.data_api
+        self.domain_data = self.domain_data_from_api()
         self.app_map = {
             'XBET': 'XBET',
             'BBET8': 'BBET8',
@@ -39,17 +36,11 @@ class DnsMonitorHandler:
         textmod = json.dumps(textmod).encode(encoding='utf-8')
         header_dict = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko',
                        "Content-Type": "application/json"}
-        url = 'http://127.0.0.1:8001/api/assets/'
-        req = request.Request(url=url, data=textmod, headers=header_dict)
+        req = request.Request(url=self.data_api, data=textmod, headers=header_dict)
         res = request.urlopen(req)
         res = res.read()
-        print(res)
-        print(res.decode(encoding='utf-8'))
 
-        f = open('domain.data', 'r')
-        domain_data = f.read()
-        f.close()
-        return json.loads(domain_data)
+        return json.loads(res.decode(encoding='utf-8'))
 
     def write_record(self, data):
         f = open('domain.log', 'a')

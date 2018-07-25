@@ -29,6 +29,7 @@ class DnsMonitorIndexView(WriteAccessLogsMixin, View):
         obj_from_db = ProductDomains.objects.filter(domain=domain)
         if obj_from_db:
             obj_from_db[0].status = False
+            obj_from_db[0].update_date = datetime.datetime.now()
             obj_from_db[0].save()
         else:
             print('---domain not found--- %s' % domain)
