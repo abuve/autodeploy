@@ -179,14 +179,18 @@
      获取默认搜索条件
      */
     function add_default_conditions(conditions) {
-        var business_id = $('input[name="default_business_unit"]').val();
-        if (business_id) {
-            var conditions_list = [business_id];
+        if ('server__ipaddress__contains' in conditions) {
+            return conditions;
         } else {
-            var conditions_list = []
+            var business_id = $('input[name="default_business_unit"]').val();
+            if (business_id) {
+                var conditions_list = [business_id];
+            } else {
+                var conditions_list = []
+            }
+            conditions['business_unit'] = conditions_list
+            return conditions;
         }
-        conditions['business_unit'] = conditions_list
-        return conditions;
     }
 
     /*
