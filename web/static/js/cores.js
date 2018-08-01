@@ -179,7 +179,7 @@
      获取默认搜索条件
      */
     function add_default_conditions(conditions) {
-        conditions['business_unit'] = $('input[name="default_business_unit"]').val()
+        conditions['business_unit'] = [$('input[name="default_business_unit"]').val()]
         return conditions;
     }
 
