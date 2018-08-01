@@ -135,13 +135,13 @@
 	<script type="text/javascript" src="/static/plugins/ztree/js/jquery.ztree.excheck.js"></script>
 	<script type="text/javascript" src="/static/plugins/ztree/js/jquery.ztree.exedit.js"></script>
 
-    <script type="text/javascript" src="/static/js/cmdb-server-list.js"></script>
+    <script type="text/javascript" src="/static/js/cmdb-server-list.js?q=20180801"></script>
 
     <script>
         $(function () {
             $.initMenu('#menu_cmdb_server_list');
             $.nbDataList('/cmdb/server-json.html');
-            load_business_tree_list()
+            load_business_tree_list();
         });
 
     </script>
