@@ -23,7 +23,7 @@ class Server(BaseServiceList):
             {'name': 'device_status_id', 'text': 'Asset Status', 'condition_type': 'select','global_name': 'device_status_list'},
             {'name': 'idc', 'text': 'IDC', 'condition_type': 'select','global_name': 'idc_list'},
             {'name': 'sn', 'text': 'SN', 'condition_type': 'input'},
-            # {'name': 'business_unit', 'text': 'Business', 'condition_type': 'select', 'global_name': 'business_unit_list'},
+            {'name': 'business_unit', 'text': 'Business', 'condition_type': 'select', 'global_name': 'business_unit_list'},
         ]
         # 表格的配置
         table_config = [

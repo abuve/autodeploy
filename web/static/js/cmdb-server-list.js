@@ -28,7 +28,7 @@ function load_business_tree_list() {
 }
 
 function do_search_by_business(obj, business_id) {
-    $('input[name="default_business_unit"]').val(business_id)
+    $('input[name="default_business_unit"]').val(business_id);
     $('#do_refresh').trigger("click");
 }
 
