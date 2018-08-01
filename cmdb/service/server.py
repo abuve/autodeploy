@@ -23,6 +23,7 @@ class Server(BaseServiceList):
             {'name': 'idc', 'text': 'IDC', 'condition_type': 'select','global_name': 'idc_list'},
             {'name': 'sn', 'text': 'SN', 'condition_type': 'input'},
             {'name': 'business_unit', 'text': 'Business', 'condition_type': 'select', 'global_name': 'business_unit_list'},
+            {'name': 'tag', 'text': 'Function', 'condition_type': 'select', 'global_name': 'tag_list'},
         ]
         # 表格的配置
         table_config = [
