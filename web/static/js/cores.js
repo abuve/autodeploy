@@ -205,7 +205,7 @@
             }
         });
         // 添加默认搜索条件
-        //ret = add_default_conditions(ret);
+        ret = add_default_conditions(ret);
         return ret;
     }
 
@@ -215,6 +215,7 @@
     function initialize(pager) {
         $.Show('#shade,#loading');
         var conditions = JSON.stringify(aggregationSearchCondition());
+        console.log(conditions)
         $.cookie('conditions', conditions);
         var $body = $('#table_body');
         $.ajax({
