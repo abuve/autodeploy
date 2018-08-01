@@ -186,9 +186,9 @@
             if (business_id) {
                 var conditions_list = [business_id];
             } else {
-                var conditions_list = []
+                var conditions_list = [];
             }
-            conditions['business_unit'] = conditions_list
+            conditions['business_unit'] = conditions_list;
             return conditions;
         }
     }
