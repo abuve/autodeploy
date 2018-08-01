@@ -205,7 +205,7 @@
             }
         });
         // 添加默认搜索条件
-        ret = add_default_conditions(ret);
+        //ret = add_default_conditions(ret);
         return ret;
     }
 
