@@ -176,6 +176,14 @@
     }
 
     /*
+     获取默认搜索条件
+     */
+    function add_default_conditions(conditions) {
+        conditions['business_unit'] = $('input[name="default_business_unit"]').val()
+        return conditions;
+    }
+
+    /*
      聚合搜索条件
      */
     function aggregationSearchCondition() {
@@ -196,6 +204,8 @@
                 }
             }
         });
+        // 添加默认搜索条件
+        ret = add_default_conditions(ret);
         return ret;
     }
 

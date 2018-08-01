@@ -1,4 +1,4 @@
-{% extends 'layout/_layout.html' %}
+{% extends 'layout/_layout_cmdb.html' %}
 
 {% block css %}
 
@@ -101,6 +101,8 @@
 
     </div>
 
+    <input type='hidden' name="default_business_unit">
+
     <!-- modal -->
     <div class="modal fade" id="business_update_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="width: 280px">
@@ -139,6 +141,7 @@
         $(function () {
             $.initMenu('#menu_cmdb_server_list');
             $.nbDataList('/cmdb/server-json.html');
+            load_business_tree_list()
         });
 
     </script>

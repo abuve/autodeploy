@@ -18,12 +18,12 @@ class Server(BaseServiceList):
         # 查询条件的配置
         condition_config = [
             {'name': 'server__ipaddress', 'text': 'IP Address', 'condition_type': 'input'},
+            {'name': 'tag', 'text': 'Function', 'condition_type': 'select', 'global_name': 'tag_list'},
             {'name': 'device_type_id', 'text': 'Asset Type', 'condition_type': 'select', 'global_name': 'device_type_list'},
             {'name': 'device_status_id', 'text': 'Asset Status', 'condition_type': 'select','global_name': 'device_status_list'},
             {'name': 'idc', 'text': 'IDC', 'condition_type': 'select','global_name': 'idc_list'},
             {'name': 'sn', 'text': 'SN', 'condition_type': 'input'},
-            {'name': 'business_unit', 'text': 'Business', 'condition_type': 'select', 'global_name': 'business_unit_list'},
-            {'name': 'tag', 'text': 'Function', 'condition_type': 'select', 'global_name': 'tag_list'},
+            # {'name': 'business_unit', 'text': 'Business', 'condition_type': 'select', 'global_name': 'business_unit_list'},
         ]
         # 表格的配置
         table_config = [
@@ -150,7 +150,7 @@ class Server(BaseServiceList):
                 'title': "Options",
                 'display': 1,
                 'text': {
-                    'content': '<div class="btn-group"><a type="button" href="/cmdb/asset-detail-{nid}.html" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> Detail</a>   <a type="button" class="btn btn-default btn-xs" onclick="business_update_fn({nid})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Business</a>  <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown"> <span class="caret"></span> </button> </div>',
+                    'content': '<div class="btn-group"><a type="button" class="btn btn-default btn-xs" onclick="business_update_fn({nid})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Business</a>  <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown"> <span class="caret"></span> </button> </div>',
                     #'content': "<a href='/cmdb/asset-detail-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
                 'attr': {}

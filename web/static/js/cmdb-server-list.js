@@ -2,6 +2,36 @@
  * Created by aaron on 2017/12/22.
  */
 
+function load_business_tree_list() {
+
+    var setting = {
+        data: {
+            simpleData: {
+                enable: true
+            }
+        }
+    };
+
+    $.ajax({
+        url: '/cmdb/business-json.html?from=cmdb_list',
+        type: 'get',
+        dataType: 'json',
+        traditional:true,
+        success: function (data, response, status) {
+            if (data.status) {
+                var zNodes = data.data
+                $.fn.zTree.init($("#business_tree_list"), setting, zNodes);
+            }
+        }
+    });
+
+}
+
+function do_search_by_business(obj, business_id) {
+    $('input[name="default_business_unit"]').val(business_id)
+    $('#do_refresh').trigger("click");
+}
+
 function load_tree_data() {
 
     var setting = {

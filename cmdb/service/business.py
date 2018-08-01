@@ -143,6 +143,9 @@ class Business(BaseServiceList):
             if get_from == "cmdb_asset_create":
                 open_tag = False
                 callback="select_business_node(this, %s);"
+            elif get_from == "cmdb_list":
+                open_tag = False
+                callback = "do_search_by_business(this, %s);"
             else:
                 open_tag = True
                 callback = "get_business_detail_fn(%d);"
