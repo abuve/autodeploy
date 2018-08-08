@@ -81,11 +81,13 @@ class Server(BaseServiceList):
                 'attr': {}
             },
             {
-                'q': 'business_unit__name',
+                'q': 'business_unit__id',
                 'title': "Business Unit",
                 'display': 1,
-                'text': {'content': "<font color='red'>{business_unit__name}</font>", 'kwargs': {'business_unit__name': '@business_unit__name'}},
-                'attr': {}
+                'text': {'content': "<font color='red'>{business_unit__name}</font>", 'kwargs': {'business_unit__name': '@@business_unit_list'}},
+                'attr': {'name': 'business_unit__id', 'id': '@business_unit__id', 'origin': '@business_unit_list', 'edit-enable': 'false',
+                         'edit-type': 'select',
+                         'global-name': 'business_unit_list'}
             },
             {
                 'q': 'tag__id',
@@ -190,9 +192,24 @@ class Server(BaseServiceList):
 
     @property
     def business_unit_list(self):
-        values = models.BusinessUnit.objects.only('id', 'name')
-        result = map(lambda x: {'id': x.id, 'name': x.name}, values)
-        return list(result)
+        # values = models.BusinessUnit.objects.only('id', 'name')
+        # result = map(lambda x: {'id': x.id, 'name': x.name}, values)
+
+        def business_node_top(obj, node_name):
+            if obj.parent_unit:
+                parent_name = business_node_top(obj.parent_unit, node_name)
+                node_name = '%s-%s' %(parent_name, obj.name)
+                return node_name
+            else:
+                return obj.name
+
+        get_data = models.BusinessUnit.objects.all()
+        business_list = []
+        for obj in get_data:
+            node_name = business_node_top(obj, '')
+            business_list.append({'id': obj.id, 'name': node_name})
+
+        return business_list
 
     @property
     def tag_list(self):
