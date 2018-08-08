@@ -150,7 +150,7 @@ class Business(BaseServiceList):
                 open_tag = True
                 callback = "get_business_detail_fn(%d);"
 
-            get_data = models.BusinessUnit.objects.all()
+            get_data = models.BusinessUnit.objects.all().order_by('-order_num')
             # for obj in get_data:
             #     if not obj.parent_unit:
             #         dict = {'id': obj.id, 'pId': 0, 'name': obj.name, 'open': open_tag,

@@ -11,6 +11,7 @@ class BusinessUnit(models.Model):
     contact = models.ManyToManyField(user_center_models.UserGroup, verbose_name='业务联系人', related_name='c')
     manager = models.ManyToManyField(user_center_models.UserGroup, verbose_name='系统管理员', related_name='m')
     memo = models.CharField('备注', max_length=64, blank=True, null=True)
+    order_num = models.SmallIntegerField(blank=True, null=True)
     create_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
