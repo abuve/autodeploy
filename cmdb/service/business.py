@@ -167,7 +167,7 @@ class Business(BaseServiceList):
                             "click": callback % obj.id}
                     ret.append(dict)
                 else:
-                    dict = {'id': obj.id, 'pId': 0, 'name': obj.name, 'open': open_tag,
+                    dict = {'id': obj.id, 'pId': 0, 'name': obj.name, 'open': True,
                             "click": callback % obj.id}
                     ret.append(dict)
 
