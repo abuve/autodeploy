@@ -8,8 +8,8 @@ class BusinessUnit(models.Model):
     """
     parent_unit = models.ForeignKey('self', related_name='parent_level', blank=True, null=True)
     name = models.CharField('业务线', max_length=64)
-    contact = models.ManyToManyField(user_center_models.UserGroup, verbose_name='业务联系人', related_name='c')
-    manager = models.ManyToManyField(user_center_models.UserGroup, verbose_name='系统管理员', related_name='m')
+    contact = models.ManyToManyField(user_center_models.UserGroup, verbose_name='业务联系人', related_name='c', blank=True)
+    manager = models.ManyToManyField(user_center_models.UserGroup, verbose_name='系统管理员', related_name='m', blank=True)
     memo = models.CharField('备注', max_length=64, blank=True, null=True)
     order_num = models.SmallIntegerField(blank=True, null=True)
     create_date = models.DateTimeField(auto_now_add=True)
