@@ -1,5 +1,5 @@
 <div class="btn-group custom-btn-group" style="padding-bottom: 10px;">
-    <a class="btn btn-default" onclick="add_business_fn({% if response.data.parent_unit.id %}{{ response.data.parent_unit.id }}{% else %}{{ response.data.id }}{% endif %})"><i class="fa fa-plus-circle"></i> Add</a>
+    <a class="btn btn-default" onclick="add_business_fn({{ response.data.id }})"><i class="fa fa-plus-circle"></i> Add</a>
     <a class="btn btn-default" onclick="delete_business_fn({{ response.data.id }}, '{{ response.data.name }}')"><i class="fa fa-plus-circle"></i> Delete</a>
     <a class="btn btn-default" onclick="edit_business_fn({{ response.data.id }})"><i class="fa fa-plus-circle"></i> Edit</a>
     <a id="handle_status" class="btn" tabindex="0" role="button" data-toggle="manual" data-trigger="focus" data-container="body" data-html="true" data-placement="bottom" title="错误详细" data-content=""></a>

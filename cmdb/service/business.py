@@ -151,15 +151,25 @@ class Business(BaseServiceList):
                 callback = "get_business_detail_fn(%d);"
 
             get_data = models.BusinessUnit.objects.all()
+            # for obj in get_data:
+            #     if not obj.parent_unit:
+            #         dict = {'id': obj.id, 'pId': 0, 'name': obj.name, 'open': open_tag,
+            #                 "click": callback % obj.id}
+            #         ret.append(dict)
+            #         for child in obj.parent_level.all():
+            #             dict = {'id': child.id, 'pId': obj.id, 'name': child.name, 'open': open_tag,
+            #                     "click": callback % child.id}
+            #             ret.append(dict)
+
             for obj in get_data:
-                if not obj.parent_unit:
+                if obj.parent_unit:
+                    dict = {'id': obj.id, 'pId': obj.parent_unit.id, 'name': obj.name, 'open': open_tag,
+                            "click": callback % obj.id}
+                    ret.append(dict)
+                else:
                     dict = {'id': obj.id, 'pId': 0, 'name': obj.name, 'open': open_tag,
                             "click": callback % obj.id}
                     ret.append(dict)
-                    for child in obj.parent_level.all():
-                        dict = {'id': child.id, 'pId': obj.id, 'name': child.name, 'open': open_tag,
-                                "click": callback % child.id}
-                        ret.append(dict)
 
             # add data, get other info from db.
             if add_data:

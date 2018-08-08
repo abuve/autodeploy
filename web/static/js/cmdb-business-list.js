@@ -50,9 +50,9 @@ function add_business_fn(obj_id) {
                 $("#add_business_parent_id").html("")
                 $("#add_business_parent_id").append("<option value=''>Create Parent unit</option>")
                 for(var i in data.data){
-                    if (data.data[i].pId == 0) {
-                        $("#add_business_parent_id").append("<option value=" + data.data[i].id + ">" + data.data[i].name + "</option>")
-                    }
+                    //if (data.data[i].pId == 0) {
+                    $("#add_business_parent_id").append("<option value=" + data.data[i].id + ">" + data.data[i].name + "</option>")
+                    //}
                 }
 
                 // 设置选中
