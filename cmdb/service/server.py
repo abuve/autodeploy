@@ -192,9 +192,6 @@ class Server(BaseServiceList):
 
     @property
     def business_unit_list(self):
-        # values = models.BusinessUnit.objects.only('id', 'name')
-        # result = map(lambda x: {'id': x.id, 'name': x.name}, values)
-
         def business_node_top(obj, node_name):
             if obj.parent_unit:
                 parent_name = business_node_top(obj.parent_unit, node_name)

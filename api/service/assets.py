@@ -2,6 +2,7 @@ __author__ = 'Aaron'
 
 from cmdb import models as cmdb_models
 from omtools import models as OMTOOLS_MODELS
+from utils.public_utils import business_node_top, business_user_filter
 import json
 import time
 
@@ -128,9 +129,15 @@ class ApiHandler:
                 items_data['configuration'] = '-'
 
             try:
-                items_data['business'] = objects.business_unit.name
-            except:
+                items_data['business'] = self.__get_business_full_name(objects.business_unit)
+            except Exception as e:
                 items_data['business'] = '-'
+
+            try:
+                items_data['admin'] = self.__get_business_admin_list(objects.business_unit)
+            except Exception as e:
+                print(e)
+                items_data['admin'] = []
 
             try:
                 items_data['status'] = objects.get_device_status_id_display()
@@ -157,6 +164,12 @@ class ApiHandler:
 
     def __parameter_check_handler(self, ):
         pass
+
+    def __get_business_full_name(self, obj):
+        return business_node_top(obj)
+
+    def __get_business_admin_list(self, obj):
+        return business_user_filter(obj, 'manager')
 
     def querybyip(self):
         if self.request_json_data.get('parameters').get('data'):
