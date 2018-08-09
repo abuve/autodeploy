@@ -21,9 +21,7 @@
             <td class="title">Business Admin</td>
             <td colspan="4">
                 {% for obj in response.data.manager.all %}
-                    {% for user in obj.users.all %}
-                        {{ user.username }} |
-                    {% endfor %}
+                    【{{ obj.name }}】
                 {% endfor %}
             </td>
 
@@ -32,9 +30,7 @@
             <td class="title">Business Contact</td>
             <td colspan="4">
                 {% for obj in response.data.contact.all %}
-                    {% for user in obj.users.all %}
-                        {{ user.username }} |
-                    {% endfor %}
+                    【{{ obj.name }}】
                 {% endfor %}
             </td>
         </tr>
