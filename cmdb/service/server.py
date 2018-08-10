@@ -9,6 +9,7 @@ from cmdb import models
 from utils.base import BaseServiceList
 from utils.pager import PageInfo
 from utils.response import BaseResponse
+from utils.public_utils import business_node_low
 
 from cmdb.service import asset_num
 
@@ -222,6 +223,14 @@ class Server(BaseServiceList):
         else:
             con_dict = json.loads(con_str)
 
+        # 查询子类业务线
+        if con_dict.get('business_unit'):
+            b_id = con_dict['business_unit']
+            business_obj = models.BusinessUnit.objects.get(id__in=b_id)
+            business_node_with_child = business_node_low(business_obj)
+            if '-' in business_node_with_child:
+                con_dict['business_unit'] = business_node_with_child.split('-')
+
         con_q = Q()
         for k, v in con_dict.items():
             temp = Q()
@@ -241,7 +250,6 @@ class Server(BaseServiceList):
             page_info = PageInfo(request.GET.get('pager', None), asset_count)
             asset_list = models.Asset.objects.filter(conditions).extra(select=self.extra_select).values(
                 *self.values_list).order_by('-id')[page_info.start:page_info.end]
-
             ret['table_config'] = self.table_config
             ret['condition_config'] = self.condition_config
             ret['data_list'] = list(asset_list)

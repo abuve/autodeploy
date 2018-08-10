@@ -73,7 +73,8 @@ class Asset(models.Model):
     sn = models.CharField('SN号', max_length=64, unique=True)
     idc = models.ForeignKey('IDC', verbose_name='IDC机房', null=True, blank=True, on_delete=models.SET_NULL)
     manage_ip = models.GenericIPAddressField('管理IP', null=True, blank=True)
-    business_unit = models.ForeignKey('BusinessUnit', verbose_name='归属业务线', null=True, blank=True, on_delete=models.SET_NULL)
+    business_unit = models.ForeignKey('BusinessUnit', verbose_name='归属业务线', null=True, blank=True,
+                                      on_delete=models.SET_NULL)
     raid_type_choices = (
         ('RAID 1', 'RAID 1'),
         ('RAID 5', 'RAID 5'),

@@ -7,6 +7,18 @@ def business_node_top(obj, node_name=''):
         return obj.name
 
 
+def business_node_low(obj, node_name=''):
+    if obj.parent_level.all():
+        child_list = []
+        for child_obj in obj.parent_level.all():
+            child_id = business_node_low(child_obj, node_name)
+            child_list.append(child_id)
+            node_id = '%s-%s' % (obj.id, '-'.join(i for i in child_list))
+        return node_id
+    else:
+        return str(obj.id)
+
+
 def business_user_filter(obj, user_type):
     user_list = []
     for group_obj in getattr(obj, user_type).all():
