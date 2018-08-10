@@ -29,6 +29,7 @@ function load_business_tree_list() {
 
 function do_search_by_business(obj, business_id) {
     $('input[name="default_business_unit"]').val(business_id);
+    $('input[name="server__ipaddress"]').val('')  //点击业务线时，清空ip搜索条件
     $('#do_refresh').trigger("click");
 }
 

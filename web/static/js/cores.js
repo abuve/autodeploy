@@ -185,6 +185,7 @@
             var business_id = $('input[name="default_business_unit"]').val();
             if (business_id) {
                 var conditions_list = [business_id];
+                delete conditions['server__ipaddress__contains']
             } else {
                 var conditions_list = [];
             }
@@ -225,7 +226,6 @@
     function initialize(pager) {
         $.Show('#shade,#loading');
         var conditions = JSON.stringify(aggregationSearchCondition());
-        console.log(conditions)
         $.cookie('conditions', conditions);
         var $body = $('#table_body');
         $.ajax({
@@ -236,7 +236,7 @@
             cache: true,
             dataType: 'JSON',
             success: function (response) {
-                $.Hide('#shade,#loading');
+                $.Hide('#shade, #loading');
                 if (response.status) {
                     initGlobal(response.data.global_dict);
                     initTableHeader(response.data.table_config);
