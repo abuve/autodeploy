@@ -78,21 +78,25 @@ function add_business_fn(obj_id) {
 
 function do_post_business_fn() {
 
-    var add_business_parent_id = $('select[name="add_business_parent_id"]').val()
-    var add_business_name = $('input[name="add_business_name"]').val()
+    var add_business_parent_id = $('select[name="add_business_parent_id"]').val();
+    var add_business_name = $('input[name="add_business_name"]').val();
 
-    var add_business_admin_list = []
-    var add_business_contact_list = []
+    if (! regular_match(add_business_name)) {
+        return false;
+    }
+
+    var add_business_admin_list = [];
+    var add_business_contact_list = [];
 
     $("#add_business_admin_id option:selected").each(function(){
         add_business_admin_list.push($(this).val())
-    })
+    });
 
     $("#add_business_contact_id option:selected").each(function(){
         add_business_contact_list.push($(this).val())
-    })
+    });
 
-    var add_business_memo = $('#add_business_memo').val()
+    var add_business_memo = $('#add_business_memo').val();
 
     $.ajax({
         url: '/cmdb/business-json.html',
@@ -196,23 +200,44 @@ function edit_business_fn(obj_id) {
     });
 }
 
+function regular_match(name) {
+    if ( name.match(/^[ ]*$/) ) {
+        alert('Business name can not be Null.');
+        return false;
+    }
+
+    var regEn = /[`~!@#$%^&*()\-+=<>?:"{},.\/;'[\]]/im,
+        regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im;
+
+    if (regEn.test(name) || regCn.test(name)) {
+        alert('Only can input "_" to connect business name.');
+        return false;
+    };
+
+    return true;
+}
+
 function do_put_business_fn(obj_id) {
 
-    var add_business_parent_id = $('select[name="add_business_parent_id"]').val()
-    var add_business_name = $('input[name="add_business_name"]').val()
+    var add_business_parent_id = $('select[name="add_business_parent_id"]').val();
+    var add_business_name = $('input[name="add_business_name"]').val();
 
-    var add_business_admin_list = []
-    var add_business_contact_list = []
+    if (! regular_match(add_business_name)) {
+        return false;
+    }
+
+    var add_business_admin_list = [];
+    var add_business_contact_list = [];
 
     $("#add_business_admin_id option:selected").each(function(){
         add_business_admin_list.push($(this).val())
-    })
+    });
 
     $("#add_business_contact_id option:selected").each(function(){
         add_business_contact_list.push($(this).val())
-    })
+    });
 
-    var add_business_memo = $('#add_business_memo').val()
+    var add_business_memo = $('#add_business_memo').val();
 
     $.ajax({
         url: '/cmdb/business-json.html',
