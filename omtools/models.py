@@ -90,7 +90,8 @@ class LogsControl(models.Model):
     #     (1, '默认日志'),
     # )
     logs_type = models.CharField('日志类型', max_length=100)
-    url = models.URLField('日志地址', blank=True, null=True)
+    # url = models.URLField('日志地址', blank=True, null=True)
+    url = models.CharField('日志地址', max_length=400, blank=True, null=True)
     logs_status_choices = (
         (0, '关闭'),
         (1, '正常'),
