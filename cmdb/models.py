@@ -266,3 +266,52 @@ class DockerInstance(models.Model):
 
     def __str__(self):
         return self.obj_id
+
+
+# 云主机申请详情表
+class ServerApplyDetail(models.Model):
+    ipaddress = models.GenericIPAddressField(u'IP地址', blank=True, null=True)
+    idc = models.CharField(max_length=100)
+    sys_type = models.CharField(u'系统类型', max_length=100)
+    function = models.CharField(u'功能分类', max_length=100)
+    cpu = models.SmallIntegerField()
+    mem = models.SmallIntegerField()
+    disk = models.SmallIntegerField()
+    memo = models.CharField(u'备注', max_length=100)
+    user_apply = models.CharField(u'申请用户', max_length=100, blank=True, null=True)
+    user_approve = models.CharField(u'审批用户', max_length=100, blank=True, null=True)
+    date_apply = models.DateTimeField(auto_now_add=True)
+    date_approve = models.DateTimeField(u'批准日期',blank=True,null=True)
+    approved_status_choices = (
+        (1, 'Pending'),
+        (2, 'Standby'),
+        (3, 'Created'),
+        (4, 'False'),
+    )
+    approved = models.SmallIntegerField(choices=approved_status_choices, default=1)
+
+
+# 任务表
+class ServerApplyOrder(models.Model):
+    """
+    资产申请任务表
+    """
+    name = models.CharField(max_length=64)
+    order_type_choices = (
+        (1, 'CloudServer Apply'),
+    )
+    order_type = models.SmallIntegerField(choices=order_type_choices, default=1)
+    business = models.CharField(u'业务线', max_length=100)
+    project = models.ManyToManyField(ServerApplyDetail, related_name='server_apply_order')
+    user_apply = models.CharField(u'申请用户', max_length=100, blank=True, null=True)
+    user_approve = models.CharField(u'审批用户', max_length=100, blank=True, null=True)
+    date_apply = models.DateTimeField(auto_now_add=True)
+    date_approve = models.DateTimeField(u'批准日期', blank=True, null=True)
+    approved = models.BooleanField(u'已审核', default=False)
+
+
+    class Meta:
+        verbose_name_plural = "资产申请任务表"
+
+    def __str__(self):
+        return self.name

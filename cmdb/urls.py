@@ -7,6 +7,7 @@ from cmdb.views import docker
 from cmdb.views import business
 from cmdb.views import idc
 from cmdb.views import dashboard
+from cmdb.views import assetApply
 
 from django.contrib.auth.decorators import login_required
 
@@ -47,5 +48,11 @@ urlpatterns = [
     url(r'^get_instance_by_asset_id/$', approval.asset_with_no_asset_id, name='cmdb-get-instance-by-asset-id'),
 
     url(r'^test/$', server.test),
+
+    url(r'^apply.html$', assetApply.AssetApplyView.as_view(), name='cmdb-asset-apply'),
+    url(r'^apply/list.html$', assetApply.AssetApplyListView.as_view(), name='cmdb-asset-apply-list'),
+    url(r'^apply/list-json.html$', assetApply.AssetApplyListJsonView.as_view(), name='cmdb-asset-apply-json'),
+    url(r'^apply/list/(?P<order_id>\d+).html$', assetApply.AssetApplyDetailView.as_view(), name='cmdb-asset-apply-detail'),
+    url(r'^apply/list/(?P<order_id>\d+)-json.html$', assetApply.AssetApplyDetailJsonView.as_view(), name='cmdb-asset-apply-json-detail'),
 
 ]

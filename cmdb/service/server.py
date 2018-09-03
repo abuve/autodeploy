@@ -248,8 +248,10 @@ class Server(BaseServiceList):
             conditions = self.assets_condition(request)
             asset_count = models.Asset.objects.filter(conditions).count()
             page_info = PageInfo(request.GET.get('pager', None), asset_count)
+
             asset_list = models.Asset.objects.filter(conditions).extra(select=self.extra_select).values(
                 *self.values_list).order_by('-id')[page_info.start:page_info.end]
+
             ret['table_config'] = self.table_config
             ret['condition_config'] = self.condition_config
             ret['data_list'] = list(asset_list)
