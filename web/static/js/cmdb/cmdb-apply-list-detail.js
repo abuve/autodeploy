@@ -227,8 +227,7 @@ function do_order_approve_fn(order_id) {
             },
             success: function (data, response, status) {
                 if (data.status) {
-                    $("#order_update_confirm_modal").modal('hide');
-                    $('#order_table').bootstrapTable('refresh');
+                   window.location.reload();
                 } else {
                     alert(data.message);
                     return false;
