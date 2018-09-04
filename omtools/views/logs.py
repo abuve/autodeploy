@@ -14,7 +14,11 @@ from omtools.models import LogsControl
 
 class LogsIndexView(WriteAccessLogsMixin, View):
     def get(self, request):
-        response = REPOSITORY_MODELS.ProjectInfo.objects.filter(name__in=['FPMS', 'PMS', 'BAOWANG', 'OTHERS'])
+        project_filter=request.GET.get('project', '')
+        if project_filter == 'all':
+            response = REPOSITORY_MODELS.ProjectInfo.objects.all()
+        else:
+            response = REPOSITORY_MODELS.ProjectInfo.objects.filter(name__in=project_filter.split(','))
         return render(request, 'omtools/logs_index.html', {'response': response})
 
     def post(self, request):
