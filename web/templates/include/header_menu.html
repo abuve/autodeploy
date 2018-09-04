@@ -4,6 +4,8 @@
         </a>
     </div>
 
+    {% if request.user.roles.all %}
+
     <div class="left-menu left">
         <a class="menu-item" href={% url 'cmdb-server-manage-list' %}>物理机维护</a>
         <a class="menu-item" href={% url 'cmdb-asset-apply-list' %}>云主机申请</a>
@@ -39,3 +41,4 @@
             <span class="badge bg-danger">4</span>
         </a>-->
     </div>
+    {% endif %}
