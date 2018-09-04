@@ -12,13 +12,13 @@ from repository import models as REPOSITORY_MODELS
 from omtools.models import UrlMapsControl
 
 
-class UrlmapsIndexView(WriteAccessLogsMixin, View):
+class UrlmapsIndexView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request):
         response = REPOSITORY_MODELS.ProjectInfo.objects.all()
         return render(request, 'omtools/urlmaps_index.html', {'response': response})
 
 
-class UrlmapsJsonView(WriteAccessLogsMixin, View):
+class UrlmapsJsonView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, project_id):
         response = UrlMapsControl.objects.filter(project_id__id=project_id).values('id', 'project_id__name', 'url',
                                                                                 'forward', 'nginx', 'ha',
