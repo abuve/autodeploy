@@ -22,7 +22,7 @@ class AssetApplyView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequire
         asset_creator = map(lambda x: {'id': x['user_roles__id'], 'name': x['user_roles__username']},
                             user_center_models.Roles.objects.filter(
                                 name='云主机配置管理').values('user_roles__id', 'user_roles__username'))
-        function_list = map(lambda x: {'id': x.id, 'name': x.name}, CMDB_MODELS.Tag.objects.all())
+        function_list = map(lambda x: {'id': x.id, 'name': x.name}, CMDB_MODELS.Tag.objects.order_by('order_id'))
         ret_data = {
             'idc_list' : idc_list,
             'asset_creator': asset_creator,

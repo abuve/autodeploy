@@ -42,6 +42,7 @@ class Tag(models.Model):
     资产标签
     """
     name = models.CharField('标签', max_length=32, unique=True)
+    order_id = models.SmallIntegerField('排序ID', default=0)
 
     class Meta:
         verbose_name_plural = "标签表"
