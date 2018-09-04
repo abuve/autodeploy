@@ -72,6 +72,10 @@ var OrderTableInit = function () {
                     title: 'Function'
                 },
                 {
+                    field: 'memo',
+                    title: 'Memo'
+                },
+                {
                     field: 'approved',
                     title: 'Status',
                     formatter: item_statusFormatter
