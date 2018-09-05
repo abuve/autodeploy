@@ -10,6 +10,7 @@ from utils.base import BaseServiceList
 from utils.pager import PageInfo
 from utils.response import BaseResponse
 from utils.public_utils import business_node_low
+from utils import email_smtp
 
 from cmdb.service import asset_num
 from utils.public_utils import business_node_top
@@ -257,6 +258,9 @@ class AssetApply(BaseServiceList):
                     add_asset.save()
                     add_order.project.add(add_asset)
 
+            # 任务创建成功，调用邮件接口 - 发送至任务接收人
+            send_to = creator[0] + '@m1om.me,'
+            email_smtp.mail_send(send_to, 'asset_apply_create', {'title': title[0], 'creator': creator[0], 'id': add_order.id})
 
         except Exception as e:
             print(Exception, e)
@@ -417,7 +421,27 @@ class AssetApply(BaseServiceList):
 
                 # 更新任务单状态 这个地方注意一下更新的顺序，放在这里有点问题，上面失败，下面也会被更新
                 apply_order_obj.approved = True
+                apply_order_obj.user_approve = request.user.username
                 apply_order_obj.save()
+
+                asset_detail_json = list(apply_order_obj.project.values())
+
+                # 任务创建完成，通知组内成员
+                send_to = ''
+                business_obj = models.BusinessUnit.objects.filter(id=apply_order_obj.business)
+                for user_groups in business_obj[0].manager.all():
+                    for user in user_groups.users.all():
+                        send_to += user.username + '@m1om.me,'
+
+                template_var = {
+                    'title': apply_order_obj.name,
+                    'json_data': asset_detail_json,
+                    'business_unit': business_node_top(business_obj[0]),
+                    'user_apply': apply_order_obj.user_apply,
+                    'user_approve': apply_order_obj.user_approve,
+                    'server_count': len(asset_detail_json)
+                }
+                email_smtp.mail_send(send_to, 'asset_apply_create_inform_group', template_var)
 
         except Exception as e:
             print(Exception, e)
