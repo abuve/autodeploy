@@ -149,6 +149,11 @@ class ApiHandler:
             except:
                 items_data['function'] = []
 
+            if objects.memo:
+                items_data['memo'] = objects.memo
+            else:
+                items_data['memo'] = '-'
+
             items_list.append(items_data)
 
         formatting_data = {
