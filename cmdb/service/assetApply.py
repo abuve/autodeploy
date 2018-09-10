@@ -14,6 +14,7 @@ from utils import email_smtp
 
 from cmdb.service import asset_num
 from utils.public_utils import business_node_top
+from utils.public_utils import log_handler
 
 from user_center import models as user_center_models
 
@@ -262,6 +263,14 @@ class AssetApply(BaseServiceList):
             send_to = creator[0] + '@m1om.me,'
             email_smtp.mail_send(send_to, 'asset_apply_create', {'title': title[0], 'creator': creator[0], 'id': add_order.id})
 
+            # 创建日志
+            log_handler(
+                asset_id=None,
+                event_type=4,
+                detail='%s apply %s hosts from cloud server' %(request.user.username, len(apply_list) ),
+                user=request.user,
+            )
+
         except Exception as e:
             print(Exception, e)
             response.status = False
@@ -391,6 +400,14 @@ class AssetApply(BaseServiceList):
                         )
                         cmdb_asset_obj.save()
                         cmdb_asset_obj.tag.add(models.Tag.objects.get(name=asset_obj.function))
+
+                        # 创建资产日志
+                        log_handler(
+                            asset_id = cmdb_asset_obj.id,
+                            event_type=1,
+                            detail = 'Server Created, apply user is %s' % apply_order_obj.user_apply,
+                            user = request.user
+                        )
                     except Exception as e:
                         print(e)
                         cmdb_asset_obj.delete()

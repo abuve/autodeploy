@@ -25,7 +25,9 @@ class DashBoard(BaseServiceList):
                 'project_count': REPOSITORY_MODELS.ProjectInfo.objects.count(),
                 'application_count': REPOSITORY_MODELS.Applications.objects.count(),
             }
+            logs_data = CMDB_MODELS.AssetRecord.objects.order_by('-date')[:11]
             response.basic_count = basic_count
+            response.logs_data = logs_data
         except Exception as e:
             print(Exception, e)
             response.status = False

@@ -82,92 +82,78 @@
 
 
         <div class="col-md-4 col-sm-4 col-xs-12">
-            <div class="x_panel tile fixed_height_320">
-                <div class="x_title">
-                    <h2>内部系统导航</h2>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="col-md-6">
-                    <div class="x_content" style="display: block;">
-                        <div class="dashboard-widget-content">
-                            <ul class="quick-list">
-                                <li><i class="fa fa-calendar-o"></i><a href="#">数据分析系统</a>
-                                </li>
-                                <li><i class="fa fa-bars"></i><a href="#">Jenkins（OM）</a>
-                                </li>
-                                <li><i class="fa fa-bar-chart"></i><a href="#">Jenkins（Dev）</a> </li>
-                                <li><i class="fa fa-line-chart"></i><a href="#">OM-Tools & Monitoring</a>
-                                </li>
-                                <li><i class="fa fa-bar-chart"></i><a href="#">Zabbix监控</a> </li>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="x_content" style="display: block;">
-                        <div class="dashboard-widget-content">
-                            <ul class="quick-list">
-                                <li><i class="fa fa-calendar-o"></i><a href="#">Grafana</a>
-                                </li>
-                                <li><i class="fa fa-bars"></i><a href="#">Argus</a>
-                                </li>
-                                <li><i class="fa fa-bar-chart"></i><a href="#">Auto Renewal</a> </li>
-                                <li><i class="fa fa-line-chart"></i><a href="#">Achievements</a>
-                                </li>
-                                <li><i class="fa fa-area-chart"></i><a href="#">Logout</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+{#            <div class="x_panel tile fixed_height_320">#}
+{#                <div class="x_title">#}
+{#                    <h2>内部系统导航</h2>#}
+{#                    <div class="clearfix"></div>#}
+{#                </div>#}
+{#                <div class="col-md-6">#}
+{#                    <div class="x_content" style="display: block;">#}
+{#                        <div class="dashboard-widget-content">#}
+{#                            <ul class="quick-list">#}
+{#                                <li><i class="fa fa-calendar-o"></i><a href="#">数据分析系统</a>#}
+{#                                </li>#}
+{#                                <li><i class="fa fa-bars"></i><a href="#">Jenkins（OM）</a>#}
+{#                                </li>#}
+{#                                <li><i class="fa fa-bar-chart"></i><a href="#">Jenkins（Dev）</a> </li>#}
+{#                                <li><i class="fa fa-line-chart"></i><a href="#">OM-Tools & Monitoring</a>#}
+{#                                </li>#}
+{#                                <li><i class="fa fa-bar-chart"></i><a href="#">Zabbix监控</a> </li>#}
+{#                                </li>#}
+{#                            </ul>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#                <div class="col-md-6">#}
+{#                    <div class="x_content" style="display: block;">#}
+{#                        <div class="dashboard-widget-content">#}
+{#                            <ul class="quick-list">#}
+{#                                <li><i class="fa fa-calendar-o"></i><a href="#">Grafana</a>#}
+{#                                </li>#}
+{#                                <li><i class="fa fa-bars"></i><a href="#">Argus</a>#}
+{#                                </li>#}
+{#                                <li><i class="fa fa-bar-chart"></i><a href="#">Auto Renewal</a> </li>#}
+{#                                <li><i class="fa fa-line-chart"></i><a href="#">Achievements</a>#}
+{#                                </li>#}
+{#                                <li><i class="fa fa-area-chart"></i><a href="#">Logout</a>#}
+{#                                </li>#}
+{#                            </ul>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#            </div>#}
 
             <div class="row" style="padding: 0px 15px">
-                <div class="panel panel-danger">
-                    <div class="panel-heading"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 项目Wiki</div>
+                <div class="panel panel-success">
+                    <div class="panel-heading"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> CMDB日志记录</div>
                     <table class="table table-bordered table-striped">
                         <tbody>
                         <tr>
                             <th nowrap="nowrap">
-                                项目名称
+                                日志内容
                             </th>
                             <th nowrap="nowrap">
-                                Wiki名称
+                                IP地址
                             </th>
                             <th nowrap="nowrap">
-                                创建时间
+                                操作时间
                             </th>
                             <th nowrap="nowrap">
-                                创建用户
+                                操作用户
                             </th>
                         </tr>
-                        <tr>
-                            <td>FPMS</td>
-                            <td>业务架构拓扑图</td>
-                            <td>2018-02-21 13:25:58</td>
-                            <td>aaron.bu</td>
-                        </tr>
-                        <tr>
-                            <td>FPMS</td>
-                            <td>业务架构拓扑图</td>
-                            <td>2018-02-21 13:25:58</td>
-                            <td>aaron.bu</td>
-                        </tr>
-                        <tr>
-                            <td>FPMS</td>
-                            <td>业务架构拓扑图</td>
-                            <td>2018-02-21 13:25:58</td>
-                            <td>aaron.bu</td>
-                        </tr>
-                        <tr>
-                            <td>FPMS</td>
-                            <td>业务架构拓扑图</td>
-                            <td>2018-02-21 13:25:58</td>
-                            <td>aaron.bu</td>
-                        </tr>
+
+                        {% for log_obj in response.logs_data %}
+                            <tr>
+                                <td>{{ log_obj.content }}</td>
+                                <td>{{ log_obj.asset_obj.server.ipaddress }}</td>
+                                 <td>{{ log_obj.date | date:'m-d' }}</td>
+                                <td>{{ log_obj.creator.username }}</td>
+                            </tr>
+                        {% endfor %}
+
                         </tbody>
                     </table>
                 </div>

@@ -153,7 +153,10 @@ class Server(BaseServiceList):
                 'title': "Options",
                 'display': 1,
                 'text': {
-                    'content': '<div class="btn-group"><a type="button" class="btn btn-default btn-xs" onclick="business_update_fn({nid})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Business</a>  <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown"> <span class="caret"></span> </button> </div>',
+                    'content': '<div class="btn-group">'
+                               '<a type="button" class="btn btn-default btn-xs" onclick="business_update_fn({nid})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Business</a>'
+                               '<a type="button" class="btn btn-default btn-xs" onclick="asset_eventlogs_fn({nid})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> EventLogs</a>'
+                               '</div>',
                     #'content': "<a href='/cmdb/asset-detail-{nid}.html'>查看详细</a> | <a href='/edit-asset-{device_type_id}-{nid}.html'>编辑</a>",
                     'kwargs': {'device_type_id': '@device_type_id', 'nid': '@id'}},
                 'attr': {}

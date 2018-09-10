@@ -1,3 +1,5 @@
+from cmdb import models as CMDB_MODELS
+
 def business_node_top(obj, node_name=''):
     if obj.parent_unit:
         parent_name = business_node_top(obj.parent_unit, node_name)
@@ -31,3 +33,13 @@ def business_user_filter(obj, user_type):
             return business_user_filter(obj.parent_unit, user_type)
         else:
             return user_list
+
+
+def log_handler(asset_id, event_type, detail, user):
+    log_obj = CMDB_MODELS.AssetRecord(
+        asset_obj_id = asset_id,
+        event_type = event_type,
+        content = detail,
+        creator = user,
+    )
+    log_obj.save()

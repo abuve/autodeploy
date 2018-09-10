@@ -49,6 +49,8 @@ urlpatterns = [
 
     url(r'^test/$', server.test),
 
+    url(r'^logstimeline.html$', server.LogsTimeLineView.as_view(), name='cmdb-logs-timeline'),
+
     url(r'^apply.html$', assetApply.AssetApplyView.as_view(), name='cmdb-asset-apply'),
     url(r'^apply/list.html$', assetApply.AssetApplyListView.as_view(), name='cmdb-asset-apply-list'),
     url(r'^apply/list-json.html$', assetApply.AssetApplyListJsonView.as_view(), name='cmdb-asset-apply-json'),

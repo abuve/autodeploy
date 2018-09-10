@@ -99,3 +99,16 @@ function update_business_unit_fn() {
         }
     });
 }
+
+function asset_eventlogs_fn(obj_id) {
+    $("#asset_eventlogs_modal").modal('show')
+    $.ajax({
+        url: '/cmdb/logstimeline.html',
+        type: 'get',
+        traditional:true,
+        data : {'asset_id': obj_id},
+        success: function (data, response, status) {
+            $('#asset_eventlogs_html_area').html(data)
+        }
+    });
+}

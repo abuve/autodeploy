@@ -220,7 +220,14 @@ class AssetRecord(models.Model):
     """
     资产变更记录,creator为空时，表示是资产汇报的数据。
     """
-    asset_obj = models.ForeignKey('Asset', related_name='ar')
+    asset_obj = models.ForeignKey('Asset', related_name='ar', blank=True, null=True)
+    event_type_choice = (
+        (1, 'Asset Create'),
+        (2, 'Asset Update'),
+        (3, 'Asset Delete'),
+        (4, 'Asset Apply'),
+    )
+    event_type = models.SmallIntegerField(u'事件类型', choices=event_type_choice, default=2)
     content = models.TextField(null=True)
     creator = models.ForeignKey(user_center_models.UserProfile, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
@@ -229,7 +236,7 @@ class AssetRecord(models.Model):
         verbose_name_plural = "资产记录表"
 
     def __str__(self):
-        return "%s-%s-%s" % (self.asset_obj.idc.name, self.asset_obj.cabinet_num, self.asset_obj.cabinet_order)
+        return str(self.id)
 
 
 class ErrorLog(models.Model):

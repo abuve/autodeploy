@@ -124,6 +124,24 @@
         </div><!-- /.modal -->
     </div>
 
+    <!-- asset event logs modal -->
+    <div class="modal fade" id="asset_eventlogs_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 580px">
+            <div class="modal-content" style="margin-top: 80px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Asset Event Logs</h4>
+                </div>
+                <div class="modal-body" id="asset_eventlogs_html_area" style="height:380px; overflow-y: auto">
+                    Loading...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
 {% endblock %}
 
 {% block js %}

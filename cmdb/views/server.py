@@ -47,6 +47,12 @@ class AssetCreateView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequir
         return render(request, 'cmdb_asset_create.html', {'response': response})
 
 
+class LogsTimeLineView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        response = CMDB_MODELS.AssetRecord.objects.filter(asset_obj_id=request.GET.get('asset_id')).order_by('-date')
+        return render(request, 'cmdb/cmdb_logs_timeline.html', {'response': response})
+
+
 # def test(request):
 #
 #     return HttpResponse(1)
