@@ -1,3 +1,8 @@
+import platform, sys
+if platform.system() == 'Linux':
+    sys.path.append('/app/project/AutoDeploy')
+import django
+
 from repository.service.deploy import docker_yml_control
 from utils.logshadler import CommonLogging
 from repository.conf import settings
@@ -13,6 +18,7 @@ class FaucetControl:
         4、生成脚本配置文件
         5、推送docker配置文件
         6、启动容器监听
+        6、修改allowcommand 配置文件
         7、配置HA监听端口
         8、配置测试环境nginx配置文件
         9、推送生产配置
