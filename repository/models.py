@@ -2,6 +2,7 @@ from django.db import models
 
 from cmdb import models as CMDB_MODELS
 
+
 class ProjectInfo(models.Model):
     """
     项目信息表

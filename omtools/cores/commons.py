@@ -54,7 +54,7 @@ class commons:
                        "backup": dict(host='10.168.11.141', user='root', passwd='70f30d42783f69d0a3a907eaed8ca0eb', port=27018),
                        "admindb": dict(host='10.168.11.135', user='root', passwd='70f30d42783f69d0a3a907eaed8ca0eb', port=27019),
                        "playerdb": dict(host='10.168.11.138', user='root', passwd='70f30d42783f69d0a3a907eaed8ca0eb', port=27020)},
-            "test": {"logsdb": dict(host='192.168.10.230', user='mysqltomongo', passwd='mongopwd', port=27018),
+            "cstest": {"logsdb": dict(host='192.168.10.230', user='mysqltomongo', passwd='mongopwd', port=27018),
                      "backup": dict(host='192.168.10.230', user='mysqltomongo', passwd='mongopwd', port=27021),
                      "admindb": dict(host='192.168.10.230', user='mysqltomongo', passwd='mongopwd', port=27019),
                      "playerdb": dict(host='192.168.10.230', user='mysqltomongo', passwd='mongopwd', port=27020)}

@@ -47,7 +47,7 @@ urlpatterns = [
 
     url(r'^get_instance_by_asset_id/$', approval.asset_with_no_asset_id, name='cmdb-get-instance-by-asset-id'),
 
-    url(r'^test/$', server.test),
+    url(r'^cstest/$', server.test),
 
     url(r'^logstimeline.html$', server.LogsTimeLineView.as_view(), name='cmdb-logs-timeline'),
 

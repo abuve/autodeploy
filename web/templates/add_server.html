@@ -13,52 +13,116 @@
             <a type="button" class="btn btn-default btn-arrow-right" style="color:#1c5a9c;" href="#"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Create App</a>
         </div>
     </ol>
-    <div class="col-sm-6" style="padding: 20px 8px;">
+    <div class="row" style="margin: 0">
+        <div class="col-sm-8" style="padding: 20px 8px;">
 
-        <form class="form-horizontal" id="add_server_form" role="form" action="servers.html" method="post">
+            <form class="form-horizontal" id="add_server_form" role="form" action="servers.html" method="post">
 
-            <table class="table table-bordered table-striped">
-                <tbody>
-                <tr>
-                    <td style="line-height:34px;" align="right">App Name : *</td>
-                    <td>
-                        <input type="text" class="form-control" name="app_name" placeholder="Enter app name...">
-                    </td>
-                </tr>
-                <tr>
-                    <td style="line-height:34px;" align="right">Parent Project : *</td>
-                    <td>
-                        <select class="form-control" name="project_id">
-                        {% for obj in response.data %}
-                            <option value="{{ obj.id }}">{{ obj.name }}</option>
-                        {% endfor %}
-                    </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="line-height:34px;" align="right">APP Type : *</td>
-                    <td>
-                        <select class="form-control" name="app_type">
-                            <option value="java">JAVA</option>
-                            <option value="php">PHP</option>
-                            <option value="python">Python</option>
-                            <option value="worker">Worker</option>
-                            <option value="static">Static</option>
-                            <option value="nodejs">NodeJS</option>
-                        </select>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                <table class="table table-bordered table-striped">
+                    <tbody>
+                    <tr>
+                        <td style="line-height:34px; width:180px" align="right">App Name : *</td>
+                        <td>
+                            <input type="text" class="form-control" name="app_name" placeholder="Enter app name...">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="line-height:34px;" align="right">Parent Project : *</td>
+                        <td>
+                            <select class="form-control" name="project_id">
+                                {% for obj in response.data %}
+                                    <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="line-height:34px;" align="right">Docker Type : *</td>
+                        <td>
+                            <select class="form-control" name="app_type">
+                                <option value="nginx">Nginx</option>
+                                <option value="tomcat">Tomcat</option>
+                                <option value="php">PHP</option>
+                                <option value="python">Python</option>
+                                <option value="worker">Worker</option>
+                                <option value="static">Static</option>
+                                <option value="nodejs">NodeJS</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="line-height:34px;" align="right">App Version : *</td>
+                        <td>
+                            <select class="form-control" name="app_type">
+                                <option value="nginx">1.4.5</option>
+                                <option value="nginx">1.4.6</option>
+                                <option value="nginx">1.4.7</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="line-height:34px;" align="right">Git Address : *</td>
+                        <td>
+                            <input type="text" class="form-control" name="app_name" placeholder="Enter app name...">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="line-height:34px;" align="right">Branch Name : *</td>
+                        <td>
+                            <input type="text" class="form-control" name="app_name" placeholder="Enter app name...">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="line-height:34px;" align="right">Git Dir Name : *</td>
+                        <td>
+                            <input type="text" class="form-control" name="app_name" placeholder="Enter app name...">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
 
-            <div class="form-group">
-                <div class="col-sm-2">
-                    <a type="submit" class="btn btn-primary" onclick="add_server_fn()"><i class="fa fa-check"></i> Create Application</a>
+                <div class="form-group">
+                    <div class="col-sm-2">
+                        <a type="submit" class="btn btn-primary" onclick="add_server_fn()"><i class="fa fa-check"></i> Create Application</a>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+
+        <div class="col-sm-4" style="padding: 20px 8px;">
+
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Environment Info</h3>
+                </div>
+                <div class="panel-body">
+                    CsTest Server
+                    <ul>
+                        <li>10.167.11.118</li>
+                    </ul>
+                    Docker Images Server
+                    <ul>
+                        <li>10.168.11.104</li>
+                    </ul>
+                    HA Server
+                    <ul>
+                        <li>10.168.11.104</li>
+                        <li>10.168.11.104</li>
+                        <li>10.168.11.104</li>
+                        <li>10.168.11.104</li>
+                    </ul>
+                    Docker Server
+                    <ul>
+                        <li>10.168.11.104</li>
+                        <li>10.168.11.104</li>
+                        <li>10.168.11.104</li>
+                    </ul>
                 </div>
             </div>
 
-        </form>
-
+        </div>
     </div>
 
 

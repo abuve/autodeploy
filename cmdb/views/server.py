@@ -53,7 +53,7 @@ class LogsTimeLineView(WriteAccessLogsMixin, LoginRequiredMixin, PermissionRequi
         return render(request, 'cmdb/cmdb_logs_timeline.html', {'response': response})
 
 
-# def test(request):
+# def cstest(request):
 #
 #     return HttpResponse(1)
 #

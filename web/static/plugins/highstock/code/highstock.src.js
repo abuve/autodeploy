@@ -1510,7 +1510,7 @@
          *
          * @function #find
          * @memberOf Highcharts
-         * @param {Array} arr - The array to test.
+         * @param {Array} arr - The array to cstest.
          * @param {Function} callback - The callback function. The function receives the
          *        item as the first argument. Return `true` if this item satisfies the
          *        condition.
@@ -18376,7 +18376,7 @@
 
             // The align options and text align varies on whether the stack is negative 
             // and if the chart is inverted or not.
-            // First test the user supplied value, then use the dynamic.
+            // First cstest the user supplied value, then use the dynamic.
             this.alignOptions = {
                 align: options.align ||
                     (inverted ? (isNegative ? 'left' : 'right') : 'center'),

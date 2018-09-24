@@ -7,4 +7,3 @@ class BaseResponse(object):
         self.status = True
         self.message = None
         self.data = None
-        self.error = None

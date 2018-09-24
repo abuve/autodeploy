@@ -1944,7 +1944,7 @@
                 return className;
             },
             /**
-             * Pass the null test in ColumnSeries.translate.
+             * Pass the null cstest in ColumnSeries.translate.
              */
             isValid: function() {
                 return isNumber(this.y, true) || this.isSum || this.isIntermediateSum;

@@ -147,7 +147,7 @@ function edit_domain_data_fn(domain_id) {
 function checkUrl(urlString){
     // if(urlString!=""){
     //     var reg=/(http|ftp|https|ws):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
-    //     if(!reg.test(urlString)){
+    //     if(!reg.cstest(urlString)){
     //         alert("Error Http Url...");
     //         return false;
     //     } else {
