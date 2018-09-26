@@ -26,6 +26,7 @@ class Applications(models.Model):
     """
     name = models.CharField(max_length=64, unique=True)
     app_type_choices = (
+        ('nginx', 'nginx'),
         ('java', 'java'),
         ('php', 'php'),
         ('python', 'python'),
@@ -35,8 +36,13 @@ class Applications(models.Model):
     )
     app_type = models.CharField(choices=app_type_choices, max_length=10, default='java')
     project_id = models.ForeignKey(ProjectInfo, related_name='applications')
+    git_name = models.CharField('Git名称', max_length=40, blank=True, null=True)
+    git_branch = models.CharField('Git分支', max_length=40, blank=True, null=True)
+    git_path = models.CharField('Git目录', max_length=40, blank=True, null=True)
+    cstest_port = models.SmallIntegerField('Git分支', blank=True, null=True)
     leader = models.CharField('开发leader', max_length=40, blank=True, null=True)
     members = models.CharField('开发成员', max_length=40, blank=True, null=True)
+    build = models.BooleanField('是否构建', default=False)
     #group = models.ManyToManyField(AppGroups, related_name='groups')
 
     class Meta:

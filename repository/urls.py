@@ -6,6 +6,7 @@ from repository.views import docker_config
 from repository.views import logs_config
 from repository.views import urlmaps_config
 from repository.views import domains_config
+from repository.views import build_config
 
 from django.contrib.auth.decorators import login_required
 
@@ -46,5 +47,8 @@ urlpatterns = [
     url(r'^config/domains/(?P<server_id>\d+).html$', domains_config.DomainsConfigView.as_view(), name='server-config-domains'),
     url(r'^config/domains/json-(?P<server_id>\d+).html$', domains_config.DomainsConfigJsonView.as_view(), name='server-config-domains-json'),
     url(r'^config/domains/update-server-domains.html$', domains_config.UpdateDomainView.as_view(), name='server-config-domains-update-server-domains'),
+
+    url(r'^config/build/(?P<server_id>\d+).html$', build_config.BuildConfigView.as_view(), name='server-config-build'),
+    url(r'^config/build/get-buildlogs-(?P<server_id>\d+).html$', build_config.GetBuildLogsView.as_view(), name='server-config-build'),
 
 ]

@@ -86,6 +86,8 @@ class FaucetControl:
         if response['status'] == False:
             return False
 
+        # 更新allowcommand配置文件
+
 
 if __name__ == "__main__":
     local_test = FaucetControl('this_is_testapp', 'nginx', 'cstest', 8888)

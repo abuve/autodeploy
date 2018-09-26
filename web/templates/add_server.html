@@ -23,13 +23,13 @@
                     <tr>
                         <td style="line-height:34px; width:180px" align="right">App Name : *</td>
                         <td>
-                            <input type="text" class="form-control" name="app_name" placeholder="Enter app name...">
+                            <input type="text" class="form-control" name="name" placeholder="Enter app name...">
                         </td>
                     </tr>
                     <tr>
                         <td style="line-height:34px;" align="right">Parent Project : *</td>
                         <td>
-                            <select class="form-control" name="project_id">
+                            <select class="form-control" name="project_id_id">
                                 {% for obj in response.data %}
                                     <option value="{{ obj.id }}">{{ obj.name }}</option>
                                 {% endfor %}
@@ -51,31 +51,38 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="line-height:34px;" align="right">App Version : *</td>
+                        <td style="line-height:34px;" align="right">Image Version : *</td>
                         <td>
-                            <select class="form-control" name="app_type">
-                                <option value="nginx">1.4.5</option>
-                                <option value="nginx">1.4.6</option>
-                                <option value="nginx">1.4.7</option>
+                            <select class="form-control" name="app_type" disabled>
+                                <option value="">None</option>
+                                <option value="1.4.5">1.4.5</option>
+                                <option value="1.4.6">1.4.6</option>
+                                <option value="1.4.7">1.4.7</option>
                             </select>
                         </td>
                     </tr>
                     <tr>
-                        <td style="line-height:34px;" align="right">Git Address : *</td>
+                        <td style="line-height:34px;" align="right">Git Name : *</td>
                         <td>
-                            <input type="text" class="form-control" name="app_name" placeholder="Enter app name...">
+                            <input type="text" class="form-control" name="git_name" placeholder="Enter git Name...">
                         </td>
                     </tr>
                     <tr>
-                        <td style="line-height:34px;" align="right">Branch Name : *</td>
+                        <td style="line-height:34px;" align="right">Git Branch : *</td>
                         <td>
-                            <input type="text" class="form-control" name="app_name" placeholder="Enter app name...">
+                            <input type="text" class="form-control" name="git_branch" placeholder="Enter git branch...">
                         </td>
                     </tr>
                     <tr>
                         <td style="line-height:34px;" align="right">Git Dir Name : *</td>
                         <td>
-                            <input type="text" class="form-control" name="app_name" placeholder="Enter app name...">
+                            <input type="text" class="form-control" name="git_path" placeholder="Default Path /">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="line-height:34px;" align="right">CSTest Port : *</td>
+                        <td>
+                            <input type="text" class="form-control" name="cstest_port" placeholder="CSTest Server Port">
                         </td>
                     </tr>
                     </tbody>
@@ -140,7 +147,7 @@
         });
 
         function add_server_fn() {
-            if ($('input[name="app_name"]').val().length == 0) {
+            if ($('input[name="name"]').val().length == 0) {
                 alert("Please add app name.");
                 return false;
             }
