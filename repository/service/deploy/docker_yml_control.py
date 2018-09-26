@@ -3,6 +3,7 @@ from repository.service.deploy import docker_control_handler
 from utils.logshadler import CommonLogging
 
 import time
+import json
 
 
 class UpdateController:
@@ -143,8 +144,11 @@ class UpdateController:
         command = 'python /bak/bin/cmdb_add_haproxy_conf.py {env_type} {app_name} {app_port}'.format(
             env_type=self.env_type, app_name=self.app_name, app_port=self.app_port)
         response = self.docker_handler.push_command_to_remote(command, **settings.server_config['haproxy'])
-        print(response)
-        log_text = '[配置HA应用代理端口]: %s, HA端口为' % (response['message'])
+        if response['status']:
+            result = json.loads(response['data']['stdout'][0])
+            log_text = '[配置HA应用代理端口]: %s, HA端口为 %s' % (response['message'], result['result'])
+        else:
+            log_text = '[配置HA应用代理端口]: 配置失败'
         self.__log_commit.logging_info(log_text)
 
         return response
